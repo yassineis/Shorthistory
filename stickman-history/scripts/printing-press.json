@@ -1,0 +1,104 @@
+{
+  "title": "How the Printing Press Changed the World",
+  "aspect": "16:9",
+  "voice": { "name": "Kore" },
+  "scenes": [
+    {
+      "kicker": "Before 1440",
+      "narration": "Imagine a world where every book had to be copied by hand. Before the 1440s in Europe, one scribe could spend [[months]] on a single book, so books were rare and expensive.",
+      "stage": {
+        "props": [
+          { "type": "sun", "x": 0.52, "size": 0.9 },
+          { "type": "book", "x": 0.46, "y": 0.6, "size": 0.9 },
+          { "type": "clock", "x": 0.42, "y": 0.33, "size": 0.9 },
+          { "type": "coins", "x": 0.72 }
+        ],
+        "actors": [{ "x": 0.3, "pose": "write", "color": "brown" }]
+      }
+    },
+    {
+      "kicker": "Mainz, Germany",
+      "stamp": "c. 1440",
+      "narration": "Then, in the German city of Mainz, a goldsmith named [[Johannes Gutenberg]] had an idea: a press with movable metal letters that could be reused again and again.",
+      "stage": {
+        "props": [
+          { "type": "town", "x": 0.2, "size": 0.7 },
+          { "type": "press", "x": 0.6, "size": 1.0 },
+          { "type": "bulb", "x": 0.3, "y": 0.3 }
+        ],
+        "actors": [{ "x": 0.36, "pose": "think", "color": "blue" }]
+      }
+    },
+    {
+      "kicker": "The Press",
+      "narration": "The press squeezed inked metal letters onto paper. Once the letters were set, he could print many identical pages, far faster than any scribe could write them.",
+      "stage": {
+        "props": [
+          { "type": "press", "x": 0.4, "size": 1.25 },
+          { "type": "pages", "x": 0.68, "y": 0.42, "size": 1.1 }
+        ],
+        "actors": [{ "x": 0.16, "pose": "point", "color": "blue" }]
+      }
+    },
+    {
+      "kicker": "Around 1455",
+      "stamp": "1455",
+      "narration": "Around 1455, his workshop produced the famous [[Gutenberg Bible]], one of the first major books printed in Europe with movable type.",
+      "stage": {
+        "props": [
+          { "type": "stack", "x": 0.6, "size": 1.2 },
+          { "type": "sun", "x": 0.42, "y": 0.2, "size": 0.7 }
+        ],
+        "actors": [{ "x": 0.3, "pose": "hold", "holds": "book", "color": "blue", "hat": "cap" }]
+      }
+    },
+    {
+      "kicker": "Books for everyone",
+      "narration": "Printed books were cheaper to make, so more people could afford them, and more people learned to read. Soon, presses were opening in cities across Europe.",
+      "stage": {
+        "props": [
+          { "type": "town", "x": 0.62, "size": 0.9 },
+          { "type": "map", "x": 0.3, "y": 0.4, "size": 1.0 },
+          { "type": "cloud", "x": 0.62, "y": 0.22 }
+        ],
+        "actors": [{ "x": -0.1, "to": 0.4, "pose": "hold", "holds": "book", "color": "green" }]
+      }
+    },
+    {
+      "kicker": "Ideas travel fast",
+      "narration": "Now ideas could spread far faster than ever before. Pamphlets and books carried new arguments from town to town, and they were hard to stop.",
+      "stage": {
+        "props": [
+          { "type": "pages", "x": 0.42, "y": 0.45, "size": 1.4 },
+          { "type": "arrow", "x": 0.52, "y": 0.62, "size": 0.9 },
+          { "type": "town", "x": 0.7, "size": 0.7 }
+        ],
+        "actors": [{ "x": 0.16, "pose": "point", "color": "red" }]
+      }
+    },
+    {
+      "kicker": "The ripple effect",
+      "narration": "Print helped fuel the [[Renaissance]], the Reformation, and the Scientific Revolution, because ideas could finally be shared widely and checked by others.",
+      "stage": {
+        "props": [
+          { "type": "gear", "x": 0.28, "y": 0.38, "size": 1.0 },
+          { "type": "bulb", "x": 0.5, "y": 0.3, "size": 1.1 },
+          { "type": "stack", "x": 0.68, "size": 1.0 }
+        ],
+        "actors": [{ "x": 0.42, "pose": "cheer", "color": "blue" }]
+      }
+    },
+    {
+      "kicker": "Today",
+      "narration": "Every book you read, every newspaper, even the pages on your screen carry a little of Gutenberg's legacy. One clever machine helped knowledge reach everyone.",
+      "stage": {
+        "props": [
+          { "type": "crowd", "x": 0.42, "size": 1.7 },
+          { "type": "sun", "x": 0.6, "y": 0.2, "size": 0.8 },
+          { "type": "book", "x": 0.2, "y": 0.45, "size": 0.9 }
+        ],
+        "actors": []
+      }
+    }
+  ]
+}

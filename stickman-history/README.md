@@ -1,0 +1,44 @@
+# stickman-history
+
+Free script-to-video tool for short history videos in a simple stickman-explainer style
+(paper background, bold black-and-red captions, a corner presenter, props drawn in code).
+
+- **Voice:** Gemini TTS, ported from YOUTUBE-AGENT (`src/voice.js`). Free tier key, no packages.
+- **Look:** drawn frame by frame with Pillow (`render/`). Structure and style follow stickman-video-director's style B5.
+- **Assembly:** ffmpeg. Each scene is its own 8-15 s clip, joined at the end, plus a synthesized music bed.
+- **Cost:** nothing. No video-generation API, no GPU.
+
+## Setup (once)
+
+1. Node 18+, Python 3, and ffmpeg on your PATH.
+2. `pip install pillow numpy`
+3. Copy `.env.example` to `.env` and paste your free Gemini key.
+
+## Use
+
+```
+node src/voice.js "Test sentence" out/test.mp3     # hear the voice first
+node src/make.js scripts/printing-press.json --sample   # first scene only: check style + voice
+node src/make.js scripts/printing-press.json            # full video -> out/printing-press/final.mp4
+node src/make.js scripts/printing-press.json --aspect 9:16   # vertical for Shorts
+node src/make.js scripts/printing-press.json --dry-voice     # test with no key / no internet
+```
+
+Free-tier voice limits: if you get rate-limit errors, raise `--pause 8000`. Finished scenes are cached, so a re-run continues where it stopped. After editing the Python code, add `--force`.
+
+## Writing your own script
+
+Copy `scripts/printing-press.json`. Each scene has:
+
+- `narration` - spoken text; wrap words in `[[double brackets]]` to show them in red in the captions.
+- `kicker` - the title in the top-left corner. `stamp` - an optional red date stamp.
+- `stage.actors` - `x` (0-1), `pose` (stand, walk, wave, point, cheer, think, write, hold, slump), `color` (ink, red, blue, green, brown, gold), `hat` (crown, cap, helmet), `holds` (book, scroll, flag, coins, bulb, quill), `to` (walk to this x).
+- `stage.props` - `type`, `x`, optional `y`, `size`, `at` (seconds). Types: sun, cloud, tree, house, town, castle, ship, flag, crown, scroll, book, stack, press, coins, mountain, map, bulb, clock, gear, arrow, pages, crowd.
+
+Aim for about 25-30 words per scene (roughly 10-12 s) and 7-9 scenes for 1-2 minutes. The tool warns if the total passes 2 minutes.
+
+## Notes
+
+- Check every historical fact in your script yourself before publishing. The sample script is an example, not a source.
+- Gemini voice terms for monetized YouTube use: read Google's current terms before you rely on it commercially.
+- The tool never uploads anything.
