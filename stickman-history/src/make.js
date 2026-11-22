@@ -105,7 +105,7 @@ async function main() {
     const specPath = path.join(out, 'scenes', `scene_${num}.json`);
     fs.writeFileSync(specPath, JSON.stringify(spec, null, 2));
 
-    if (!fs.existsSync(clip) || args.force) {
+    if (!fs.existsSync(clip) || !fs.existsSync(clip.replace(/\.mp4$/, '.wav')) || args.force) {
       process.stdout.write(`  scene ${num}: rendering (${adur.toFixed(1)}s of speech)... `);
       const t0 = Date.now();
       const r = spawnSync(python, [path.join(ROOT, 'render', 'render_scene.py'), specPath], { stdio: 'inherit' });
@@ -116,29 +116,37 @@ async function main() {
     total += await probeDuration(clip);
   }
 
+  const wavs = clips.map((c) => c.replace(/\.mp4$/, '.wav'));
   if (!args.sample) { // drop clips from older versions of the script so the folder does not fill up
+    const keep = new Set([...clips, ...wavs]);
     for (const f of fs.readdirSync(path.join(out, 'clips'))) {
       const full = path.join(out, 'clips', f);
-      if (!clips.includes(full)) fs.unlinkSync(full);
+      if (!keep.has(full)) fs.unlinkSync(full);
     }
   }
 
-  const joined = path.join(out, args.sample ? 'sample_nomusic.mp4' : 'joined.mp4');
-  if (clips.length === 1) fs.copyFileSync(clips[0], joined);
-  else {
-    const list = path.join(out, 'clips.txt');
-    fs.writeFileSync(list, clips.map((c) => `file '${c.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n'));
-    await runFFmpeg(['-y', '-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', joined]);
-  }
+  // Video clips are joined without audio; narration is joined as lossless WAV and encoded once at the end.
+  const concat = async (files, dest) => {
+    if (files.length === 1) return fs.copyFileSync(files[0], dest);
+    const list = dest + '.txt';
+    fs.writeFileSync(list, files.map((c) => `file '${c.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n'));
+    return runFFmpeg(['-y', '-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', dest]);
+  };
+  const joined = path.join(out, args.sample ? 'sample_video.mp4' : 'joined_video.mp4');
+  const narration = path.join(out, 'narration.wav');
+  await concat(clips, joined);
+  await concat(wavs, narration);
 
   const final = path.join(out, args.sample ? 'sample.mp4' : 'final.mp4');
-  if (args['no-music']) fs.copyFileSync(joined, final);
-  else {
+  if (args['no-music']) {
+    await runFFmpeg(['-y', '-i', joined, '-i', narration, '-map', '0:v', '-map', '1:a',
+      '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', final]);
+  } else {
     const music = path.join(out, 'music.wav');
     const r = spawnSync(python, [path.join(ROOT, 'render', 'music.py'), String(total + 1), music], { stdio: 'inherit' });
     if (r.status !== 0) throw new Error('Music generation failed.');
-    await runFFmpeg(['-y', '-i', joined, '-i', music, '-filter_complex',
-      '[0:a]volume=1.0[n];[1:a]volume=0.14[m];[n][m]amix=inputs=2:duration=first:dropout_transition=0[mix];[mix]volume=2[a]',
+    await runFFmpeg(['-y', '-i', joined, '-i', narration, '-i', music, '-filter_complex',
+      '[1:a]volume=1.0[n];[2:a]volume=0.14[m];[n][m]amix=inputs=2:duration=first:dropout_transition=0[mix];[mix]volume=2[a]',
       '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', final]);
   }
 

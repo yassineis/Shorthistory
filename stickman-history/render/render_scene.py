@@ -93,11 +93,7 @@ def main(spec_path):
     tmp_out = spec["out"] + ".part.mp4"  # renamed only on success, so a crash never leaves a bad cached clip
     cmd = [FFMPEG, "-y", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(fps), "-i", "-",
-           "-i", spec["audio"],
-           "-filter_complex", f"[1:a]aformat=channel_layouts=stereo,adelay={int(lead * 1000)}|{int(lead * 1000)},apad[a]",
-           "-map", "0:v", "-map", "[a]", "-t", f"{total:.3f}",
-           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
-           "-c:a", "aac", "-ar", "44100", "-b:a", "160k", tmp_out]
+           "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", tmp_out]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 
     paper_flat = Image.new("RGB", (W, H), PAPER)
@@ -174,6 +170,17 @@ def main(spec_path):
     if proc.wait() != 0:
         sys.exit("ffmpeg failed while writing " + spec["out"])
     os.replace(tmp_out, spec["out"])
+
+    # Narration goes to its own lossless WAV, exactly as long as the video clip. make.js joins the WAVs
+    # and encodes the audio ONCE, so there are no click/pop artifacts at scene changes (joining separately
+    # encoded AAC clips leaves a splice at every join). Short fades remove any hard edge from the voice.
+    fade = 0.012
+    ms = int(lead * 1000)
+    af = (f"aformat=channel_layouts=stereo,aresample=44100,afade=t=in:d={fade},"
+          f"afade=t=out:st={max(0.0, adur - fade):.3f}:d={fade},adelay={ms}|{ms},apad")
+    wav = os.path.splitext(spec["out"])[0] + ".wav"
+    subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", spec["audio"], "-af", af,
+                    "-t", f"{nframes / fps:.5f}", "-c:a", "pcm_s16le", "-ar", "44100", wav], check=True)
 
 
 if __name__ == "__main__":
