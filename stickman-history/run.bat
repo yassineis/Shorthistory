@@ -4,22 +4,58 @@ cd /d "%~dp0"
 title Stickman History
 
 rem ---- 1. check the tools ----
+set NEED_NODE=
+set NEED_FFMPEG=
+set NEED_PY=
+
 where node >nul 2>nul
-if errorlevel 1 goto no_node
+if errorlevel 1 set NEED_NODE=1
 where ffmpeg >nul 2>nul
-if errorlevel 1 goto no_ffmpeg
+if errorlevel 1 set NEED_FFMPEG=1
 
 set PY=
-where python >nul 2>nul
+python -c "pass" >nul 2>nul
 if not errorlevel 1 set PY=python
 if not defined PY (
-  where py >nul 2>nul
+  py -c "pass" >nul 2>nul
   if not errorlevel 1 set PY=py
 )
-if not defined PY goto no_python
+if not defined PY set NEED_PY=1
+
+rem ---- 2. install what is missing (needs Windows 10/11 winget) ----
+if defined NEED_NODE goto install
+if defined NEED_FFMPEG goto install
+if defined NEED_PY goto install
+goto tools_ok
+
+:install
+where winget >nul 2>nul
+if errorlevel 1 goto no_winget
+echo.
+echo Some tools are missing. Installing them now. Say Yes if Windows asks for permission.
+echo.
+if defined NEED_NODE (
+  echo Installing Node.js...
+  winget install -e --id OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+)
+if defined NEED_PY (
+  echo Installing Python...
+  winget install -e --id Python.Python.3.12 --silent --accept-package-agreements --accept-source-agreements
+)
+if defined NEED_FFMPEG (
+  echo Installing ffmpeg...
+  winget install -e --id Gyan.FFmpeg --silent --accept-package-agreements --accept-source-agreements
+)
+echo.
+echo Installation finished. Close this window, then double-click run.bat again.
+echo Windows only sees the new programs in a fresh window.
+pause
+exit /b 0
+
+:tools_ok
 set PYTHON=%PY%
 
-rem ---- 2. one-time setup ----
+rem ---- 3. one-time setup ----
 %PY% -c "import PIL, numpy" >nul 2>nul
 if errorlevel 1 (
   echo Installing Pillow and numpy, one time only...
@@ -35,7 +71,7 @@ if not exist .env (
   notepad .env
 )
 
-rem ---- 3. menu ----
+rem ---- 4. menu ----
 :menu
 echo.
 echo ===== Stickman History =====
@@ -90,18 +126,13 @@ echo Something went wrong. Read the error above. If it mentions rate limits, wai
 echo finished scenes are saved and will be skipped.
 goto menu
 
-:no_node
-echo Node.js was not found. Install it from https://nodejs.org then run this file again.
-pause
-exit /b 1
-
-:no_ffmpeg
-echo ffmpeg was not found. Install it from https://ffmpeg.org and add it to your PATH, then run this file again.
-pause
-exit /b 1
-
-:no_python
-echo Python was not found. Install Python 3 from https://python.org, tick "Add to PATH", then run this file again.
+:no_winget
+echo.
+echo Some tools are missing and the automatic installer (winget) is not available on this PC.
+echo Please install these by hand, then run this file again:
+if defined NEED_NODE echo   Node.js:  https://nodejs.org
+if defined NEED_PY echo   Python 3: https://python.org  (tick "Add to PATH")
+if defined NEED_FFMPEG echo   ffmpeg:   https://www.gyan.dev/ffmpeg/builds/  (add its bin folder to PATH)
 pause
 exit /b 1
 
