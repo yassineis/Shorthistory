@@ -117,6 +117,25 @@ async function dryVoice(text, outputPath) {
 const POLISH = 'highpass=f=75,equalizer=f=200:t=q:w=1.2:g=-1.5,equalizer=f=3200:t=q:w=1.1:g=2.5,equalizer=f=7500:t=q:w=1.5:g=1.5,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=120,loudnorm=I=-16:TP=-1.5:LRA=7,aresample=48000';
 const kokoroCache = {};
 
+// Reuse a model already downloaded by another project (e.g. YOUTUBE-AGENT) so it is not downloaded twice.
+// Set KOKORO_CACHE to a cache folder, or leave it empty and the usual Desktop folders are searched.
+async function useExistingCache() {
+  const os = require('os');
+  const sub = path.join('node_modules', '@huggingface', 'transformers', '.cache');
+  const home = os.homedir();
+  const names = ['YOUTUBE-AGENT-backup', 'YOUTUBE-AGENT', 'youtube-agent'];
+  const cands = [process.env.KOKORO_CACHE, process.env.YOUTUBE_AGENT_DIR && path.join(process.env.YOUTUBE_AGENT_DIR, sub)]
+    .concat(names.flatMap((n) => [path.join(home, 'Desktop', n, sub), path.join(home, 'OneDrive', 'Desktop', n, sub), path.join(home, n, sub)]))
+    .filter(Boolean);
+  const found = cands.find((c) => fs.existsSync(path.join(c, 'onnx-community')));
+  if (!found) return;
+  try {
+    const { env } = await import('@huggingface/transformers');
+    env.cacheDir = found;
+    console.log(`  (using the voice model already downloaded in ${found})`);
+  } catch (e) { /* package layout differs: fall back to a normal download */ }
+}
+
 async function loadKokoro(dtype) {
   if (!kokoroCache[dtype]) {
     kokoroCache[dtype] = (async () => {
@@ -124,6 +143,7 @@ async function loadKokoro(dtype) {
       try { mod = await import('kokoro-js'); } catch (e) {
         throw new Error('The free voice engine is not installed. Run "npm install" in this folder (run.bat does it for you), or use --voice gemini / --dry-voice.');
       }
+      await useExistingCache();
       console.log(`  (loading the Kokoro voice model, ${dtype}; the first time it downloads about ${dtype === 'q8' ? '90' : '330'} MB)`);
       return mod.KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype, device: 'cpu' });
     })();
