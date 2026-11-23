@@ -63,7 +63,7 @@ if errorlevel 1 (
   if errorlevel 1 goto pip_failed
 )
 if not exist node_modules\kokoro-js (
-  echo Installing the free voice engine (Kokoro), one time only. The voice model downloads on first use, about 330 MB.
+  echo Installing the free voice engine Kokoro, one time only...
   call npm install --no-audit --no-fund
   if errorlevel 1 goto npm_failed
 )
@@ -77,7 +77,8 @@ if not exist out\.voice_ready (
 if not exist .env (
   copy .env.example .env >nul
   echo.
-  echo A file called .env will open. Paste your free Gemini key after GEMINI_API_KEY= (it is only used to WRITE the stories; the voice is free and offline).
+  echo A file called .env will open. Paste your free Gemini key after GEMINI_API_KEY=
+  echo The key is only used to WRITE the stories. The voice is free and offline.
   echo Get the key at https://aistudio.google.com/apikey then save and close Notepad.
   pause
   notepad .env
@@ -146,11 +147,11 @@ goto menu
 
 :no_winget
 echo.
-echo Some tools are missing and the automatic installer (winget) is not available on this PC.
+echo Some tools are missing and the automatic installer ^(winget^) is not available on this PC.
 echo Please install these by hand, then run this file again:
 if defined NEED_NODE echo   Node.js:  https://nodejs.org
-if defined NEED_PY echo   Python 3: https://python.org  (tick "Add to PATH")
-if defined NEED_FFMPEG echo   ffmpeg:   https://www.gyan.dev/ffmpeg/builds/  (add its bin folder to PATH)
+if defined NEED_PY echo   Python 3: https://python.org  ^(tick "Add to PATH"^)
+if defined NEED_FFMPEG echo   ffmpeg:   https://www.gyan.dev/ffmpeg/builds/  ^(add its bin folder to PATH^)
 pause
 exit /b 1
 
