@@ -56,32 +56,121 @@ Return ONLY JSON with this shape:
 Use 1 to 3 actors per scene, with costumes that fit the era and place. Keep the same setting for neighbouring scenes unless the story moves. Use 0 to 2 props per scene.`;
 }
 
-async function geminiText(prompt) {
+// ---- Gemini text, same approach as YOUTUBE-AGENT (kids-channel/story/gemini-rest.js) ----
+// Model names change, so we do not trust a fixed name: ask the API which models this key can use, test them
+// together with a tiny question, take the fastest one that answers, and remember it for next time.
+const path = require('path');
+const fs = require('fs');
+const BASE = 'https://generativelanguage.googleapis.com/v1beta';
+const MODEL_CACHE = path.join(__dirname, '..', 'out', '.text-model');
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+class QuotaError extends Error {}
+class TempError extends Error {}   // network trouble, timeout, 5xx: worth trying again
+class MissingModel extends Error {} // 404: this model name is not available for this key
+
+function apiKey() {
   const key = ['GEMINI_API_KEY', 'GOOGLE_API_KEY', 'GEMINI_KEY'].map((n) => process.env[n]).find(Boolean);
-  if (!key) throw new Error('No Gemini key found. Put GEMINI_API_KEY=... in .env, or use --mock-story to test without one.');
-  const models = [process.env.GEMINI_TEXT_MODEL, 'gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'].filter(Boolean);
-  let lastErr;
-  for (const model of models) {
-    for (let attempt = 1; attempt <= 4; attempt += 1) {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json', temperature: 0.8 } }),
-      });
-      if (res.status === 404) { lastErr = new Error(`Model ${model} not found`); break; } // try the next model name
-      if (res.status === 429 || res.status >= 500) {
-        lastErr = new Error(`Gemini ${res.status}`);
-        await new Promise((r) => setTimeout(r, 5000 * attempt));
+  if (!key) throw new Error('No Gemini key found. Put GEMINI_API_KEY=... in the .env file (free key: https://aistudio.google.com/apikey), or use --mock-story to test without one.');
+  return key;
+}
+
+async function listModels(key) {
+  const res = await fetch(`${BASE}/models?pageSize=200`, { headers: { 'x-goog-api-key': key }, signal: AbortSignal.timeout(30000) });
+  if (!res.ok) throw new Error(`models list failed (${res.status})`);
+  const data = await res.json();
+  return (data.models || [])
+    .filter((m) => (m.supportedGenerationMethods || []).includes('generateContent'))
+    .map((m) => String(m.name).replace(/^models\//, ''))
+    .filter((n) => /^gemini/.test(n) && !/image|tts|live|embed|audio|vision|robotics|computer|native|thinking|learnlm|omni|veo|imagen|video|music|lyria|gemma/i.test(n));
+}
+
+// Steadiest first: stable "flash", then "flash-lite", then previews, then the rest.
+function rankModels(names) {
+  const score = (n) => (/preview|exp/i.test(n) ? 10 : 0) + (/flash-lite|lite/i.test(n) ? 3 : /flash/i.test(n) ? 0 : 6);
+  return [...new Set(names)].sort((a, b) => score(a) - score(b) || b.localeCompare(a));
+}
+
+async function once(key, model, prompt, ms) {
+  let res;
+  try {
+    res = await fetch(`${BASE}/models/${model}:generateContent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: 'application/json', temperature: 0.8, maxOutputTokens: 16384 } }),
+      signal: AbortSignal.timeout(ms),
+    });
+  } catch (e) {
+    const timeout = /timeout|abort/i.test(e.message);
+    throw new TempError(`Gemini (${model}) ${timeout ? 'did not answer in time' : 'could not be reached'}. Check the internet connection, a VPN or a firewall.`);
+  }
+  const raw = await res.text();
+  if (!res.ok) {
+    const msg = raw.replace(key, '[hidden key]').slice(0, 300);
+    if (res.status === 429 || /RESOURCE_EXHAUSTED|quota/i.test(msg)) throw new QuotaError(`Gemini limit reached (${res.status}).`);
+    if (res.status === 404) throw new MissingModel(`Model ${model} not found`);
+    if ([500, 502, 503, 504].includes(res.status)) throw new TempError(`Gemini (${model}) error ${res.status}`);
+    throw new Error(`Gemini (${model}) error ${res.status}: ${msg}${res.status === 400 || res.status === 403 ? ' | Check GEMINI_API_KEY in the .env file.' : ''}`);
+  }
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { throw new TempError('Gemini sent an answer that is not JSON'); }
+  const text = ((data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || []).map((p) => p.text || '').join('');
+  if (!text.trim()) throw new TempError('Gemini sent an empty answer');
+  return text;
+}
+
+let currentModel = null;
+const noQuota = new Map();
+
+async function pickModel(key, preferred) {
+  console.log('  checking which Gemini model is ready...');
+  let names = [preferred];
+  try { names.push(...rankModels(await listModels(key))); } catch (e) { /* try the default only */ }
+  names = [...new Set(names.filter(Boolean))].filter((n) => !(noQuota.has(n) && Date.now() - noQuota.get(n) < 600000)).slice(0, 5);
+  const results = await Promise.all(names.map(async (name) => {
+    const t0 = Date.now();
+    try { await once(key, name, 'Reply with exactly this JSON and nothing else: {"ok": true}', 25000); return { name, ms: Date.now() - t0, ok: true }; } catch (e) {
+      if (e instanceof QuotaError) noQuota.set(name, Date.now());
+      return { name, ok: false, why: e instanceof QuotaError ? 'no free quota' : e instanceof MissingModel ? 'not found' : e.message.slice(0, 60) };
+    }
+  }));
+  results.forEach((r) => console.log(r.ok ? `    ${r.name}: ready (${(r.ms / 1000).toFixed(1)}s)` : `    ${r.name}: not ready (${r.why})`));
+  const ready = results.filter((r) => r.ok).sort((a, b) => a.ms - b.ms);
+  if (!ready.length) return null;
+  try { fs.mkdirSync(path.dirname(MODEL_CACHE), { recursive: true }); fs.writeFileSync(MODEL_CACHE, ready[0].name); } catch (e) { /* not important */ }
+  console.log(`    using ${ready[0].name}`);
+  return ready[0].name;
+}
+
+async function geminiText(prompt) {
+  const key = apiKey();
+  let cached = '';
+  try { cached = fs.readFileSync(MODEL_CACHE, 'utf8').trim(); } catch (e) { /* no cache yet */ }
+  const preferred = process.env.GEMINI_TEXT_MODEL || cached || 'gemini-3.8-flash';
+  const patience = Number(process.env.STORY_PATIENCE_MS) || 5 * 60000;
+  const pause = Number(process.env.STORY_WAIT_MS) || 20000;
+  const started = Date.now();
+  let last;
+  for (;;) {
+    if (!currentModel) {
+      currentModel = await pickModel(key, preferred);
+      if (!currentModel) {
+        if (Date.now() - started > patience) break;
+        console.log(`  no model is ready right now. Checking again in ${Math.round(pause / 1000)}s...`);
+        await sleep(pause);
         continue;
       }
-      if (!res.ok) throw new Error(`Gemini text error ${res.status}: ${(await res.text()).slice(0, 300)}`);
-      const j = await res.json();
-      const text = j.candidates && j.candidates[0] && j.candidates[0].content.parts.map((p) => p.text || '').join('');
-      if (!text) { lastErr = new Error('Gemini returned no text'); continue; }
-      return text;
+    }
+    try { return await once(key, currentModel, prompt, 120000); } catch (e) {
+      last = e;
+      if (e instanceof QuotaError) noQuota.set(currentModel, Date.now());
+      else if (!(e instanceof TempError || e instanceof MissingModel)) throw e;
+      console.log(`  ${currentModel} failed (${e.message}). Checking again which model is ready...`);
+      currentModel = null;
+      if (Date.now() - started > patience) break;
     }
   }
-  throw lastErr || new Error('Gemini text request failed');
+  throw new Error(`Gemini is not answering right now${last ? ` (${last.message})` : ''}. Check the internet connection, then run again: finished stories are saved.`);
 }
 
 function parseJson(text) {

@@ -159,6 +159,7 @@ async function main() {
   }
   console.log('\n===== Summary =====');
   results.forEach((r) => console.log(r));
+  if (!results.some((r) => r.startsWith('OK'))) process.exitCode = 1;
   console.log('\nFailed or unfinished stories are kept in the library and are finished first next time you run this.');
 }
 

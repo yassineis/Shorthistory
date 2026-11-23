@@ -108,13 +108,13 @@ goto shorts
 :shorts
 node src\shorts.js
 if errorlevel 1 goto failed
-start "" "out\shorts"
+if exist "out\shorts" start "" "out\shorts"
 goto menu
 
 :shortsv
 node src\shorts.js --aspect 9:16
 if errorlevel 1 goto failed
-start "" "out\shorts"
+if exist "out\shorts" start "" "out\shorts"
 goto menu
 
 :list
@@ -124,7 +124,7 @@ goto menu
 :dry
 node src\shorts.js --count 1 --yes --mock-story --dry-voice --height 360 --no-music --topic "Test story"
 if errorlevel 1 goto failed
-start "" "out\shorts"
+if exist "out\shorts" start "" "out\shorts"
 goto menu
 
 :sample
