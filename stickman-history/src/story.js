@@ -120,42 +120,53 @@ async function once(key, model, prompt, ms) {
 }
 
 let currentModel = null;
-const noQuota = new Map();
+const bad = new Map(); // model -> time until which we skip it (Infinity = model does not exist for this key, skipped for the whole run)
 
+const markBad = (name, e) => bad.set(name, e instanceof MissingModel ? Infinity : Date.now() + (e instanceof QuotaError ? 10 * 60000 : 60000));
+
+// Test the models that are not marked bad, five at a time, and take the fastest one that answers.
+// If none of a batch answers, go straight on to the next five, so every model the key offers gets a turn.
 async function pickModel(key, preferred) {
   console.log('  checking which Gemini model is ready...');
   let names = [preferred];
   try { names.push(...rankModels(await listModels(key))); } catch (e) { /* try the default only */ }
-  names = [...new Set(names.filter(Boolean))].filter((n) => !(noQuota.has(n) && Date.now() - noQuota.get(n) < 600000)).slice(0, 5);
-  const results = await Promise.all(names.map(async (name) => {
-    const t0 = Date.now();
-    try { await once(key, name, 'Reply with exactly this JSON and nothing else: {"ok": true}', 25000); return { name, ms: Date.now() - t0, ok: true }; } catch (e) {
-      if (e instanceof QuotaError) noQuota.set(name, Date.now());
-      return { name, ok: false, why: e instanceof QuotaError ? 'no free quota' : e instanceof MissingModel ? 'not found' : e.message.slice(0, 60) };
+  const usable = [...new Set(names.filter(Boolean))].filter((n) => !(bad.get(n) > Date.now()));
+  for (let k = 0; k < usable.length; k += 5) {
+    const results = await Promise.all(usable.slice(k, k + 5).map(async (name) => {
+      const t0 = Date.now();
+      try { await once(key, name, 'Reply with exactly this JSON and nothing else: {"ok": true}', 25000); return { name, ms: Date.now() - t0, ok: true }; } catch (e) {
+        markBad(name, e);
+        return { name, ok: false, why: e instanceof QuotaError ? 'no free quota' : e instanceof MissingModel ? 'not found' : e.message.slice(0, 60) };
+      }
+    }));
+    results.forEach((r) => console.log(r.ok ? `    ${r.name}: ready (${(r.ms / 1000).toFixed(1)}s)` : `    ${r.name}: not ready (${r.why})`));
+    const ready = results.filter((r) => r.ok).sort((a, b) => a.ms - b.ms);
+    if (ready.length) {
+      try { fs.mkdirSync(path.dirname(MODEL_CACHE), { recursive: true }); fs.writeFileSync(MODEL_CACHE, ready[0].name); } catch (e) { /* not important */ }
+      console.log(`    using ${ready[0].name}`);
+      return ready[0].name;
     }
-  }));
-  results.forEach((r) => console.log(r.ok ? `    ${r.name}: ready (${(r.ms / 1000).toFixed(1)}s)` : `    ${r.name}: not ready (${r.why})`));
-  const ready = results.filter((r) => r.ok).sort((a, b) => a.ms - b.ms);
-  if (!ready.length) return null;
-  try { fs.mkdirSync(path.dirname(MODEL_CACHE), { recursive: true }); fs.writeFileSync(MODEL_CACHE, ready[0].name); } catch (e) { /* not important */ }
-  console.log(`    using ${ready[0].name}`);
-  return ready[0].name;
+    if (k + 5 < usable.length) console.log('    none of these answered, trying the next models...');
+  }
+  return null;
 }
 
+// Keeps going, switching to another model whenever one stops, until the story arrives or 10 minutes pass.
 async function geminiText(prompt) {
   const key = apiKey();
   let cached = '';
   try { cached = fs.readFileSync(MODEL_CACHE, 'utf8').trim(); } catch (e) { /* no cache yet */ }
   const preferred = process.env.GEMINI_TEXT_MODEL || cached || 'gemini-3.8-flash';
-  const patience = Number(process.env.STORY_PATIENCE_MS) || 5 * 60000;
+  const patience = Number(process.env.STORY_PATIENCE_MS) || 10 * 60000;
   const pause = Number(process.env.STORY_WAIT_MS) || 20000;
   const started = Date.now();
   let last;
   for (;;) {
+    if (Date.now() - started > patience) break;
     if (!currentModel) {
       currentModel = await pickModel(key, preferred);
       if (!currentModel) {
-        if (Date.now() - started > patience) break;
+        bad.forEach((until, n) => { if (until !== Infinity) bad.delete(n); }); // forget short-term failures, retry after a pause
         console.log(`  no model is ready right now. Checking again in ${Math.round(pause / 1000)}s...`);
         await sleep(pause);
         continue;
@@ -163,14 +174,13 @@ async function geminiText(prompt) {
     }
     try { return await once(key, currentModel, prompt, 120000); } catch (e) {
       last = e;
-      if (e instanceof QuotaError) noQuota.set(currentModel, Date.now());
-      else if (!(e instanceof TempError || e instanceof MissingModel)) throw e;
-      console.log(`  ${currentModel} failed (${e.message}). Checking again which model is ready...`);
+      if (!(e instanceof QuotaError || e instanceof TempError || e instanceof MissingModel)) throw e;
+      markBad(currentModel, e);
+      console.log(`  ${currentModel} stopped (${e.message}). Trying another model...`);
       currentModel = null;
-      if (Date.now() - started > patience) break;
     }
   }
-  throw new Error(`Gemini is not answering right now${last ? ` (${last.message})` : ''}. Check the internet connection, then run again: finished stories are saved.`);
+  throw new Error(`Gemini did not give a story in ${Math.round(patience / 60000)} minutes${last ? ` (last problem: ${last.message})` : ''}. Check the internet connection, then run again: finished stories are saved.`);
 }
 
 function parseJson(text) {
