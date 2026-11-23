@@ -75,43 +75,49 @@ rem ---- 4. menu ----
 :menu
 echo.
 echo ===== Stickman History =====
-echo  1  Sample: first scene only, to check voice and style
-echo  2  Full video, 16:9
-echo  3  Full video, vertical 9:16 for Shorts
-echo  4  Test run with placeholder voice, no key needed
+echo  1  Make history shorts (it asks how many, 1:30 to 3:00 each)
+echo  2  Make history shorts, vertical 9:16
+echo  3  Show the story library (made and still to make)
+echo  4  Test run with no key: placeholder story and voice, 1 video
 echo  5  Voice test only
-echo  6  Exit
+echo  6  Old sample: printing press explainer, first scene
+echo  7  Exit
 echo.
-choice /c 123456 /n /m "Choose 1-6: "
-if errorlevel 6 goto end
+choice /c 1234567 /n /m "Choose 1-7: "
+if errorlevel 7 goto end
+if errorlevel 6 goto sample
 if errorlevel 5 goto voice
 if errorlevel 4 goto dry
-if errorlevel 3 goto vertical
-if errorlevel 2 goto full
-goto sample
+if errorlevel 3 goto list
+if errorlevel 2 goto shortsv
+goto shorts
+
+:shorts
+node src\shorts.js
+if errorlevel 1 goto failed
+start "" "out\shorts"
+goto menu
+
+:shortsv
+node src\shorts.js --aspect 9:16
+if errorlevel 1 goto failed
+start "" "out\shorts"
+goto menu
+
+:list
+node src\shorts.js --list
+goto menu
+
+:dry
+node src\shorts.js --count 1 --yes --mock-story --dry-voice --height 360 --no-music --topic "Test story"
+if errorlevel 1 goto failed
+start "" "out\shorts"
+goto menu
 
 :sample
 node src\make.js scripts\printing-press.json --sample
 if errorlevel 1 goto failed
 start "" "out\printing-press"
-goto menu
-
-:full
-node src\make.js scripts\printing-press.json
-if errorlevel 1 goto failed
-start "" "out\printing-press"
-goto menu
-
-:vertical
-node src\make.js scripts\printing-press.json --aspect 9:16 --out out\printing-press-vertical
-if errorlevel 1 goto failed
-start "" "out\printing-press-vertical"
-goto menu
-
-:dry
-node src\make.js scripts\printing-press.json --dry-voice --out out\dry-test
-if errorlevel 1 goto failed
-start "" "out\dry-test"
 goto menu
 
 :voice

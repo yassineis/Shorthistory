@@ -48,6 +48,8 @@ function help() {
   --no-music         skip the background music
   --no-presenter     hide the corner presenter
   --font <file.ttf>  caption font (default: a bold system font)
+  --style a5|b5      a5 = colourful historical cartoon (default for shorts), b5 = paper stickman explainer
+  --min 90 --max 180 refuse the video if narration + padding falls outside these seconds (exit code 3)
   --force            ignore cached voice and clips
   --env <file>       file with GEMINI_API_KEY (default: .env)`);
 }
@@ -75,14 +77,17 @@ async function main() {
   const scenes = args.sample ? script.scenes.slice(0, 1) : script.scenes;
 
   console.log(`"${script.title || name}": ${scenes.length} scene(s), ${width}x${height} @ ${fps}fps${args['dry-voice'] ? ' [dry voice]' : ''}`);
+  const style = args.style || script.style || 'b5';
+  const lead = 0.45, tail = 0.55;
   const clips = [];
   let total = 0;
 
+  // pass 1: voice for every scene (cached), so the length can be checked before the slow rendering
+  const items = [];
   for (let i = 0; i < scenes.length; i += 1) {
     const sc = scenes[i];
     const num = String(i + 1).padStart(2, '0');
     if (!sc.narration) throw new Error(`Scene ${i + 1} has no "narration".`);
-
     const audioKey = hash(JSON.stringify([sc.narration, voice, !!args['dry-voice']]));
     const audio = path.join(out, 'audio', `scene_${num}_${audioKey}.mp3`);
     if (!fs.existsSync(audio) || args.force) {
@@ -91,11 +96,24 @@ async function main() {
       console.log('ok');
       if (!args['dry-voice'] && i < scenes.length - 1) await sleep(pause);
     }
-    const adur = await probeDuration(audio);
+    items.push({ sc, num, audio, adur: await probeDuration(audio) });
+  }
+  const estimate = items.reduce((a, it) => a + it.adur + lead + tail, 0);
+  if (!args.sample && (args.min || args.max)) {
+    const lo = parseFloat(args.min || '0'), hi = parseFloat(args.max || '1e9');
+    if (estimate < lo || estimate > hi) {
+      console.error(`DURATION ${estimate.toFixed(1)} (allowed ${lo}-${hi})`);
+      process.exit(3);
+    }
+  }
 
+  // pass 2: render each scene (cached by spec hash)
+  for (let i = 0; i < items.length; i += 1) {
+    const { sc, num, audio, adur } = items[i];
     const spec = {
       index: i, narration: sc.narration, kicker: sc.kicker || '', stamp: sc.stamp || '', stamp_at: sc.stamp_at,
-      stage: sc.stage || {}, presenter: !args['no-presenter'] && script.presenter !== false,
+      stage: sc.stage || {}, style, setting: sc.setting || script.setting,
+      presenter: !args['no-presenter'] && (style === 'a5' ? script.presenter === true : script.presenter !== false),
       presenter_pose: sc.presenter_pose, audio, audio_duration: adur,
       width, height, fps, font: args.font || script.font || undefined,
     };
@@ -151,8 +169,8 @@ async function main() {
   }
 
   console.log(`\nDone: ${final}  (${total.toFixed(1)}s)`);
-  if (!args.sample && total > 120) console.log('Note: longer than 2 minutes. Shorten the narration or drop a scene.');
-  if (!args.sample && aspect === '9:16' && total > 60) console.log('Note: YouTube Shorts are 60 s or less; this one is longer.');
+  if (!args.sample && !args.max && total > 120) console.log('Note: longer than 2 minutes. Shorten the narration or drop a scene.');
+  if (!args.sample && aspect === '9:16' && total > 180) console.log('Note: YouTube Shorts may be capped by YouTube (check current limit); this one is longer.');
 }
 
 main().catch((e) => { console.error('\nError: ' + e.message); process.exit(1); });

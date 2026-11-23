@@ -1,5 +1,24 @@
 # stickman-history
 
+## NEW: history Shorts in one command (style A5 "Historical Cartoon")
+
+```
+node src/shorts.js            # asks how many videos (1-10), then makes them
+node src/shorts.js --list     # shows the library: stories made and topics left
+```
+or double-click `run.bat` and choose 1. Each video is 1:30 to 3:00 (checked from the real voice length, rewritten automatically if outside).
+
+How it works: `library/topics.json` holds 60 history topics (from vidIQ trending/outlier/keyword data fetched 2026-11-22, plus evergreen ones). The tool takes the top-scored topics not made yet, Gemini writes each story (`src/story.js`), the script is saved in `library/stories/`, and `library/index.json` records it so a story is never made twice. Finished videos: `out/shorts/<story>/final.mp4` plus `info.txt` (title, description, tags, facts to verify). Unfinished or failed stories are finished first on the next run.
+
+Options: `--count N`, `--topic "my topic"`, `--random`, `--aspect 9:16`, `--mock-story --dry-voice` (test with no key), `--pause 8000` (free-tier limits).
+Add topics later: append entries to `library/topics.json` (same fields) after a new vidIQ run.
+Free-tier note: each scene is one voice request (about 15 per video), so many videos in one day may hit Gemini's daily limit; just run again later, finished scenes are cached.
+Optional `.env` key `GEMINI_TEXT_MODEL` if the default text model name is not available to your key.
+
+---
+
+# Original stickman explainer (style B5)
+
 Free script-to-video tool for short history videos in a simple stickman-explainer style
 (paper background, bold black-and-red captions, a corner presenter, props drawn in code).
 

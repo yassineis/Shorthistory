@@ -1,0 +1,442 @@
+{
+ "title": "The Shortest War in History (prototype, hand-written)",
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "facts_to_check": [
+  "Date of the war: 27 August 1896",
+  "Sultan Hamad bin Thuwaini died 25 August 1896; Khalid bin Barghash took the palace",
+  "Ultimatum expired 9:00; bombardment length is given as 38-45 minutes depending on source",
+  "One British sailor wounded; Zanzibari casualties around 500 per commonly cited figures (verify)",
+  "Khalid's force of about 2,000 men; his escape via the German consulate; Hamoud bin Mohammed installed as sultan"
+ ],
+ "scenes": [
+  {
+   "kicker": "The Shortest War",
+   "stamp": "1896",
+   "narration": "In August of eighteen ninety-six, a war broke out on the island of Zanzibar, and it still holds a [[world record]] for being the shortest ever.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "blue",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "stand",
+      "outfit": "white",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "ship",
+      "x": 0.8,
+      "size": 1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Zanzibar",
+   "stamp": "",
+   "narration": "Zanzibar sat off the coast of East Africa, a rich trading island ruled by a sultan, with strong ties to [[Britain]] by treaty.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "wave",
+      "outfit": "yellow",
+      "talk": true,
+      "outfit_kind": "robe",
+      "hat": "turban"
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "white",
+      "face": "left",
+      "hat": "tricorn"
+     }
+    ],
+    "props": [
+     {
+      "type": "map",
+      "x": 0.8,
+      "size": 0.9
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Trouble",
+   "stamp": "25 Aug",
+   "narration": "On the twenty-fifth of August, the pro-British sultan, Hamad bin Thuwaini, suddenly [[died]], and his cousin Khalid hurried to take his place.",
+   "setting": "edo_street",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "slump",
+      "outfit": "white",
+      "talk": true,
+      "outfit_kind": "robe",
+      "hat": "turban"
+     },
+     {
+      "x": 0.65,
+      "pose": "think",
+      "outfit": "purple",
+      "face": "left",
+      "emote": "?",
+      "hat": "turban"
+     }
+    ],
+    "props": []
+   }
+  },
+  {
+   "kicker": "Not Allowed",
+   "stamp": "",
+   "narration": "There was a catch. The British had agreed that any new sultan needed [[their approval]], and they had somebody else in mind.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "red",
+      "talk": true,
+      "emote": "!",
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "cheer",
+      "outfit": "purple",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "scroll",
+      "x": 0.5,
+      "size": 0.9
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Palace",
+   "stamp": "",
+   "narration": "Khalid ignored them. He moved into the palace with about [[two thousand]] men, and some old cannons pointed at the harbor.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "purple",
+      "talk": true,
+      "hat": "turban"
+     },
+     {
+      "x": 0.55,
+      "pose": "walk",
+      "outfit": "orange",
+      "hat": "turban"
+     },
+     {
+      "x": 0.75,
+      "pose": "walk",
+      "outfit": "red",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "castle",
+      "x": 0.8,
+      "size": 1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ultimatum",
+   "stamp": "",
+   "narration": "The British consul sent a message: leave the palace by nine in the morning on the twenty-seventh, or [[expect a fight]].",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "hold",
+      "outfit": "white",
+      "talk": true,
+      "holds": "scroll",
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "stand",
+      "outfit": "purple",
+      "face": "left",
+      "emote": "...",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.8,
+      "size": 1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ships Arrive",
+   "stamp": "",
+   "narration": "Meanwhile Royal Navy warships had arrived in the harbor, with sailors and Marines ready on deck, and their guns aimed at the [[palace]].",
+   "setting": "ship_sea",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "blue",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "white",
+      "face": "left",
+      "hat": "helmet"
+     }
+    ],
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.8,
+      "size": 1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Standoff",
+   "stamp": "",
+   "narration": "Khalid sent back a reply that was something like, we will not [[lower the flag]], and we do not believe you will open fire.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "purple",
+      "talk": true,
+      "hat": "turban"
+     },
+     {
+      "x": 0.65,
+      "pose": "slump",
+      "outfit": "white",
+      "face": "left",
+      "emote": "!?",
+      "hat": "tricorn"
+     }
+    ],
+    "props": []
+   }
+  },
+  {
+   "kicker": "Nine O'Clock",
+   "stamp": "9:00",
+   "narration": "At nine o'clock the deadline ran out, and the British ships opened fire. The old palace was not built for [[this]].",
+   "setting": "battlefield",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "red",
+      "talk": true,
+      "emote": "!",
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "slump",
+      "outfit": "purple",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "castle",
+      "x": 0.78,
+      "size": 1.1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Thirty-Eight Minutes",
+   "stamp": "~40 min",
+   "narration": "Historians give different times, but the bombardment lasted about [[thirty-eight to forty-five minutes]] before the palace was in ruins and the flag was down.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "think",
+      "outfit": "white",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "stand",
+      "outfit": "gray",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.75,
+      "size": 1.1
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Escape",
+   "stamp": "",
+   "narration": "Khalid slipped away and took shelter in the German consulate, and later escaped to German East Africa, so he was never [[captured]] on the spot.",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "purple",
+      "talk": true,
+      "to": 0.8,
+      "hat": "turban"
+     },
+     {
+      "x": 0.7,
+      "pose": "point",
+      "outfit": "teal",
+      "face": "left",
+      "hat": "kasa"
+     }
+    ],
+    "props": []
+   }
+  },
+  {
+   "kicker": "The Result",
+   "stamp": "",
+   "narration": "The British put Hamoud bin Mohammed on the throne instead. He was friendly to them, and the island stayed under [[British influence]].",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "white",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.6,
+      "pose": "hold",
+      "outfit": "yellow",
+      "face": "left",
+      "holds": "crown",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "crown",
+      "x": 0.8,
+      "size": 0.9
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Cost",
+   "stamp": "",
+   "narration": "Hundreds of defenders were reported killed or wounded, while the British side had just [[one sailor]] hurt. It was very one-sided.",
+   "setting": "battlefield",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "slump",
+      "outfit": "white",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "gray",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": []
+   }
+  },
+  {
+   "kicker": "Record Holder",
+   "stamp": "",
+   "narration": "So that is the story of the Anglo-Zanzibar War, a conflict that finished in less time than a [[TV episode]].",
+   "setting": "harbor",
+   "stage": {
+    "actors": [
+     {
+      "x": 0.35,
+      "pose": "cheer",
+      "outfit": "blue",
+      "talk": true,
+      "hat": "tricorn"
+     },
+     {
+      "x": 0.65,
+      "pose": "cheer",
+      "outfit": "yellow",
+      "face": "left",
+      "hat": "turban"
+     }
+    ],
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.5,
+      "size": 1
+     }
+    ]
+   }
+  }
+ ]
+}

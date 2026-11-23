@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "stories": [
+  {
+   "id": "printing-press-sample",
+   "topic_id": "gutenberg-and-the-printing-press",
+   "title": "Gutenberg and the Printing Press",
+   "status": "sample",
+   "created": "2026-11-22"
+  }
+ ]
+}

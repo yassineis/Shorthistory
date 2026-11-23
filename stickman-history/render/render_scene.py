@@ -70,16 +70,23 @@ def main(spec_path):
     W, H, fps = spec["width"], spec["height"], spec.get("fps", 24)
     set_font(spec.get("font"))
     L = layout(W, H)
+    a5 = spec.get("style") == "a5"
+    if a5:
+        L["line_w"] *= 1.25  # bolder outlines for the cartoon look
     lead, tail = spec.get("lead", 0.45), spec.get("tail", 0.55)
     adur = spec["audio_duration"]
     total = lead + adur + tail
     nframes = int(math.ceil(total * fps))
     env = audio_envelope(spec["audio"], fps, lead, nframes)
-    paper = make_paper(W, H, S)
+    if a5:
+        import a5 as a5mod
+        paper = a5mod.make_backdrop(W, H, S, spec.get("setting"), L)
+    else:
+        paper = make_paper(W, H, S)
     stage = spec.get("stage", {})
     props = stage.get("props", [])
     actors = stage.get("actors", [])
-    presenter_on = spec.get("presenter", True)
+    presenter_on = spec.get("presenter", not a5)
 
     probe = Pen(paper.copy(), S, 0, L["line_w"])
     cap_size = L["cap_size"]
@@ -127,15 +134,31 @@ def main(spec_path):
 
         draw_props(True)
         # hand-drawn ground line
-        pts = [(0.03 * W + k * 0.94 * W / 40, ground + math.sin(k * 1.7) * 1.5) for k in range(41)]
-        pen.line(pts, w=L["line_w"] * 0.8, color=INK)
+        if not a5:
+            pts = [(0.03 * W + k * 0.94 * W / 40, ground + math.sin(k * 1.7) * 1.5) for k in range(41)]
+            pen.line(pts, w=L["line_w"] * 0.8, color=INK)
         draw_props(False)
 
         for a in actors:
             ax, pose, face = actor_state(a, t, total, W)
             holds = a.get("holds") or ("quill" if pose == "write" else None)
-            draw_stick(pen, ax, ground, L["actor_h"] * a.get("scale", 1.0), pose, t + a.get("offset", 0.0),
-                       face=face, color=COLORS.get(a.get("color", "ink"), INK), hat=a.get("hat"), holds=holds)
+            kw = {}
+            if a5:
+                kw = dict(head_fill=(255, 255, 255), outfit=a5mod.OUTFITS.get(a.get("outfit", ""), None),
+                          outfit_kind=a.get("outfit_kind", "tunic"))
+                if a.get("talk") and lead <= t <= lead + adur:
+                    kw["mouth"] = float(env[i])
+            info = draw_stick(pen, ax, ground, L["actor_h"] * a.get("scale", 1.0), pose, t + a.get("offset", 0.0),
+                              face=face, color=COLORS.get(a.get("color", "ink"), INK), hat=a.get("hat"), holds=holds, **kw)
+            em = a.get("emote")
+            if em and t >= a.get("emote_at", lead + 1.0):
+                hx, hy = info["head"]
+                r = info["hr"]
+                sc = ease_out_back((t - a.get("emote_at", lead + 1.0)) / 0.3)
+                br = r * 0.9 * max(0.05, sc)
+                bx, by = hx + r * 1.5, hy - r * 1.9
+                pen.circle(bx, by, br, fill=(255, 255, 255), outline=INK, w=L["line_w"] * 0.8)
+                pen.text((bx, by), em, br * 1.5, RED, anchor="mm")
 
         if presenter_on:
             draw_stick(pen, L["presenter_x"], ground, L["presenter_h"], spec.get("presenter_pose", "stand"),
@@ -151,6 +174,10 @@ def main(spec_path):
         if kicker and t >= 0.1:
             kx, ky = L["kicker_xy"]
             ks = L["kicker_size"]
+            if a5:  # keep the title readable on any backdrop
+                padk = 0.012 * H
+                pen.d.rounded_rectangle(((kx - padk) * S, (ky - padk * 0.6) * S, (kx + pen.tw(kicker, ks) + padk) * S, (ky + ks * 1.45) * S),
+                                        radius=int(0.02 * H * S), fill=(252, 247, 235), outline=INK, width=int(L["line_w"] * S * 0.7))
             pen.text((kx, ky), kicker, ks, INK)
             wk = pen.tw(kicker, ks) * ease_inout((t - 0.15) / 0.5)
             pen.line([(kx, ky + ks * 1.2), (kx + wk, ky + ks * 1.2)], w=L["line_w"] * 1.3, color=RED, wob=False)
@@ -158,6 +185,11 @@ def main(spec_path):
         for (t0, t1), ch in zip(times, chunks):
             last = ch is chunks[-1]
             if t0 <= t < t1 or (last and t >= t0):
+                if a5:  # readable panel behind the caption on a busy colourful background
+                    pad = 0.012 * H
+                    pen.d.rounded_rectangle(((L["cap_x0"] - 2 * pad) * S, (L["cap_y0"] - pad) * S,
+                                             (L["cap_x1"] + 2 * pad) * S, (L["cap_y1"] + pad) * S), radius=int(0.025 * H * S),
+                                            fill=(252, 247, 235), outline=INK, width=int(L["line_w"] * S * 0.8))
                 draw_chunk(pen, ch, space, cap_size, L["cap_x0"], L["cap_x1"], L["cap_y0"], L["cap_y1"])
                 break
 

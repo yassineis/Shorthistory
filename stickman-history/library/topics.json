@@ -1,0 +1,646 @@
+{
+ "version": 1,
+ "updated": "2026-11-22",
+ "about": "Seed library of history story topics. 'vidiq' topics come from vidIQ signals fetched 2026-11-22 (outliers, rising keywords, trending videos); 'evergreen' topics are curated. Scores are my 0-100 priority guess, not a vidIQ number. Topics are seeds: every fact must be checked before publishing.",
+ "excluded_note": "Skipped trending items that are pseudo-history or unverifiable (Tartaria, Anunnaki-as-aliens, 'forbidden' claims), music/exam/news content and non-story keywords.",
+ "vidiq_runs": [
+  {
+   "date": "2026-11-22",
+   "tool": "outliers",
+   "query": "ancient history untold story (long)",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-22",
+   "tool": "outliers",
+   "query": "history story (short)",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-22",
+   "tool": "outliers",
+   "query": "history of how it really happened animated (long)",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-22",
+   "tool": "keyword_research rising",
+   "query": "niche: history stories",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-22",
+   "tool": "keyword_research questions",
+   "query": "history of (trending)",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-22",
+   "tool": "trending_videos",
+   "query": "title: history, long, by VPH",
+   "credits": 5
+  }
+ ],
+ "topics": [
+  {
+   "id": "the-5-500-year-old-shoe-of-areni-cave",
+   "title": "The 5,500-Year-Old Shoe of Areni Cave",
+   "angle": "A leather shoe found in an Armenian cave, laces still in place",
+   "category": "archaeology",
+   "setting": "cave",
+   "score": 92,
+   "source": "vidiq",
+   "signal": "Shorts outlier: '5,500-Year-Old Shoe Still Had Its Laces' 192K views, 306x breakout (small channel)"
+  },
+  {
+   "id": "the-day-the-mona-lisa-was-stolen",
+   "title": "The Day the Mona Lisa Was Stolen",
+   "angle": "How a museum worker walked out with the painting in 1911",
+   "category": "crime",
+   "setting": "medieval_town",
+   "score": 90,
+   "source": "vidiq",
+   "signal": "Outlier long video on Mona Lisa 'true story' 56K views; evergreen search interest"
+  },
+  {
+   "id": "the-shortest-war-in-history",
+   "title": "The Shortest War in History",
+   "angle": "The Anglo-Zanzibar War of 1896, over in under an hour",
+   "category": "war",
+   "setting": "harbor",
+   "score": 93,
+   "source": "vidiq",
+   "signal": "Outlier: 'The Shortest War EVER' 2.1M-sub channel; rising question demand"
+  },
+  {
+   "id": "the-martyrs-of-lyon-177-ad",
+   "title": "The Martyrs of Lyon, 177 AD",
+   "angle": "Blandina and the Christians of Lugdunum",
+   "category": "ancient",
+   "setting": "roman_forum",
+   "score": 78,
+   "source": "vidiq",
+   "signal": "Shorts outlier: 908K views, 151x breakout"
+  },
+  {
+   "id": "who-invented-eyeglasses",
+   "title": "Who Invented Eyeglasses?",
+   "angle": "From reading stones to glasses in medieval Italy",
+   "category": "inventions",
+   "setting": "medieval_town",
+   "score": 84,
+   "source": "vidiq",
+   "signal": "Outlier long video 'Who Invented Eyeglasses' 3.7x breakout; evergreen question"
+  },
+  {
+   "id": "henry-heinz-and-the-horseradish-bankruptcy",
+   "title": "Henry Heinz and the Horseradish Bankruptcy",
+   "angle": "The first Heinz company failed before ketchup made him famous",
+   "category": "business",
+   "setting": "london",
+   "score": 86,
+   "source": "vidiq",
+   "signal": "Shorts outlier: 42.9K views, 18x breakout"
+  },
+  {
+   "id": "the-pyramid-builders-how-were-they-built",
+   "title": "The Pyramid Builders: How Were They Built?",
+   "angle": "What archaeologists actually know about building the Great Pyramid",
+   "category": "ancient",
+   "setting": "egypt_temple",
+   "score": 95,
+   "source": "vidiq",
+   "signal": "Rising keyword 'how they built the pyramids' +4759% in a month, ~84K est. monthly searches"
+  },
+  {
+   "id": "why-canada-never-became-part-of-the-united-states",
+   "title": "Why Canada Never Became Part of the United States",
+   "angle": "The 1775 and 1812 invasions that failed",
+   "category": "war",
+   "setting": "snow",
+   "score": 94,
+   "source": "vidiq",
+   "signal": "Rising keyword 'the real reason canada never became part of the united states' +2229%, ~160K est. monthly searches"
+  },
+  {
+   "id": "the-neanderthals-our-closest-cousins",
+   "title": "The Neanderthals: Our Closest Cousins",
+   "angle": "What the genes and the bones say",
+   "category": "prehistory",
+   "setting": "cave",
+   "score": 88,
+   "source": "vidiq",
+   "signal": "Rising keyword 'the 6 inches that separated us from neanderthals' +848%"
+  },
+  {
+   "id": "the-nuremberg-trials",
+   "title": "The Nuremberg Trials",
+   "angle": "How the world put the leaders of a regime on trial in 1945",
+   "category": "war",
+   "setting": "london",
+   "score": 85,
+   "source": "vidiq",
+   "signal": "Rising keyword 'nuremberg' +420%, 42K VPH on top video"
+  },
+  {
+   "id": "pearl-harbor-the-morning-of-december-7-1941",
+   "title": "Pearl Harbor: The Morning of December 7, 1941",
+   "angle": "Minute by minute, from the Japanese strike to the US declaration of war",
+   "category": "war",
+   "setting": "harbor",
+   "score": 86,
+   "source": "vidiq",
+   "signal": "Rising keyword 'pearl harbor' +155%, ~253K est. monthly searches"
+  },
+  {
+   "id": "bonnie-and-clyde",
+   "title": "Bonnie and Clyde",
+   "angle": "The real story of the Barrow Gang",
+   "category": "crime",
+   "setting": "old_west",
+   "score": 85,
+   "source": "vidiq",
+   "signal": "Rising keyword 'bonnie and clyde' +120%, 130K VPH"
+  },
+  {
+   "id": "bobby-fischer-vs-boris-spassky-1972",
+   "title": "Bobby Fischer vs Boris Spassky, 1972",
+   "angle": "The chess match that became a Cold War showdown",
+   "category": "sports",
+   "setting": "moon",
+   "score": 80,
+   "source": "vidiq",
+   "signal": "Rising keyword 'bobby fischer' +129%, 100K VPH"
+  },
+  {
+   "id": "the-ss-united-states",
+   "title": "The SS United States",
+   "angle": "The fastest ocean liner ever built and what happened to it",
+   "category": "inventions",
+   "setting": "ship_sea",
+   "score": 80,
+   "source": "vidiq",
+   "signal": "Rising keywords 'ss united states' +374% and 'ss united states sinking' +659%"
+  },
+  {
+   "id": "how-rome-fell",
+   "title": "How Rome Fell",
+   "angle": "The slow fall of the western Roman Empire, in four steps",
+   "category": "ancient",
+   "setting": "roman_forum",
+   "score": 84,
+   "source": "vidiq",
+   "signal": "Question keyword 'how rome fell // the history of the fall of the roman empire' ~5.6K monthly searches"
+  },
+  {
+   "id": "the-mongol-empire-rises",
+   "title": "The Mongol Empire Rises",
+   "angle": "How Genghis Khan united the steppe",
+   "category": "war",
+   "setting": "steppe",
+   "score": 90,
+   "source": "vidiq",
+   "signal": "Trending: Mongols 'most feared empire' 67K views in 2 days"
+  },
+  {
+   "id": "frederick-the-great-of-prussia",
+   "title": "Frederick the Great of Prussia",
+   "angle": "The flute-playing king who built Europe's best army",
+   "category": "war",
+   "setting": "battlefield",
+   "score": 75,
+   "source": "vidiq",
+   "signal": "Trending: Extra History 'Frederick the Great' 94K views in 1 day"
+  },
+  {
+   "id": "pompey-caesar-and-the-rubicon",
+   "title": "Pompey, Caesar and the Rubicon",
+   "angle": "Why crossing a small river started a civil war",
+   "category": "ancient",
+   "setting": "roman_forum",
+   "score": 82,
+   "source": "vidiq",
+   "signal": "Trending: Tribunate 'Quoting History to Men with Swords' 164K views"
+  },
+  {
+   "id": "the-barbarossa-brothers",
+   "title": "The Barbarossa Brothers",
+   "angle": "Two pirate brothers who ruled the Mediterranean",
+   "category": "pirates",
+   "setting": "ship_sea",
+   "score": 80,
+   "source": "vidiq",
+   "signal": "Trending: 'Dark History of the Barbarossa Brothers' 53K views, VPH 473"
+  },
+  {
+   "id": "cleopatra-s-little-sister-arsinoe",
+   "title": "Cleopatra's Little Sister Arsinoe",
+   "angle": "The rival princess history almost forgot",
+   "category": "ancient",
+   "setting": "egypt_temple",
+   "score": 82,
+   "source": "vidiq",
+   "signal": "Outlier: 'They Found Cleopatra's Sister' 23x breakout"
+  },
+  {
+   "id": "mitanni-the-lost-empire-that-fought-egypt",
+   "title": "Mitanni: The Lost Empire That Fought Egypt",
+   "angle": "The Hurrian kingdom between Egypt and the Hittites",
+   "category": "ancient",
+   "setting": "egypt_temple",
+   "score": 70,
+   "source": "vidiq",
+   "signal": "Outlier: Mitanni 2.7x and Hurrians 2.5x breakout (low competition)"
+  },
+  {
+   "id": "the-olmecs-america-s-first-civilization",
+   "title": "The Olmecs: America's First Civilization",
+   "angle": "The giant stone heads and who made them",
+   "category": "ancient",
+   "setting": "jungle_temple",
+   "score": 72,
+   "source": "vidiq",
+   "signal": "Outlier: 'Witness the Olmecs' 6.6x breakout"
+  },
+  {
+   "id": "russia-and-alaska-the-1867-sale",
+   "title": "Russia and Alaska: The 1867 Sale",
+   "angle": "Why Russia sold Alaska for about $7 million",
+   "category": "politics",
+   "setting": "snow",
+   "score": 83,
+   "source": "vidiq",
+   "signal": "Question keyword 'do you know the history of russia and alaska' ~7K monthly searches"
+  },
+  {
+   "id": "what-did-vikings-eat",
+   "title": "What Did Vikings Eat?",
+   "angle": "A day of Viking food from porridge to dried fish",
+   "category": "food",
+   "setting": "viking_coast",
+   "score": 82,
+   "source": "vidiq",
+   "signal": "Question keyword 'what did vikings eat' ~8.2K monthly searches"
+  },
+  {
+   "id": "what-did-samurai-eat",
+   "title": "What Did Samurai Eat?",
+   "angle": "Rice, miso and the diet of Edo-period warriors",
+   "category": "food",
+   "setting": "edo_street",
+   "score": 82,
+   "source": "vidiq",
+   "signal": "Question keyword 'what did samurai eat' ~8.3K monthly searches"
+  },
+  {
+   "id": "what-did-titanic-passengers-eat",
+   "title": "What Did Titanic Passengers Eat?",
+   "angle": "Menus from first class to steerage",
+   "category": "food",
+   "setting": "ship_sea",
+   "score": 83,
+   "source": "vidiq",
+   "signal": "Question keywords about Titanic food ~5.8K-6.5K monthly searches"
+  },
+  {
+   "id": "what-did-medieval-people-eat",
+   "title": "What Did Medieval People Eat?",
+   "angle": "Bread, pottage and feast-day dishes",
+   "category": "food",
+   "setting": "medieval_town",
+   "score": 78,
+   "source": "vidiq",
+   "signal": "Question keyword 'what did medieval people eat' ~5.4K monthly searches"
+  },
+  {
+   "id": "the-farm-boy-who-invented-television",
+   "title": "The Farm Boy Who Invented Television",
+   "angle": "Philo Farnsworth and the first electronic TV",
+   "category": "inventions",
+   "setting": "old_west",
+   "score": 80,
+   "source": "vidiq",
+   "signal": "Question keyword 'a farm boy came up with the idea of television' ~5.3K monthly searches"
+  },
+  {
+   "id": "how-sunlight-was-first-turned-into-electricity",
+   "title": "How Sunlight Was First Turned Into Electricity",
+   "angle": "From Becquerel to the first silicon solar cell",
+   "category": "inventions",
+   "setting": "london",
+   "score": 70,
+   "source": "vidiq",
+   "signal": "Question keyword 'history of solar panels' ~7.8K monthly searches"
+  },
+  {
+   "id": "the-lighthouse-of-alexandria",
+   "title": "The Lighthouse of Alexandria",
+   "angle": "One of the Seven Wonders and how it fell",
+   "category": "ancient",
+   "setting": "harbor",
+   "score": 84,
+   "source": "vidiq",
+   "signal": "Rising keyword 'lighthouse mysteries' +171%, ~365K est. monthly searches"
+  },
+  {
+   "id": "the-evolution-of-medicine",
+   "title": "The Evolution of Medicine",
+   "angle": "From herbs and leeches to antibiotics",
+   "category": "science",
+   "setting": "medieval_town",
+   "score": 72,
+   "source": "vidiq",
+   "signal": "Question keyword 'how doctors worked throughout history' ~5.6K monthly searches"
+  },
+  {
+   "id": "the-sphinx-who-built-it-and-why",
+   "title": "The Sphinx: Who Built It and Why",
+   "angle": "What Egyptologists know about the Great Sphinx",
+   "category": "ancient",
+   "setting": "desert",
+   "score": 85,
+   "source": "vidiq",
+   "signal": "Rising keyword 'sphinx' +352%, ~300K est. monthly searches"
+  },
+  {
+   "id": "the-deadliest-candy-ever-sold",
+   "title": "The Deadliest Candy Ever Sold",
+   "angle": "The story of a dangerous 19th-century candy trend",
+   "category": "oddities",
+   "setting": "london",
+   "score": 74,
+   "source": "vidiq",
+   "signal": "Rising keyword 'the deadliest candy ever sold' +243%, ~254K est. monthly searches"
+  },
+  {
+   "id": "what-if-you-woke-up-20-000-years-ago",
+   "title": "What If You Woke Up 20,000 Years Ago?",
+   "angle": "Daily life in the Ice Age",
+   "category": "prehistory",
+   "setting": "cave",
+   "score": 80,
+   "source": "vidiq",
+   "signal": "Rising keyword 'what if you woke up 20,000 years ago' +239%, ~310K est. monthly searches"
+  },
+  {
+   "id": "how-did-ancient-people-get-privacy",
+   "title": "How Did Ancient People Get Privacy?",
+   "angle": "Homes, baths and personal space in the ancient world",
+   "category": "everyday",
+   "setting": "roman_forum",
+   "score": 72,
+   "source": "vidiq",
+   "signal": "Rising keyword 'how did ancient humans get any privacy' +115%, ~292K est. monthly searches"
+  },
+  {
+   "id": "doomsday-clock-where-did-it-come-from",
+   "title": "Doomsday Clock: Where Did It Come From?",
+   "angle": "The 1947 magazine clock that measures nuclear risk",
+   "category": "science",
+   "setting": "moon",
+   "score": 70,
+   "source": "vidiq",
+   "signal": "Rising keyword 'doomsday clock' +196%, ~545K est. monthly searches"
+  },
+  {
+   "id": "gutenberg-and-the-printing-press",
+   "title": "Gutenberg and the Printing Press",
+   "angle": "How movable type spread ideas across Europe",
+   "category": "inventions",
+   "setting": "medieval_town",
+   "score": 70,
+   "source": "sample",
+   "signal": "Already made as the sample video; kept for reference"
+  },
+  {
+   "id": "the-great-emu-war-of-1932",
+   "title": "The Great Emu War of 1932",
+   "angle": "Australia's soldiers versus a flock of emus",
+   "category": "oddities",
+   "setting": "old_west",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Humor-friendly evergreen; fits cartoon style"
+  },
+  {
+   "id": "the-dancing-plague-of-1518",
+   "title": "The Dancing Plague of 1518",
+   "angle": "Hundreds of people danced in Strasbourg for days",
+   "category": "oddities",
+   "setting": "medieval_town",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Curiosity story, short-form friendly"
+  },
+  {
+   "id": "the-great-molasses-flood-of-1919",
+   "title": "The Great Molasses Flood of 1919",
+   "angle": "A sticky wave hit Boston's North End",
+   "category": "oddities",
+   "setting": "harbor",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Curiosity story, short-form friendly"
+  },
+  {
+   "id": "the-great-fire-of-london-1666",
+   "title": "The Great Fire of London, 1666",
+   "angle": "Pudding Lane to St Paul's",
+   "category": "disaster",
+   "setting": "london",
+   "score": 72,
+   "source": "evergreen",
+   "signal": "Evergreen school-history topic"
+  },
+  {
+   "id": "the-trojan-horse",
+   "title": "The Trojan Horse",
+   "angle": "What Virgil wrote and what archaeology says",
+   "category": "myth-history",
+   "setting": "greek_agora",
+   "score": 74,
+   "source": "evergreen",
+   "signal": "Evergreen; clear visual hook"
+  },
+  {
+   "id": "hannibal-crosses-the-alps",
+   "title": "Hannibal Crosses the Alps",
+   "angle": "Elephants, snow and a surprise attack on Rome",
+   "category": "war",
+   "setting": "snow",
+   "score": 74,
+   "source": "evergreen",
+   "signal": "Evergreen; strong visual hook"
+  },
+  {
+   "id": "leif-erikson-and-the-vikings-in-north-america",
+   "title": "Leif Erikson and the Vikings in North America",
+   "angle": "L'Anse aux Meadows and the Vinland sagas",
+   "category": "exploration",
+   "setting": "viking_coast",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Evergreen; ties to Viking interest"
+  },
+  {
+   "id": "the-terracotta-army",
+   "title": "The Terracotta Army",
+   "angle": "A farmer's well and an emperor's buried guard",
+   "category": "archaeology",
+   "setting": "china_palace",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Evergreen; strong visual hook"
+  },
+  {
+   "id": "oda-nobunaga-and-the-musket-volleys",
+   "title": "Oda Nobunaga and the Musket Volleys",
+   "angle": "The warlord who changed samurai warfare",
+   "category": "war",
+   "setting": "edo_street",
+   "score": 72,
+   "source": "evergreen",
+   "signal": "Pairs with samurai-food interest"
+  },
+  {
+   "id": "operation-mincemeat",
+   "title": "Operation Mincemeat",
+   "angle": "The dead man who fooled the Axis in 1943",
+   "category": "war",
+   "setting": "harbor",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Evergreen spy story"
+  },
+  {
+   "id": "the-christmas-truce-of-1914",
+   "title": "The Christmas Truce of 1914",
+   "angle": "Soldiers who paused the war to play football",
+   "category": "war",
+   "setting": "battlefield",
+   "score": 74,
+   "source": "evergreen",
+   "signal": "Evergreen; seasonal in December"
+  },
+  {
+   "id": "the-rosetta-stone",
+   "title": "The Rosetta Stone",
+   "angle": "How a slab of rock unlocked hieroglyphs",
+   "category": "archaeology",
+   "setting": "egypt_temple",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Evergreen; pairs with Egypt interest"
+  },
+  {
+   "id": "tulip-mania",
+   "title": "Tulip Mania",
+   "angle": "Bulbs, bubbles and the Dutch Golden Age (with the facts historians dispute)",
+   "category": "business",
+   "setting": "harbor",
+   "score": 70,
+   "source": "evergreen",
+   "signal": "Evergreen finance-history story"
+  },
+  {
+   "id": "marco-polo-and-the-silk-road",
+   "title": "Marco Polo and the Silk Road",
+   "angle": "What he saw and what scholars doubt",
+   "category": "exploration",
+   "setting": "desert",
+   "score": 72,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "the-library-of-alexandria",
+   "title": "The Library of Alexandria",
+   "angle": "What was lost and how it really declined",
+   "category": "ancient",
+   "setting": "egypt_temple",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Evergreen; pairs with lighthouse topic"
+  },
+  {
+   "id": "the-wright-brothers-at-kitty-hawk",
+   "title": "The Wright Brothers at Kitty Hawk",
+   "angle": "Twelve seconds that started aviation",
+   "category": "inventions",
+   "setting": "old_west",
+   "score": 72,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "apollo-11-and-the-final-minutes-of-landing",
+   "title": "Apollo 11 and the Final Minutes of Landing",
+   "angle": "Alarms, low fuel and 'Tranquility Base'",
+   "category": "science",
+   "setting": "moon",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "the-battle-of-thermopylae",
+   "title": "The Battle of Thermopylae",
+   "angle": "300 Spartans, thousands of allies, one narrow pass",
+   "category": "war",
+   "setting": "greek_agora",
+   "score": 80,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "joan-of-arc",
+   "title": "Joan of Arc",
+   "angle": "A teenage soldier who changed a war",
+   "category": "war",
+   "setting": "medieval_town",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "napoleon-s-retreat-from-moscow",
+   "title": "Napoleon's Retreat From Moscow",
+   "angle": "How winter and supply lines wrecked the Grande Armée",
+   "category": "war",
+   "setting": "snow",
+   "score": 76,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "the-black-death",
+   "title": "The Black Death",
+   "angle": "How the plague reached Europe and what changed after",
+   "category": "disaster",
+   "setting": "medieval_town",
+   "score": 78,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "pompeii-the-last-day",
+   "title": "Pompeii: The Last Day",
+   "angle": "What Vesuvius did and what the ash preserved",
+   "category": "disaster",
+   "setting": "roman_forum",
+   "score": 82,
+   "source": "evergreen",
+   "signal": "Evergreen"
+  },
+  {
+   "id": "tutankhamun-s-tomb",
+   "title": "Tutankhamun's Tomb",
+   "angle": "Howard Carter and the sealed door in 1922",
+   "category": "archaeology",
+   "setting": "egypt_temple",
+   "score": 84,
+   "source": "evergreen",
+   "signal": "Evergreen; pairs with Egypt interest"
+  }
+ ]
+}
