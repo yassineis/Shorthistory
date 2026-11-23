@@ -45,7 +45,8 @@ It asks how many videos to make (1-10), then makes them. Videos are 1:30 to 3:00
   --yes            do not ask for confirmation
   --list           show the library: topics made and topics left
   --mock-story     placeholder story, no Gemini (to test the pipeline)
-  --dry-voice      placeholder voice, no Gemini (to test the pipeline)
+  --voice kokoro|gemini  default kokoro: free offline voice, no key, no limits
+  --dry-voice      placeholder voice (to test the pipeline)
   --aspect 16:9|9:16   default 16:9;  --height 720;  --pause 4000;  --no-music;  --env file`);
 }
 
@@ -120,7 +121,7 @@ async function main() {
       let ok = false;
       for (let attempt = 1; attempt <= 3 && !ok; attempt += 1) {
         const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--min', String(MIN_SEC), '--max', String(MAX_SEC), '--style', 'a5'];
-        for (const k of ['aspect', 'height', 'pause', 'env']) if (args[k]) margs.push(`--${k}`, args[k]);
+        for (const k of ['aspect', 'height', 'pause', 'env', 'voice']) if (args[k]) margs.push(`--${k}`, args[k]);
         for (const k of ['dry-voice', 'no-music']) if (args[k]) margs.push(`--${k}`);
         const r = spawnSync(process.execPath, margs, { stdio: ['inherit', 'inherit', 'pipe'], encoding: 'utf8' });
         if (r.stderr) process.stderr.write(r.stderr);

@@ -2,7 +2,7 @@
   "name": "stickman-history",
   "version": "0.1.0",
   "private": true,
-  "description": "Free script-to-video generator: Gemini voice + code-drawn stickman scenes + ffmpeg",
+  "description": "Free script-to-video generator: Kokoro offline voice + code-drawn cartoon scenes + ffmpeg",
   "scripts": {
     "voice-test": "node src/voice.js",
     "sample": "node src/make.js scripts/printing-press.json --sample",
@@ -10,5 +10,10 @@
     "make:dry": "node src/make.js scripts/printing-press.json --dry-voice",
     "make:vertical": "node src/make.js scripts/printing-press.json --aspect 9:16 --out out/printing-press-vertical"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "kokoro-js": "^1.2.0"
+  }
 }

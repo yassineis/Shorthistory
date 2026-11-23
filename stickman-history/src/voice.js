@@ -1,5 +1,7 @@
 'use strict';
-// Voice generation, ported from YOUTUBE-AGENT (utils/ai-video-generator.js -> generateGeminiTTS).
+// Voice generation. Default engine: Kokoro (kokoro-js, free, offline, runs on the CPU, no API key, no limits),
+// ported from YOUTUBE-AGENT (kids-channel/animation/lib/voices.js). Optional engine: Gemini TTS
+// (--voice gemini), ported from YOUTUBE-AGENT (utils/ai-video-generator.js -> generateGeminiTTS).
 // Same request shape and the same PCM -> FFmpeg step. The only change: it calls the Gemini REST
 // endpoint with fetch (Node 18+) so this project needs no npm packages.
 //
@@ -110,6 +112,58 @@ async function dryVoice(text, outputPath) {
   return outputPath;
 }
 
+// ---------------------------------------------------------------- Kokoro (free, offline)
+// Same clean-up chain as YOUTUBE-AGENT: remove rumble, add clarity, even loudness.
+const POLISH = 'highpass=f=75,equalizer=f=200:t=q:w=1.2:g=-1.5,equalizer=f=3200:t=q:w=1.1:g=2.5,equalizer=f=7500:t=q:w=1.5:g=1.5,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=120,loudnorm=I=-16:TP=-1.5:LRA=7,aresample=48000';
+const kokoroCache = {};
+
+async function loadKokoro(dtype) {
+  if (!kokoroCache[dtype]) {
+    kokoroCache[dtype] = (async () => {
+      let mod;
+      try { mod = await import('kokoro-js'); } catch (e) {
+        throw new Error('The free voice engine is not installed. Run "npm install" in this folder (run.bat does it for you), or use --voice gemini / --dry-voice.');
+      }
+      console.log(`  (loading the Kokoro voice model, ${dtype}; the first time it downloads about ${dtype === 'q8' ? '90' : '330'} MB)`);
+      return mod.KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype, device: 'cpu' });
+    })();
+  }
+  return kokoroCache[dtype];
+}
+
+function writeWavFile(file, samples, rate) {
+  const buf = Buffer.alloc(44 + samples.length * 2);
+  buf.write('RIFF', 0); buf.writeUInt32LE(36 + samples.length * 2, 4); buf.write('WAVEfmt ', 8);
+  buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20); buf.writeUInt16LE(1, 22); buf.writeUInt32LE(rate, 24);
+  buf.writeUInt32LE(rate * 2, 28); buf.writeUInt16LE(2, 32); buf.writeUInt16LE(16, 34); buf.write('data', 36);
+  buf.writeUInt32LE(samples.length * 2, 40);
+  for (let i = 0; i < samples.length; i += 1) buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, samples[i])) * 32767), 44 + i * 2);
+  fs.writeFileSync(file, buf);
+}
+
+// One sentence at a time sounds better than a long block; join with a short natural pause.
+async function kokoroVoice(text, outputPath, { voice, speed, dtype }) {
+  const tts = await loadKokoro(dtype);
+  const parts = (text.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) || [text]).map((x) => x.trim()).filter(Boolean);
+  const chunks = [];
+  let rate = 24000;
+  for (const sentence of parts) {
+    const a = await tts.generate(sentence, { voice, speed });
+    rate = a.sampling_rate || rate;
+    chunks.push(Float32Array.from(a.audio));
+    chunks.push(new Float32Array(Math.round(rate * 0.22)));
+  }
+  chunks.pop();
+  const all = new Float32Array(chunks.reduce((n, c) => n + c.length, 0));
+  let at = 0;
+  for (const c of chunks) { all.set(c, at); at += c.length; }
+  const wav = outputPath.replace(/\.[^.]+$/, '') + '.raw.wav';
+  writeWavFile(wav, all, rate);
+  await runFFmpeg(['-y', '-i', wav, '-af', POLISH, '-ac', '1', outputPath]);
+  fs.unlinkSync(wav);
+  return outputPath;
+}
+
 // Strip the [[red word]] caption markup before the text is spoken.
 const speakable = (t) => t.replace(/\[\[(.+?)\]\]/g, '$1').replace(/\s+/g, ' ').trim();
 
@@ -117,6 +171,14 @@ async function generateVoice(text, outputPath, opts = {}) {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   const clean = speakable(text);
   if (opts.dry) return dryVoice(clean, outputPath);
+  const provider = opts.provider || process.env.VOICE_PROVIDER || 'kokoro';
+  if (provider === 'kokoro') {
+    return kokoroVoice(clean, outputPath, {
+      voice: opts.kokoroVoice || process.env.KOKORO_VOICE || 'bf_emma',
+      speed: Number(opts.kokoroSpeed || process.env.KOKORO_SPEED || 0.95),
+      dtype: opts.kokoroDtype || process.env.KOKORO_DTYPE || 'fp32',
+    });
+  }
   const apiKey = geminiKey();
   if (!apiKey) {
     throw new Error('No Gemini key found. Put GEMINI_API_KEY=... in stickman-history/.env (free key: https://aistudio.google.com/apikey), or run with --dry-voice to test without one.');
@@ -129,7 +191,7 @@ async function generateVoice(text, outputPath, opts = {}) {
   });
 }
 
-module.exports = { generateVoice, probeDuration, runFFmpeg, loadEnv, speakable };
+module.exports = { generateVoice, kokoroVoice, probeDuration, runFFmpeg, loadEnv, speakable };
 
 // Quick voice test:  node src/voice.js "Hello from history" out/test.mp3 [--dry]
 if (require.main === module) {

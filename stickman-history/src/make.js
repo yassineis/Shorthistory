@@ -40,11 +40,12 @@ function help() {
 
   --out <dir>        output folder (default: out/<script name>)
   --sample           make only the first scene -> sample.mp4 (check style and voice first)
-  --dry-voice        use a placeholder tone instead of Gemini (no key, no internet)
+  --voice kokoro|gemini  kokoro (default) = free offline voice, no key, no limits; gemini = Gemini TTS (needs key)
+  --dry-voice        use a placeholder tone instead of a real voice (fastest test)
   --aspect 16:9|9:16 default 16:9 (9:16 for Shorts / Reels)
   --height 720       frame height in pixels (default 720)
   --fps 24           frames per second
-  --pause 4000       pause in ms between voice requests (raise it if you hit free-tier limits)
+  --pause 4000       pause in ms between Gemini voice requests (only with --voice gemini)
   --no-music         skip the background music
   --no-presenter     hide the corner presenter
   --font <file.ttf>  caption font (default: a bold system font)
@@ -88,13 +89,14 @@ async function main() {
     const sc = scenes[i];
     const num = String(i + 1).padStart(2, '0');
     if (!sc.narration) throw new Error(`Scene ${i + 1} has no "narration".`);
-    const audioKey = hash(JSON.stringify([sc.narration, voice, !!args['dry-voice']]));
+    const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
+    const audioKey = hash(JSON.stringify([sc.narration, voice, provider, !!args['dry-voice']]));
     const audio = path.join(out, 'audio', `scene_${num}_${audioKey}.mp3`);
     if (!fs.existsSync(audio) || args.force) {
       process.stdout.write(`  scene ${num}: voice... `);
-      await generateVoice(sc.narration, audio, { dry: !!args['dry-voice'], ...voice });
+      await generateVoice(sc.narration, audio, { dry: !!args['dry-voice'], provider, ...voice });
       console.log('ok');
-      if (!args['dry-voice'] && i < scenes.length - 1) await sleep(pause);
+      if (!args['dry-voice'] && provider === 'gemini' && i < scenes.length - 1) await sleep(pause);
     }
     items.push({ sc, num, audio, adur: await probeDuration(audio) });
   }

@@ -62,10 +62,22 @@ if errorlevel 1 (
   %PY% -m pip install pillow numpy
   if errorlevel 1 goto pip_failed
 )
+if not exist node_modules\kokoro-js (
+  echo Installing the free voice engine (Kokoro), one time only. The voice model downloads on first use, about 330 MB.
+  call npm install --no-audit --no-fund
+  if errorlevel 1 goto npm_failed
+)
+if not exist out\.voice_ready (
+  echo Downloading the free voice model, one time only, about 330 MB. Please wait...
+  if not exist out mkdir out
+  node src\voice.js "Voice ready." out\warmup.mp3
+  if errorlevel 1 goto voice_failed
+  echo ok> out\.voice_ready
+)
 if not exist .env (
   copy .env.example .env >nul
   echo.
-  echo A file called .env will open. Paste your free Gemini key after GEMINI_API_KEY=
+  echo A file called .env will open. Paste your free Gemini key after GEMINI_API_KEY= (it is only used to WRITE the stories; the voice is free and offline).
   echo Get the key at https://aistudio.google.com/apikey then save and close Notepad.
   pause
   notepad .env
@@ -139,6 +151,16 @@ echo Please install these by hand, then run this file again:
 if defined NEED_NODE echo   Node.js:  https://nodejs.org
 if defined NEED_PY echo   Python 3: https://python.org  (tick "Add to PATH")
 if defined NEED_FFMPEG echo   ffmpeg:   https://www.gyan.dev/ffmpeg/builds/  (add its bin folder to PATH)
+pause
+exit /b 1
+
+:voice_failed
+echo Could not download the voice model. Check your internet connection, then run this file again.
+pause
+exit /b 1
+
+:npm_failed
+echo Could not install the voice engine. Check your internet connection and run:  npm install
 pause
 exit /b 1
 

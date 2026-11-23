@@ -10,9 +10,11 @@ or double-click `run.bat` and choose 1. Each video is 1:30 to 3:00 (checked from
 
 How it works: `library/topics.json` holds 60 history topics (from vidIQ trending/outlier/keyword data fetched 2026-11-22, plus evergreen ones). The tool takes the top-scored topics not made yet, Gemini writes each story (`src/story.js`), the script is saved in `library/stories/`, and `library/index.json` records it so a story is never made twice. Finished videos: `out/shorts/<story>/final.mp4` plus `info.txt` (title, description, tags, facts to verify). Unfinished or failed stories are finished first on the next run.
 
+Voice: **Kokoro** (`kokoro-js`, from YOUTUBE-AGENT) is the default: free, offline, no key, no limits. `run.bat` runs `npm install` once; the model (~330 MB) downloads on first use. Settings in `.env`: `KOKORO_VOICE` (default `bf_emma`), `KOKORO_SPEED` (0.95), `KOKORO_DTYPE` (`fp32` clean, or `q8` smaller ~90 MB). Gemini voice is optional: `--voice gemini`. The Gemini key is now only used to write the stories (1 request per video).
+
 Options: `--count N`, `--topic "my topic"`, `--random`, `--aspect 9:16`, `--mock-story --dry-voice` (test with no key), `--pause 8000` (free-tier limits).
 Add topics later: append entries to `library/topics.json` (same fields) after a new vidIQ run.
-Free-tier note: each scene is one voice request (about 15 per video), so many videos in one day may hit Gemini's daily limit; just run again later, finished scenes are cached.
+With the default Kokoro voice there are no voice limits. Only the story writing uses Gemini (1 request per video).
 Optional `.env` key `GEMINI_TEXT_MODEL` if the default text model name is not available to your key.
 
 ---
@@ -22,7 +24,7 @@ Optional `.env` key `GEMINI_TEXT_MODEL` if the default text model name is not av
 Free script-to-video tool for short history videos in a simple stickman-explainer style
 (paper background, bold black-and-red captions, a corner presenter, props drawn in code).
 
-- **Voice:** Gemini TTS, ported from YOUTUBE-AGENT (`src/voice.js`). Free tier key, no packages.
+- **Voice:** Kokoro (offline, free) by default; Gemini TTS optional (`src/voice.js`, ported from YOUTUBE-AGENT).
 - **Look:** drawn frame by frame with Pillow (`render/`). Structure and style follow stickman-video-director's style B5.
 - **Assembly:** ffmpeg. Each scene is its own 8-15 s clip, joined at the end, plus a synthesized music bed.
 - **Cost:** nothing. No video-generation API, no GPU.
