@@ -194,8 +194,8 @@ async function generateVoice(text, outputPath, opts = {}) {
   const provider = opts.provider || process.env.VOICE_PROVIDER || 'kokoro';
   if (provider === 'kokoro') {
     return kokoroVoice(clean, outputPath, {
-      voice: opts.kokoroVoice || process.env.KOKORO_VOICE || 'bf_emma',
-      speed: Number(opts.kokoroSpeed || process.env.KOKORO_SPEED || 0.95),
+      voice: opts.kokoroVoice || process.env.KOKORO_VOICE || 'am_fenrir',
+      speed: Number(opts.kokoroSpeed || process.env.KOKORO_SPEED || 0.88),
       dtype: opts.kokoroDtype || process.env.KOKORO_DTYPE || 'fp32',
     });
   }

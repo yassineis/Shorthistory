@@ -241,6 +241,50 @@ def stills(out_dir):
     print("still subscribe")
 
 
+# ---------------------------------------------------------------- "up next" frame (teases the next story of the library)
+def next_story_card(title, k=3, size=(1080, 1920), channel=None):
+    sc = Scene("subscribe", k)
+
+    def ex(top, info):
+        draw_subscribe(top, 1.0)
+    img, _ = sc.frame(0.6, extras=ex)
+    fr = crop_to(img, k, size)
+    OW, OH = size
+    d = ImageDraw.Draw(fr)
+    # ribbon "UP NEXT"
+    f = get_font(int(OH * 0.034))
+    tw = d.textlength("UP NEXT", font=f)
+    rx0, ry0 = OW / 2 - tw / 2 - 46, OH * 0.065
+    d.rounded_rectangle((rx0, ry0, rx0 + tw + 92, ry0 + OH * 0.058), radius=int(OH * 0.029), fill=(214, 58, 52), outline=(38, 30, 36), width=5)
+    d.text((OW / 2, ry0 + OH * 0.029), "UP NEXT", font=f, fill=(255, 255, 255), anchor="mm")
+    # cream panel with the title, wrapped on up to 3 lines
+    size_px = int(OH * 0.04)
+    while True:
+        f = get_font(size_px)
+        words, lines, cur = title.split(), [], ""
+        for w_ in words:
+            trial = (cur + " " + w_).strip()
+            if d.textlength(trial, font=f) > OW * 0.82 and cur:
+                lines.append(cur)
+                cur = w_
+            else:
+                cur = trial
+        lines.append(cur)
+        if len(lines) <= 3 or size_px < 30:
+            break
+        size_px -= 3
+    ph = len(lines) * size_px * 1.28 + OH * 0.04
+    py0 = OH * 0.135
+    d.rounded_rectangle((OW * 0.07, py0, OW * 0.93, py0 + ph), radius=int(OH * 0.025), fill=(252, 247, 235), outline=(38, 30, 36), width=6)
+    for i, ln in enumerate(lines):
+        d.text((OW / 2, py0 + OH * 0.02 + size_px * (0.64 + 1.28 * i)), ln, font=f, fill=(38, 30, 36), anchor="mm")
+    for txt, yf, sz in (("Subscribe so you never miss it", 0.795, 0.03), (channel or LINES["channel"], 0.84, 0.04)):
+        f = fit_font(d, txt, int(OH * sz), OW * 0.88)
+        tw = d.textlength(txt, font=f)
+        d.text((OW * 0.5 - tw / 2, OH * yf), txt, font=f, fill=(255, 255, 255), stroke_width=7, stroke_fill=(38, 30, 36))
+    return fr
+
+
 # ---------------------------------------------------------------- sketches
 LINES = json.load(open(os.path.join(HERE, "..", "sketches", "lines.json"), encoding="utf-8"))
 FPS = 24
@@ -380,5 +424,8 @@ def render_sketch(n, out_dir, fast=False):
 if __name__ == "__main__":
     if sys.argv[1] == "stills":
         stills(sys.argv[2])
+    elif sys.argv[1] == "nextcard":
+        next_story_card(sys.argv[2]).save(sys.argv[3])
+        print("wrote", sys.argv[3])
     elif sys.argv[1] == "sketch":
         print(render_sketch(int(sys.argv[2]), sys.argv[3], "--fast" in sys.argv))

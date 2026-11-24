@@ -10,7 +10,7 @@ or double-click `run.bat` and choose 1. Each video is 1:30 to 3:00 (checked from
 
 How it works: `library/topics.json` holds 60 history topics (from vidIQ trending/outlier/keyword data fetched 2026-11-22, plus evergreen ones). The tool takes the top-scored topics not made yet, Gemini writes each story (`src/story.js`), the script is saved in `library/stories/`, and `library/index.json` records it so a story is never made twice. Finished videos: `out/shorts/<story>/final.mp4` plus `info.txt` (title, description, tags, facts to verify). Unfinished or failed stories are finished first on the next run.
 
-Voice: **Kokoro** (`kokoro-js`, from YOUTUBE-AGENT) is the default: free, offline, no key, no limits. `run.bat` runs `npm install` once; the model (~330 MB) downloads on first use. Settings in `.env`: `KOKORO_VOICE` (default `bf_emma`), `KOKORO_SPEED` (0.95), `KOKORO_DTYPE` (`fp32` clean, or `q8` smaller ~90 MB). Gemini voice is optional: `--voice gemini`. The Gemini key is now only used to write the stories (1 request per video).
+Voice: **Kokoro** (`kokoro-js`, from YOUTUBE-AGENT) is the default: free, offline, no key, no limits. `run.bat` runs `npm install` once; the model (~330 MB) downloads on first use. Settings in `.env`: `KOKORO_VOICE` (default `am_fenrir`, the calm voice of Oli in YOUTUBE-AGENT), `KOKORO_SPEED` (0.88), `KOKORO_DTYPE` (`fp32` clean, or `q8` smaller ~90 MB). Gemini voice is optional: `--voice gemini`. The Gemini key is now only used to write the stories (1 request per video).
 
 Options: `--count N`, `--topic "my topic"`, `--random`, `--aspect 9:16`, `--mock-story --dry-voice` (test with no key), `--pause 8000` (free-tier limits).
 Add topics later: append entries to `library/topics.json` (same fields) after a new vidIQ run.
