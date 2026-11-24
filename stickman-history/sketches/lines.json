@@ -1,0 +1,57 @@
+{
+  "channel": "ShortHistory",
+  "cta": "Follow for more history",
+  "voice": "kokoro bf_emma, speed 0.95",
+  "sketches": [
+    {
+      "id": 1, "scene": "egypt", "music": "music box lullaby",
+      "title": "Who really built the pyramids?",
+      "lines": [
+        {"start": 0.5,  "text": "Everyone says slaves built the pyramids."},
+        {"start": 5.3,  "text": "But the workers were paid in bread, beer and meat."},
+        {"start": 10.1, "text": "They even had doctors, and tombs built beside the pyramid."},
+        {"start": 14.9, "text": "The Great Pyramid took about twenty years to finish."}
+      ]
+    },
+    {
+      "id": 2, "scene": "viking", "music": "folk guitar",
+      "title": "Who reached America first?",
+      "lines": [
+        {"start": 0.5,  "text": "Around the year one thousand, a Viking ship reached America."},
+        {"start": 5.3,  "text": "That was almost five hundred years before Columbus."},
+        {"start": 10.1, "text": "They built a small camp in Newfoundland, in Canada."},
+        {"start": 14.9, "text": "Today you can still visit it at L'Anse aux Meadows."}
+      ]
+    },
+    {
+      "id": 3, "scene": "edo", "music": "lo-fi chill",
+      "title": "The biggest city you never heard of",
+      "lines": [
+        {"start": 0.5,  "text": "By seventeen twenty, Edo was possibly the biggest city on Earth."},
+        {"start": 5.3,  "text": "Today we call it Tokyo."},
+        {"start": 8.6,  "text": "Over a million people lived here, with fast food on every street."},
+        {"start": 14.4, "text": "Street vendors sold noodles and sushi to hungry workers."}
+      ]
+    },
+    {
+      "id": 4, "scene": "rome", "music": "adventure marimba",
+      "title": "A day in the Roman Forum",
+      "lines": [
+        {"start": 0.5,  "text": "This was the heart of ancient Rome."},
+        {"start": 3.6,  "text": "Senators argued, merchants shouted and judges heard cases."},
+        {"start": 9.9,  "text": "Even the news was posted here, carved and painted on boards."},
+        {"start": 14.9, "text": "Rome was loud, crowded, and never slept."}
+      ]
+    },
+    {
+      "id": 5, "scene": "workshop", "music": "cinematic epic",
+      "title": "The machine that changed the world",
+      "lines": [
+        {"start": 0.5,  "text": "Around fourteen fifty, Gutenberg built a printing press."},
+        {"start": 5.3,  "text": "Before it, one book took months to copy by hand."},
+        {"start": 10.1, "text": "Now a workshop could print hundreds of pages a day."},
+        {"start": 14.9, "text": "Ideas began to spread faster than ever before."}
+      ]
+    }
+  ]
+}

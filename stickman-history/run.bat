@@ -94,10 +94,12 @@ echo  3  Show the story library (made and still to make)
 echo  4  Test run with no key: placeholder story and voice, 1 video
 echo  5  Voice test only
 echo  6  Old sample: printing press explainer, first scene
-echo  7  Exit
+echo  7  Storybook sketches: the 5 prototype videos with voice and music
+echo  8  Exit
 echo.
-choice /c 1234567 /n /m "Choose 1-7: "
-if errorlevel 7 goto end
+choice /c 12345678 /n /m "Choose 1-8: "
+if errorlevel 8 goto end
+if errorlevel 7 goto sketches
 if errorlevel 6 goto sample
 if errorlevel 5 goto voice
 if errorlevel 4 goto dry
@@ -125,6 +127,12 @@ goto menu
 node src\shorts.js --count 1 --yes --mock-story --dry-voice --height 360 --no-music --topic "Test story"
 if errorlevel 1 goto failed
 if exist "out\shorts" start "" "out\shorts"
+goto menu
+
+:sketches
+node src\sketches.js
+if errorlevel 1 goto failed
+if exist "out\sketches" start "" "out\sketches"
 goto menu
 
 :sample
