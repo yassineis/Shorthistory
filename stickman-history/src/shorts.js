@@ -48,7 +48,8 @@ It asks how many videos to make (1-10), then makes them. Videos are 1:30 to 3:00
   --mock-story     placeholder story, no Gemini (to test the pipeline)
   --voice kokoro|gemini  default kokoro: free offline voice, no key, no limits
   --dry-voice      placeholder voice (to test the pipeline)
-  --aspect 16:9|9:16   default 16:9;  --height 720;  --pause 4000;  --no-music;  --env file`);
+  --style sb|a5     sb = storybook look, vertical 9:16 (default);  a5 = old stick figures, 16:9
+  --aspect 16:9|9:16 (a5 only);  --height;  --pause 4000;  --no-music;  --env file`);
 }
 
 function ask(rl, q) { return new Promise((res) => rl.question(q, (a) => res(a.trim()))); }
@@ -109,6 +110,15 @@ async function main() {
   }
   rl.close();
 
+  // title for the "Up next" end card: the next video in this run, otherwise the best library topic not made yet
+  const nextTitle = (i) => {
+    const q = queue[i + 1];
+    if (q) return q.resume ? q.resume.title : q.topic.title;
+    const taken = new Set(queue.map((x) => (x.resume ? x.resume.topic_id : x.topic.id)));
+    const t = [...left].filter((x) => !taken.has(x.id)).sort((a, b) => b.score - a.score)[0];
+    return t ? t.title : '';
+  };
+
   const results = [];
   for (let i = 0; i < queue.length; i += 1) {
     const q = queue[i];
@@ -135,8 +145,10 @@ async function main() {
       const outDir = path.join('out', 'shorts', entry.id);
       let ok = false;
       for (let attempt = 1; attempt <= 3 && !ok; attempt += 1) {
-        const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--min', String(MIN_SEC), '--max', String(MAX_SEC), '--style', 'a5'];
+        const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--min', String(MIN_SEC), '--max', String(MAX_SEC), '--style', args.style || 'sb'];
         for (const k of ['aspect', 'height', 'pause', 'env', 'voice']) if (args[k]) margs.push(`--${k}`, args[k]);
+        const nextT = nextTitle(i);
+        if (nextT) margs.push('--next', nextT);
         for (const k of ['dry-voice', 'no-music']) if (args[k]) margs.push(`--${k}`);
         if (q.redo || args.force) margs.push('--force');
         const r = spawnSync(process.execPath, margs, { stdio: ['inherit', 'inherit', 'pipe'], encoding: 'utf8' });

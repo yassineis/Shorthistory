@@ -12,6 +12,8 @@ How it works: `library/topics.json` holds 60 history topics (from vidIQ trending
 
 Voice: **Kokoro** (`kokoro-js`, from YOUTUBE-AGENT) is the default: free, offline, no key, no limits. `run.bat` runs `npm install` once; the model (~330 MB) downloads on first use. Settings in `.env`: `KOKORO_VOICE` (default `am_fenrir`, the calm voice of Oli in YOUTUBE-AGENT), `KOKORO_SPEED` (0.88), `KOKORO_DTYPE` (`fp32` clean, or `q8` smaller ~90 MB). Gemini voice is optional: `--voice gemini`. The Gemini key is now only used to write the stories (1 request per video).
 
+Look: the default style is now **storybook** (`--style sb`, vertical 9:16 Shorts, 720x1280): code-drawn backdrops for all 18 settings, big-headed characters with hats, props and tiny faces, a different code-made music style per story, and an end card with a Subscribe button and "Up next" (the next story of the library). The old stick-figure look is still available with `--style a5 --aspect 16:9`. No AI image/voice credits are used. Menu option 7 remakes a story already made with the current look.
+
 Options: `--count N`, `--topic "my topic"`, `--random`, `--aspect 9:16`, `--mock-story --dry-voice` (test with no key), `--pause 8000` (free-tier limits).
 Add topics later: append entries to `library/topics.json` (same fields) after a new vidIQ run.
 With the default Kokoro voice there are no voice limits. Only the story writing uses Gemini (1 request per video).

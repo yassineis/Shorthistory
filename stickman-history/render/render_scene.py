@@ -66,11 +66,16 @@ def actor_state(a, t, total, W):
 
 
 def main(spec_path):
+    global S
     spec = json.load(open(spec_path, encoding="utf-8"))
     W, H, fps = spec["width"], spec["height"], spec.get("fps", 24)
     set_font(spec.get("font"))
     L = layout(W, H)
-    a5 = spec.get("style") == "a5"
+    sb = spec.get("style") == "sb"  # storybook look (sb_story.py); captions, title and stamp are drawn here
+    a5 = spec.get("style") in ("a5", "sb")
+    if sb:
+        S = 1  # the storybook scene is already smooth; text is drawn straight onto the final frame
+        L["cap_y0"], L["cap_y1"] = H * 0.785, H * 0.955
     if a5:
         L["line_w"] *= 1.25  # bolder outlines for the cartoon look
     lead, tail = spec.get("lead", 0.45), spec.get("tail", 0.55)
@@ -78,7 +83,13 @@ def main(spec_path):
     total = lead + adur + tail
     nframes = int(math.ceil(total * fps))
     env = audio_envelope(spec["audio"], fps, lead, nframes)
-    if a5:
+    if sb:
+        import a5 as a5mod  # only for the outfit table, never drawn
+        from sb_story import StoryScene
+        stage0 = spec.get("stage", {})
+        story_scene = StoryScene(spec.get("setting"), stage0.get("actors", []), stage0.get("props", []), W, H)
+        paper = Image.new("RGB", (W, H), PAPER)
+    elif a5:
         import a5 as a5mod
         paper = a5mod.make_backdrop(W, H, S, spec.get("setting"), L)
     else:
@@ -107,7 +118,10 @@ def main(spec_path):
     ground = L["ground"]
     for i in range(nframes):
         t = i / fps
-        img = paper.copy()
+        if sb:
+            img = story_scene.frame(t, total, mouth=float(env[i]) if lead <= t <= lead + adur else 0.0)
+        else:
+            img = paper.copy()
         pen = Pen(img, S, seed=int(t * 8) % 997, lw=L["line_w"])
 
         def draw_props(sky):
@@ -132,14 +146,16 @@ def main(spec_path):
                     cy = ground
                 fn(pen, cx, cy, u, t, pr)
 
-        draw_props(True)
+        if not sb:
+            draw_props(True)
         # hand-drawn ground line
         if not a5:
             pts = [(0.03 * W + k * 0.94 * W / 40, ground + math.sin(k * 1.7) * 1.5) for k in range(41)]
             pen.line(pts, w=L["line_w"] * 0.8, color=INK)
-        draw_props(False)
+        if not sb:
+            draw_props(False)
 
-        for a in actors:
+        for a in ([] if sb else actors):
             ax, pose, face = actor_state(a, t, total, W)
             holds = a.get("holds") or ("quill" if pose == "write" else None)
             kw = {}
@@ -160,7 +176,7 @@ def main(spec_path):
                 pen.circle(bx, by, br, fill=(255, 255, 255), outline=INK, w=L["line_w"] * 0.8)
                 pen.text((bx, by), em, br * 1.5, RED, anchor="mm")
 
-        if presenter_on:
+        if presenter_on and not sb:
             draw_stick(pen, L["presenter_x"], ground, L["presenter_h"], spec.get("presenter_pose", "stand"),
                        t, face=-1, scarf=True, mouth=float(env[i]) if lead <= t <= lead + adur else 0.0)
 
@@ -194,7 +210,7 @@ def main(spec_path):
                 break
 
         frame = img.reduce(S) if S > 1 else img
-        if t < 0.18:
+        if t < 0.18 and not sb:
             frame = Image.blend(paper_flat, frame, clamp(t / 0.18))
         proc.stdin.write(frame.tobytes())
 

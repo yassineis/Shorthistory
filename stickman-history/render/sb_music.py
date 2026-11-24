@@ -33,8 +33,19 @@ def tone(f, dur, harm=(1, .4, .2), a=0.005, d=0.4, vib=0.0):
     return y * env(n, a, d)
 
 
+_PLUCKS = {}
+
+
 def pluck(f, dur, damp=0.996):
-    """Karplus-Strong string."""
+    """Karplus-Strong string (cached: each note is only computed once)."""
+    key = (round(f, 3), dur, damp)
+    if key in _PLUCKS:
+        return _PLUCKS[key]
+    _PLUCKS[key] = _pluck(f, dur, damp)
+    return _PLUCKS[key]
+
+
+def _pluck(f, dur, damp):
     n = int(dur * SR)
     p = max(2, int(SR / f))
     buf = np.random.default_rng(int(f)).uniform(-1, 1, p)
@@ -231,6 +242,16 @@ def render(n, dur=24.0):
     return np.clip(m, -1, 1)
 
 
+def render_bg(n, dur):
+    """Music bed for a whole story video: one of the 5 styles, quiet, with fade in/out, no sound effects."""
+    m = STYLES[n](dur)
+    m = m / (np.abs(m).max() + 1e-9) * 0.5
+    fi, fo = int(1.0 * SR), int(2.0 * SR)
+    m[:fi] *= np.linspace(0, 1, fi)
+    m[-fo:] *= np.linspace(1, 0, fo)
+    return np.clip(m, -1, 1)
+
+
 def save(path, y):
     with wave.open(path, "wb") as w:
         w.setnchannels(1)
@@ -241,5 +262,6 @@ def save(path, y):
 
 if __name__ == "__main__":
     n = int(sys.argv[1])
-    save(sys.argv[2], render(n, float(sys.argv[3]) if len(sys.argv) > 3 else 24.0))
+    d = float(sys.argv[3]) if len(sys.argv) > 3 else 24.0
+    save(sys.argv[2], render_bg(n, d) if "--bg" in sys.argv else render(n, d))
     print("wrote", sys.argv[2])

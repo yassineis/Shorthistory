@@ -49,7 +49,8 @@ function help() {
   --no-music         skip the background music
   --no-presenter     hide the corner presenter
   --font <file.ttf>  caption font (default: a bold system font)
-  --style a5|b5      a5 = colourful historical cartoon (default for shorts), b5 = paper stickman explainer
+  --style sb|a5|b5   sb = storybook cartoon, vertical 9:16 (default for shorts), a5 = old colourful stick figures, b5 = paper stickman explainer
+  --next "Title"     show an 'Up next' end card with this title (storybook style)
   --min 90 --max 180 refuse the video if narration + padding falls outside these seconds (exit code 3)
   --force            ignore cached voice and clips
   --env <file>       file with GEMINI_API_KEY (default: .env)`);
@@ -67,8 +68,11 @@ async function main() {
   const out = path.resolve(args.out || path.join('out', name));
   for (const d of ['audio', 'scenes', 'clips']) fs.mkdirSync(path.join(out, d), { recursive: true });
 
-  const aspect = args.aspect || script.aspect || '16:9';
-  const height = parseInt(args.height || script.height || '720', 10);
+  const style = args.style || script.style || 'b5';
+  const sb = style === 'sb';
+  if (sb && args.aspect && args.aspect !== '9:16') console.log('  (the storybook style is vertical, so 9:16 is used)');
+  const aspect = sb ? '9:16' : (args.aspect || script.aspect || '16:9');
+  const height = parseInt(args.height || script.height || (sb ? '1280' : '720'), 10);
   const [aw, ah] = aspect.split(':').map(Number);
   const width = Math.round((height * aw) / ah / 2) * 2;
   const fps = parseInt(args.fps || '24', 10);
@@ -78,7 +82,6 @@ async function main() {
   const scenes = args.sample ? script.scenes.slice(0, 1) : script.scenes;
 
   console.log(`"${script.title || name}": ${scenes.length} scene(s), ${width}x${height} @ ${fps}fps${args['dry-voice'] ? ' [dry voice]' : ''}`);
-  const style = args.style || script.style || 'b5';
   const lead = 0.45, tail = 0.55;
   const clips = [];
   let total = 0;
@@ -136,6 +139,19 @@ async function main() {
     total += await probeDuration(clip);
   }
 
+  if (sb && !args.sample) { // end card: subscribe button + 'Up next' title (the next story of the library)
+    const nextTitle = args.next || '';
+    const card = path.join(out, 'clips', `endcard_${hash(nextTitle + width + height)}.mp4`);
+    if (!fs.existsSync(card) || !fs.existsSync(card.replace(/\.mp4$/, '.wav')) || args.force) {
+      process.stdout.write('  end card... ');
+      const r = spawnSync(python, [path.join(ROOT, 'render', 'sb_endcard.py'), card, String(width), String(height), nextTitle], { stdio: 'inherit' });
+      if (r.status !== 0) throw new Error('Rendering the end card failed.');
+      console.log('done');
+    }
+    clips.push(card);
+    total += await probeDuration(card);
+  }
+
   const wavs = clips.map((c) => c.replace(/\.mp4$/, '.wav'));
   if (!args.sample) { // drop clips from older versions of the script so the folder does not fill up
     const keep = new Set([...clips, ...wavs]);
@@ -163,7 +179,10 @@ async function main() {
       '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', final]);
   } else {
     const music = path.join(out, 'music.wav');
-    const r = spawnSync(python, [path.join(ROOT, 'render', 'music.py'), String(total + 1), music], { stdio: 'inherit' });
+    const mstyle = (parseInt(hash(script.title || name), 16) % 5) + 1; // one of 5 code-made music styles, chosen per story
+    const r = sb
+      ? spawnSync(python, [path.join(ROOT, 'render', 'sb_music.py'), String(mstyle), music, String(total + 1), '--bg'], { stdio: 'inherit' })
+      : spawnSync(python, [path.join(ROOT, 'render', 'music.py'), String(total + 1), music], { stdio: 'inherit' });
     if (r.status !== 0) throw new Error('Music generation failed.');
     await runFFmpeg(['-y', '-i', joined, '-i', narration, '-i', music, '-filter_complex',
       '[1:a]volume=1.0[n];[2:a]volume=0.14[m];[n][m]amix=inputs=2:duration=first:dropout_transition=0[mix];[mix]volume=2[a]',

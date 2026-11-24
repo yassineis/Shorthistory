@@ -195,6 +195,16 @@ OUTFITS = {
     "red": ((178, 78, 72), (146, 58, 56)),
     "ochre": ((208, 166, 88), (176, 138, 68)),
     "teal": ((90, 148, 148), (66, 120, 122)),
+    # names used by the story writer
+    "blue": ((86, 116, 168), (62, 90, 138)),
+    "green": ((104, 146, 100), (80, 120, 80)),
+    "yellow": ((234, 198, 96), (204, 166, 70)),
+    "purple": ((134, 98, 152), (106, 74, 124)),
+    "brown": ((150, 106, 78), (120, 84, 60)),
+    "black": ((70, 68, 78), (48, 46, 56)),
+    "orange": ((226, 140, 78), (194, 110, 56)),
+    "pink": ((222, 150, 166), (190, 120, 140)),
+    "gray": ((156, 156, 164), (126, 126, 136)),
 }
 GOLD = (222, 184, 96)
 GOLD_SH = (188, 150, 70)
@@ -247,6 +257,36 @@ def _hat(c, kind, hx, hy, r, face, w, outfit_col):
         c.cel([(hx - r * 1.0, hy - r * .12), (hx - r * .72, top + r * .05), (hx + r * .72, top + r * .05), (hx + r * 1.0, hy - r * .12),
                (hx + r * .9, hy - r * .02), (hx - r * .9, hy - r * .02)], (240, 240, 236), (214, 214, 210), w=w * .9)
         c.line([(hx - r * .9, hy - r * .12), (hx + r * .9, hy - r * .12)], (96, 120, 160), w * .7)
+    elif kind == "helmet":
+        c.cel([(hx - r * 1.02, hy - r * .05), (hx - r * .9, top - r * .05), (hx - r * .4, top - r * .4), (hx + r * .4, top - r * .4), (hx + r * .9, top - r * .05),
+               (hx + r * 1.02, hy - r * .05), (hx + r * .8, hy - r * .3), (hx - r * .8, hy - r * .3)], (176, 180, 190), (140, 144, 156), w=w)
+        c.line([(hx - r * .92, hy - r * .26), (hx + r * .92, hy - r * .26)], (120, 124, 136), w * .7)
+        c.line([(hx, top - r * .38), (hx, hy - r * .28)], (132, 136, 148), w * .6)
+    elif kind == "tophat":
+        c.cel([(hx - r * .62, top + r * .3), (hx - r * .58, top - r * .98), (hx + r * .58, top - r * .98), (hx + r * .62, top + r * .3)], (64, 58, 70), (44, 40, 50), w=w)
+        c.line([(hx - r * .61, top + r * .02), (hx + r * .61, top + r * .02)], (176, 70, 78), w * 1.6)
+        c.cel([(hx - r * 1.2, top + r * .3), (hx + r * 1.2, top + r * .3), (hx + r * 1.05, top + r * .5), (hx - r * 1.05, top + r * .5)], (64, 58, 70), (44, 40, 50), w=w)
+    elif kind == "tricorn":
+        c.cel([(hx - r * 1.4, top + r * .55), (hx - r * .7, top - r * .12), (hx, top - r * .3), (hx + r * .7, top - r * .12), (hx + r * 1.4, top + r * .55),
+               (hx + r * .6, top + r * .36), (hx - r * .6, top + r * .36)], (66, 68, 94), (46, 48, 70), w=w)
+        c.line([(hx - r * 1.38, top + r * .53), (hx - r * .7, top - r * .1), (hx, top - r * .28), (hx + r * .7, top - r * .1), (hx + r * 1.38, top + r * .53)], GOLD, w * .6)
+    elif kind == "turban":
+        c.cel([(hx - r * 1.06, hy - r * .2), (hx - r * .98, top - r * .08), (hx - r * .45, top - r * .6), (hx + r * .45, top - r * .6), (hx + r * .98, top - r * .08),
+               (hx + r * 1.06, hy - r * .2), (hx + r * .5, hy - r * .42), (hx - r * .5, hy - r * .42)], (238, 230, 210), (210, 200, 178), w=w)
+        for i in range(3):
+            c.line([(hx - r * .92 + i * r * .1, hy - r * .3 - i * r * .3), (hx + r * .5 + i * r * .1, top - r * .1 + i * r * .05 - r * .1)], (206, 194, 168), w * .6)
+        c.circle(hx + face * r * .1, top + r * .1, r * .13, fill=(176, 70, 78), w=w * .6)
+    elif kind == "kabuto":
+        c.cel([(hx - r * 1.06, hy - r * .05), (hx - r * .92, top - r * .05), (hx - r * .4, top - r * .4), (hx + r * .4, top - r * .4), (hx + r * .92, top - r * .05),
+               (hx + r * 1.06, hy - r * .05), (hx + r * .85, hy - r * .3), (hx - r * .85, hy - r * .3)], (86, 82, 98), (62, 58, 74), w=w)
+        for sd in (-1, 1):
+            c.line([(hx + sd * r * .12, top - r * .38), (hx + sd * r * .62, top - r * 1.05)], GOLD, w * 1.4)
+        c.line([(hx - r * .95, hy - r * .26), (hx + r * .95, hy - r * .26)], GOLD_SH, w * .7)
+    elif kind == "cowboy":
+        c.cel([(hx - r * .6, top + r * .38), (hx - r * .55, top - r * .5), (hx, top - r * .36), (hx + r * .55, top - r * .5), (hx + r * .6, top + r * .38)], (150, 106, 72), (120, 82, 54), w=w)
+        c.line([(hx - r * .58, top + r * .1), (hx + r * .58, top + r * .1)], (96, 66, 50), w * 1.4)
+        c.cel([(hx - r * 1.5, top + r * .5), (hx - r * .8, top + r * .3), (hx + r * .8, top + r * .3), (hx + r * 1.5, top + r * .5),
+               (hx + r * .8, top + r * .64), (hx - r * .8, top + r * .64)], (160, 116, 80), (128, 90, 60), w=w)
     elif kind == "hood":  # back of the hood is drawn before the head; this is the front rim
         c.cel([(hx - r * 1.05, hy - r * .1), (hx - r * .9, top + r * .05), (hx, top - r * .2), (hx + r * .9, top + r * .05), (hx + r * 1.05, hy - r * .1),
                (hx + r * .7, hy - r * .4), (hx - r * .7, hy - r * .4)], mix(outfit_col, (40, 40, 50), .15), shade_of(outfit_col), w=w)
@@ -273,6 +313,22 @@ def _object(c, kind, x, y, h, w, face, t=0.0):
     elif kind == "lantern":
         c.line([(x, y - 30 * u), (x, y - 8 * u)], INK, w * .5)
         c.ellipse(x, y + 12 * u, 13 * u, 18 * u, fill=(214, 120, 90), w=w * .7)
+    elif kind == "book":
+        c.cel([(x - 24 * u, y - 28 * u), (x + 24 * u, y - 28 * u), (x + 24 * u, y + 28 * u), (x - 24 * u, y + 28 * u)], (158, 82, 80), (126, 62, 64), w=w * .7)
+        c.line([(x - 17 * u, y - 28 * u), (x - 17 * u, y + 28 * u)], (226, 190, 120), w * .6)
+        c.line([(x - 6 * u, y - 8 * u), (x + 14 * u, y - 8 * u)], (226, 190, 120), w * .5)
+    elif kind == "flag":
+        c.line([(x, y - 80 * u), (x + face * 4 * u, y + 90 * u)], (150, 108, 74), w * 1.3)
+        c.cel([(x, y - 80 * u), (x + face * 64 * u, y - 62 * u + 6 * math.sin(t * 4) * u), (x, y - 30 * u)], (190, 70, 70), (156, 52, 56), w=w * .7)
+    elif kind == "coins":
+        for i in range(3):
+            c.ellipse(x, y + 16 * u - i * 10 * u, 20 * u, 8 * u, fill=GOLD, w=w * .6)
+    elif kind == "quill":
+        c.line([(x - face * 10 * u, y + 40 * u), (x + face * 18 * u, y - 50 * u)], (120, 96, 80), w * .7)
+        c.cel([(x + face * 18 * u, y - 50 * u), (x + face * 36 * u, y - 34 * u), (x + face * 8 * u, y - 4 * u)], (244, 238, 226), (216, 208, 196), w=w * .6)
+    elif kind == "bulb":
+        c.circle(x, y, 14 * u, fill=(255, 232, 140), w=w * .7)
+        c.rect(x - 7 * u, y + 12 * u, x + 7 * u, y + 24 * u, fill=(176, 172, 176), w=w * .6)
 
 
 def draw_char(c, x, gy, h, outfit="linen", hat=None, emotion="smile", pose="idle", face=1, t=0.0, mouth=None,
