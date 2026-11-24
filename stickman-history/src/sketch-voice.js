@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-// Adds the free Kokoro narrator (am_fenrir 0.88, the Oli voice from YOUTUBE-AGENT) to the 5 prototype sketches.
+// Adds the free Kokoro narrator (am_fenrir 1.06, the Oli voice 1.2x faster from YOUTUBE-AGENT) to the 5 prototype sketches.
 //   node src/sketch-voice.js --dir out/sketches [--only 3]
 // Needs in --dir:  sketchN_silent.mp4 and musicN.wav  (made by render/sb_sketch.py and render/sb_music.py)
 // Writes:          sketchN_final.mp4  (picture + music + narration)
