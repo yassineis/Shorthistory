@@ -17,7 +17,7 @@ const { writeStory, estimate } = require('./story');
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
 const MIN_SEC = 90, MAX_SEC = 180, MAX_VIDEOS = 10;
-const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'help']);
+const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'help']);
 
 function parseArgs(argv) {
   const o = {};
@@ -44,6 +44,7 @@ It asks how many videos to make (1-10), then makes them. Videos are 1:30 to 3:00
   --random         pick unused library topics at random instead of top score first
   --yes            do not ask for confirmation
   --list           show the library: topics made and topics left
+  --redo           show the stories already made and remake the one you pick (same story, new render, no Gemini)
   --mock-story     placeholder story, no Gemini (to test the pipeline)
   --voice kokoro|gemini  default kokoro: free offline voice, no key, no limits
   --dry-voice      placeholder voice (to test the pipeline)
@@ -72,18 +73,32 @@ async function main() {
   }
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  let n = parseInt(args.count, 10);
-  while (!(n >= 1 && n <= MAX_VIDEOS)) {
-    n = parseInt(await ask(rl, `How many videos do you want to make? (1-${MAX_VIDEOS}): `), 10);
-    if (!(n >= 1 && n <= MAX_VIDEOS)) console.log(`Please type a number from 1 to ${MAX_VIDEOS}.`);
+  let queue = [];
+  if (args.redo) {
+    const made = index.stories.filter((s) => s.status !== 'sample' && fs.existsSync(path.join(LIB, 'stories', `${s.id}.json`)));
+    if (!made.length) { rl.close(); return console.log('No story has been made yet. Use option 1 first.'); }
+    console.log('\nStories already made:');
+    made.forEach((s, i) => console.log(`  ${i + 1}. ${s.title}  [${s.status}${s.duration ? `, ${s.duration}s` : ''}]${s.video ? `  ${s.video}` : ''}`));
+    const a = (await ask(rl, '\nWhich one do you want to remake? Type a number, or "all" (just Enter = cancel): ')).toLowerCase();
+    let picks = [];
+    if (a === 'all') picks = made;
+    else if (/^\d+$/.test(a) && +a >= 1 && +a <= made.length) picks = [made[+a - 1]];
+    if (!picks.length) { rl.close(); return console.log('Cancelled. Nothing was changed.'); }
+    queue = picks.map((u) => ({ resume: u, redo: true }));
+    args.yes = true;
+  } else {
+    let n = parseInt(args.count, 10);
+    while (!(n >= 1 && n <= MAX_VIDEOS)) {
+      n = parseInt(await ask(rl, `How many videos do you want to make? (1-${MAX_VIDEOS}): `), 10);
+      if (!(n >= 1 && n <= MAX_VIDEOS)) console.log(`Please type a number from 1 to ${MAX_VIDEOS}.`);
+    }
+    // queue: unfinished stories first, then a custom topic, then library topics
+    queue = unfinished.slice(0, n).map((u) => ({ resume: u }));
+    if (args.topic && queue.length < n) queue.push({ topic: { id: slugify(args.topic), title: args.topic, angle: '', setting: 'medieval_town', source: 'custom' } });
+    const pool = args.random ? [...left].sort(() => Math.random() - 0.5) : [...left].sort((a, b) => b.score - a.score);
+    while (queue.length < n && pool.length) queue.push({ topic: pool.shift() });
+    if (queue.length < n) console.log(`Only ${queue.length} topics are left in the library. Add more with vidIQ later, or use --topic.`);
   }
-
-  // queue: unfinished stories first, then a custom topic, then library topics
-  const queue = unfinished.slice(0, n).map((u) => ({ resume: u }));
-  if (args.topic && queue.length < n) queue.push({ topic: { id: slugify(args.topic), title: args.topic, angle: '', setting: 'medieval_town', source: 'custom' } });
-  const pool = args.random ? [...left].sort(() => Math.random() - 0.5) : [...left].sort((a, b) => b.score - a.score);
-  while (queue.length < n && pool.length) queue.push({ topic: pool.shift() });
-  if (queue.length < n) console.log(`Only ${queue.length} topics are left in the library. Add more with vidIQ later, or use --topic.`);
   if (!queue.length) { rl.close(); return console.log('Nothing to make.'); }
 
   console.log('\nWill make:');
@@ -123,6 +138,7 @@ async function main() {
         const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--min', String(MIN_SEC), '--max', String(MAX_SEC), '--style', 'a5'];
         for (const k of ['aspect', 'height', 'pause', 'env', 'voice']) if (args[k]) margs.push(`--${k}`, args[k]);
         for (const k of ['dry-voice', 'no-music']) if (args[k]) margs.push(`--${k}`);
+        if (q.redo || args.force) margs.push('--force');
         const r = spawnSync(process.execPath, margs, { stdio: ['inherit', 'inherit', 'pipe'], encoding: 'utf8' });
         if (r.stderr) process.stderr.write(r.stderr);
         if (r.status === 0) { ok = true; break; }
