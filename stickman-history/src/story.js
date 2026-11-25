@@ -30,6 +30,10 @@ ANGLE: ${topic.angle || ''}
 
 RULES
 - Tell ONE complete story with a hook in the first sentence, a clear middle, and a satisfying last line.
+- HOOK (first scene): the first sentence drops the viewer straight into one specific person, object or odd fact in action, for example "He crawled down the road at midnight, hammering glass marbles into the tarmac." Never start with a date, "In the year...", "Today we...", "Have you ever wondered" or the topic name. The hook must be true and must be paid off later.
+- CURIOSITY TURN (about the middle): one short line that makes the viewer need the answer, such as "But it gets weird." or "But how could that possibly work?" Keep the answer for the last third.
+- LAST LINE: a short punchy twist or payoff that echoes the first sentence, so the story feels finished and people want to watch it again.
+- Keep every scene moving: each scene brings one new fact, image or surprise. No filler, no repeating the topic.
 - Only use facts that are well documented. Do not invent dates, numbers, names or quotes. If something is disputed, say "according to" or "historians think". If unsure, leave it out.
 - Light humour is welcome (funny reactions, understatement), never at the expense of real victims.
 - ${o.minScenes} to ${o.maxScenes} scenes. Each narration is 18 to 26 words. Total ${o.minWords} to ${o.maxWords} words.
@@ -38,9 +42,9 @@ RULES
 ${avoid.length ? `- Do NOT repeat these already-made stories: ${avoid.slice(0, 40).join('; ')}.\n` : ''}${o.fix ? `- FIX FROM LAST TRY: ${o.fix}\n` : ''}
 Return ONLY JSON with this shape:
 {
- "title": "catchy YouTube title under 70 characters",
- "description": "2 sentence YouTube description",
- "tags": ["8 to 12 tags"],
+ "title": "curiosity title under 60 characters, written as a question (Why did..., How did..., What did X think of Y?) or one odd specific detail, never a lie; the story must answer it",
+ "description": "2 sentence YouTube description; the first sentence repeats the question or odd detail from the title",
+ "tags": ["6 to 10 tags: first the specific ones (people, place, era, object from this story), then 2 broad ones such as history facts"],
  "facts_to_check": ["every date, number and claim a human should verify"],
  "scenes": [
   {

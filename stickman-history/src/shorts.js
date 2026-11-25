@@ -9,6 +9,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { finalTags, hashtags } = require('./tags');
 const readline = require('readline');
 const { spawnSync } = require('child_process');
 const { loadEnv } = require('./voice');
@@ -177,7 +178,7 @@ async function main() {
       saveJson(indexFile, index);
       const story = readJson(scriptPath);
       fs.writeFileSync(path.join(outDir, 'info.txt'),
-        `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\nTAGS\n${(story.tags || []).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n`);
+        `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\n${hashtags(story)}\n\nTAGS\n${finalTags(story).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n`);
       results.push(`OK   ${entry.title} - ${entry.duration}s - ${final}`);
     } catch (e) {
       console.error(`  failed: ${e.message}`);
