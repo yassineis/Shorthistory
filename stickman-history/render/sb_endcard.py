@@ -14,7 +14,15 @@ from sb_sketch import Scene, crop_to, draw_subscribe, draw_cursor, sparkles, eas
 FPS = 24
 
 
-def main(out, w, h, title, dur=4.5):
+def voice_len(path):
+    r = subprocess.run([FFMPEG.replace('ffmpeg', 'ffprobe') if FFMPEG.endswith('ffmpeg') else 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path], capture_output=True, text=True)
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        return 2.5
+
+
+def main(out, w, h, title, dur=4.5, voice=None):
     k = max(1.25, w / 720 * 1.5)
     sc = Scene("subscribe", k)
     n = int(dur * FPS)
@@ -22,19 +30,20 @@ def main(out, w, h, title, dur=4.5):
     cmd = [FFMPEG, "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}", "-r", str(FPS), "-i", "-",
            "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", tmp]
     pr = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-    click_at = 2.3
+    click_at = 1.6  # the narrator says "Subscribe" first, then the cursor clicks, then the bell rings
+    talk_end = 0.5 + (voice_len(voice) if voice else 1.0)
     for i in range(n):
         t = i / FPS
         ck = t - click_at
 
         def ex(top, info):
             draw_subscribe(top, t, click=ck if ck > 0 else None)
-            if t > 1.0:
-                p = ease_io((t - 1.0) / 1.2)
+            if t > 0.3:
+                p = ease_io((t - 0.3) / 1.2)
                 draw_cursor(top, 700 + (540 - 700) * p, 1000 + (800 - 1000) * p, press=(0 < ck < 0.2))
             if ck > 0:
                 sparkles(top, 500, 770, ck, seed=4)
-        img, _ = sc.frame(t, extras=ex, talk=("host", 0.5 + 0.5 * abs(math.sin(t * 12))) if t < 2.2 else None)
+        img, _ = sc.frame(t, extras=ex, talk=("host", 0.5 + 0.5 * abs(math.sin(t * 12))) if t < talk_end else None)
         fr = crop_to(img, k, (w, h), 1.0 + 0.03 * min(1, t / dur))
         d = ImageDraw.Draw(fr)
         # ribbon + title panel
@@ -77,8 +86,12 @@ def main(out, w, h, title, dur=4.5):
         sys.exit("ffmpeg failed")
     os.replace(tmp, out)
     wav = os.path.splitext(out)[0] + ".wav"
-    subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{n / FPS:.5f}", "-c:a", "pcm_s16le", wav], check=True)
+    if voice:  # narrator line starts 0.5 s in, padded with silence to the length of the video
+        subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", voice, "-af", "aformat=channel_layouts=stereo,aresample=44100,adelay=500|500,apad",
+                        "-t", f"{n / FPS:.5f}", "-c:a", "pcm_s16le", "-ar", "44100", wav], check=True)
+    else:
+        subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{n / FPS:.5f}", "-c:a", "pcm_s16le", wav], check=True)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), sys.argv[4] if len(sys.argv) > 4 else "", float(sys.argv[5]) if len(sys.argv) > 5 else 4.5)
+    main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), sys.argv[4] if len(sys.argv) > 4 else "", float(sys.argv[5]) if len(sys.argv) > 5 else 4.5, sys.argv[6] if len(sys.argv) > 6 else None)

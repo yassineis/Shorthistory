@@ -139,12 +139,19 @@ async function main() {
     total += await probeDuration(clip);
   }
 
-  if (sb && !args.sample) { // end card: subscribe button + 'Up next' title (the next story of the library)
+  if (sb && !args.sample) { // end card: narrator says "subscribe and ring the bell", Subscribe button + 'Up next' title
     const nextTitle = args.next || '';
-    const card = path.join(out, 'clips', `endcard_${hash(nextTitle + width + height)}.mp4`);
+    const line = 'Subscribe, and ring the bell, to see our next episode.';
+    const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
+    const vkey = hash(JSON.stringify([line, voice, provider, !!args['dry-voice']]));
+    const cardVoice = path.join(out, 'audio', `endcard_${vkey}.mp3`);
+    if (!fs.existsSync(cardVoice) || args.force) await generateVoice(line, cardVoice, { dry: !!args['dry-voice'], provider, ...voice });
+    const vdur = await probeDuration(cardVoice);
+    const cardSec = Math.max(4.5, 0.5 + vdur + 1.0);
+    const card = path.join(out, 'clips', `endcard_${hash(nextTitle + width + height + vkey)}.mp4`);
     if (!fs.existsSync(card) || !fs.existsSync(card.replace(/\.mp4$/, '.wav')) || args.force) {
       process.stdout.write('  end card... ');
-      const r = spawnSync(python, [path.join(ROOT, 'render', 'sb_endcard.py'), card, String(width), String(height), nextTitle], { stdio: 'inherit' });
+      const r = spawnSync(python, [path.join(ROOT, 'render', 'sb_endcard.py'), card, String(width), String(height), nextTitle, cardSec.toFixed(2), cardVoice], { stdio: 'inherit' });
       if (r.status !== 0) throw new Error('Rendering the end card failed.');
       console.log('done');
     }
