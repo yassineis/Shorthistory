@@ -24,12 +24,20 @@ function estimate(story) {
   return story.scenes.reduce((a, s) => a + words(s.narration) / wps() + 1.0, 0) + 3.3; // + the subscribe line at the end
 }
 
+// Story shapes that suit short narrated cartoons: always one main character and a TRUE ending that pays off the hook.
+const SHAPES = {
+  underdog: 'STORY SHAPE (mocked underdog): one main character does something that looks foolish, people laugh or refuse to listen, and a real physical or scientific principle proves them right in the end. Show the mockery clearly in the middle, then the payoff.',
+  experiment: 'STORY SHAPE (weird real experiment or institution): one main character (or the odd person who runs it) does something that sounds absurd; explain the real reason it exists and what it proved or protects. The twist is why it makes sense.',
+  scheme: 'STORY SHAPE (clever scheme or loophole): one main character plans something sneaky or clever; show the plan step by step, then a twist that reveals how it really worked.',
+};
+const shapeFor = (topic) => (SHAPES[topic.type] ? `${SHAPES[topic.type]}${topic.character ? ` MAIN CHARACTER: ${topic.character}.` : ''}\n` : '');
+
 function buildPrompt(topic, avoid, o) {
   return `You write scripts for short animated history videos in a funny, friendly cartoon style (stick figures with white round heads, colourful period settings). The voice is a warm narrator speaking English.
 
 TOPIC: ${topic.title}
 ANGLE: ${topic.angle || ''}
-
+${shapeFor(topic)}
 RULES
 - Tell ONE complete story with a hook in the first sentence, a clear middle, and a satisfying last line.
 - HOOK (first scene): the first sentence drops the viewer straight into one specific person, object or odd fact in action, for example "He crawled down the road at midnight, hammering glass marbles into the tarmac." Never start with a date, "In the year...", "Today we..." or "Have you ever wondered". The first sentence must name the main subject people search for (for example the Mona Lisa, the pyramids, Genghis Khan) within its first 8 words. The hook must be true and must be paid off later.
@@ -45,7 +53,7 @@ RULES
 ${avoid.length ? `- Do NOT repeat these already-made stories: ${avoid.slice(0, 40).join('; ')}.\n` : ''}${o.fix ? `- FIX FROM LAST TRY: ${o.fix}\n` : ''}
 Return ONLY JSON with this shape:
 {
- "title": "curiosity title under 60 characters, written as a question (Why did..., How did..., What did X think of Y?) or one odd specific detail, never a lie; the story must answer it",
+ "title": "curiosity title under 60 characters, written as a question (Why did..., How did..., What did X think of Y?), or as \"Why [normal thing] is secretly weird\", or as \"They laughed at [odd idea]\", or as one odd specific detail; never a lie; the story must answer it",
  "description": "2 sentence YouTube description; the first sentence repeats the question or odd detail from the title",
  "tags": ["6 to 10 tags: first the specific ones (people, place, era, object from this story), then 2 broad ones such as history facts"],
  "facts_to_check": ["every date, number and claim a human should verify"],

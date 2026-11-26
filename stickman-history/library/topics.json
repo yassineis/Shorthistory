@@ -1,7 +1,7 @@
 {
  "version": 1,
- "updated": "2026-11-25",
- "about": "Seed library of history story topics. 'vidiq' topics come from vidIQ signals fetched 2026-11-22 (outliers, rising keywords, trending videos); 'evergreen' topics are curated. Scores are my 0-100 priority guess, not a vidIQ number. Topics are seeds: every fact must be checked before publishing. Titles rewritten on 2026-11-25 as curiosity questions (original in orig_title); ids unchanged so made-story tracking keeps working.",
+ "updated": "2026-11-26",
+ "about": "Seed library of history story topics. 'vidiq' topics come from vidIQ signals fetched 2026-11-22 (outliers, rising keywords, trending videos); 'evergreen' topics are curated. Scores are my 0-100 priority guess, not a vidIQ number. Topics are seeds: every fact must be checked before publishing. Titles rewritten on 2026-11-25 as curiosity questions (original in orig_title); ids unchanged so made-story tracking keeps working. 2026-11-26: added 14 topics in three story types (type: underdog, experiment, scheme) with a main character each.",
  "excluded_note": "Skipped trending items that are pseudo-history or unverifiable (Tartaria, Anunnaki-as-aliens, 'forbidden' claims), music/exam/news content and non-story keywords.",
  "vidiq_runs": [
   {
@@ -62,6 +62,18 @@
    "date": "2026-11-25",
    "tool": "trending_videos",
    "query": "title: history why did ancient people (short)",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-26",
+   "tool": "outliers (short)",
+   "query": "mocked underdog true stories",
+   "credits": 5
+  },
+  {
+   "date": "2026-11-26",
+   "tool": "trending_videos (short)",
+   "query": "they laughed at his idea until physics proved him right",
    "credits": 5
   }
  ],
@@ -818,6 +830,174 @@
    "score": 86,
    "source": "vidiq",
    "signal": "vidIQ 2026-11-25: 'He hammered glass into the road. Then the fog came.' 20K views from a 237-sub channel"
+  },
+  {
+   "id": "they-laughed-at-his-aircraft-carrier-made-of-ice",
+   "title": "They Laughed at His Aircraft Carrier Made of Ice",
+   "angle": "Project Habakkuk: Geoffrey Pyke's WWII plan to build ships from pykrete (ice mixed with wood pulp), tested on a Canadian lake, and why it was dropped",
+   "type": "underdog",
+   "character": "Geoffrey Pyke, the eccentric inventor",
+   "category": "war",
+   "setting": "ship_sea",
+   "score": 94,
+   "source": "vidiq",
+   "signal": "vidIQ 2026-11-26: 'They laughed at his aircraft carrier made of ice' 67 s Short, fresh, 909 views/hour on a 3.5K-sub channel, 6.3% engagement"
+  },
+  {
+   "id": "why-scientists-laughed-at-a-pattern-that-couldn-t-exist",
+   "title": "Why Scientists Laughed at a Pattern That Couldn't Exist",
+   "angle": "Dan Shechtman sees a forbidden five-fold pattern in 1982, is mocked (Linus Pauling among his critics) and asked to leave his group, then wins the 2011 Nobel Prize for quasicrystals",
+   "type": "underdog",
+   "character": "Dan Shechtman, a materials scientist",
+   "category": "science",
+   "setting": "interior",
+   "score": 92,
+   "source": "vidiq",
+   "signal": "vidIQ 2026-11-26: 'Laughed at for a pattern that couldn't exist' (quasicrystals) 338K views, 119x breakout, 2.9K-sub channel"
+  },
+  {
+   "id": "the-doctor-who-drank-bacteria-to-prove-a-point",
+   "title": "The Doctor Who Drank Bacteria to Prove a Point",
+   "angle": "Barry Marshall swallows a culture of H. pylori in 1984 to show it causes stomach ulcers when doctors blamed stress and acid; Nobel Prize 2005 with Robin Warren",
+   "type": "experiment",
+   "character": "Barry Marshall, a young Australian doctor",
+   "category": "science",
+   "setting": "interior",
+   "score": 93,
+   "source": "story-types",
+   "signal": "Story type B (weird real experiment); same 'mocked, then proven right' pull as the quasicrystal Short"
+  },
+  {
+   "id": "the-pilot-who-glided-a-jumbo-jet-without-fuel",
+   "title": "The Pilot Who Glided a Jumbo Jet Without Fuel",
+   "angle": "Air Canada Flight 143, 1983: a Boeing 767 runs out of fuel after a units mix-up, and Captain Bob Pearson, who also flew gliders, lands it at the old Gimli airfield with no deaths",
+   "type": "underdog",
+   "character": "Captain Bob Pearson",
+   "category": "inventions",
+   "setting": "steppe",
+   "score": 90,
+   "source": "story-types",
+   "signal": "Story type A (hidden physics: gliding a big jet); everyone survived, strong payoff"
+  },
+  {
+   "id": "the-escape-hidden-inside-a-gym-horse",
+   "title": "The Escape Hidden Inside a Gym Horse",
+   "angle": "Stalag Luft III, 1943: prisoners hide a tunnel digger inside a wooden vaulting horse while others exercise on it; three men escape and reach Britain",
+   "type": "scheme",
+   "character": "The prisoners, led by Eric Williams and Oliver Philpot",
+   "category": "war",
+   "setting": "battlefield",
+   "score": 90,
+   "source": "story-types",
+   "signal": "Story type C (clever scheme with a twist)"
+  },
+  {
+   "id": "the-man-who-sold-the-eiffel-tower-twice",
+   "title": "The Man Who Sold the Eiffel Tower Twice",
+   "angle": "Victor Lustig, Paris 1925: posing as a government official, he persuades scrap dealers the tower is to be sold for scrap, and repeats the trick",
+   "type": "scheme",
+   "character": "Victor Lustig, a con man",
+   "category": "oddities",
+   "setting": "london",
+   "score": 90,
+   "source": "story-types",
+   "signal": "Story type C (clever scheme with a twist)"
+  },
+  {
+   "id": "why-astronomers-mocked-the-clockmaker-who-solved-longitude",
+   "title": "Why Experts Mocked the Clockmaker Who Solved Longitude",
+   "angle": "John Harrison builds sea clocks that keep time on a rolling ship, solving the longitude problem, while the Board of Longitude kept doubting him",
+   "type": "underdog",
+   "character": "John Harrison, a self-taught clockmaker",
+   "category": "inventions",
+   "setting": "ship_sea",
+   "score": 86,
+   "source": "story-types",
+   "signal": "Story type A (mocked underdog, hidden physics of temperature and motion); 'Why a Watchmaker Broke His Own Clock' broke out at 9.5x (22K views, 318-sub channel)"
+  },
+  {
+   "id": "the-actress-who-invented-a-way-to-hide-radio-signals",
+   "title": "The Actress Who Invented a Way to Hide Radio Signals",
+   "angle": "Hedy Lamarr and George Antheil patent frequency hopping in 1942 to stop torpedo guidance signals being jammed; the idea later shaped modern wireless technology",
+   "type": "underdog",
+   "character": "Hedy Lamarr, film star and inventor",
+   "category": "inventions",
+   "setting": "interior",
+   "score": 86,
+   "source": "story-types",
+   "signal": "Story type A (underdog inventor)"
+  },
+  {
+   "id": "why-everyone-said-his-balsa-raft-would-sink",
+   "title": "Why Everyone Said His Balsa Raft Would Sink",
+   "angle": "Thor Heyerdahl and five crewmates sail the Kon-Tiki from Peru toward Polynesia in 1947 to show it could be done on a raft; say that his theory about Polynesian origins is disputed",
+   "type": "underdog",
+   "character": "Thor Heyerdahl",
+   "category": "everyday",
+   "setting": "ship_sea",
+   "score": 82,
+   "source": "story-types",
+   "signal": "Story type A (mocked underdog)"
+  },
+  {
+   "id": "why-soldiers-break-step-on-bridges",
+   "title": "Why Soldiers Break Step on Bridges",
+   "angle": "Broughton Suspension Bridge near Manchester, 1831: marching soldiers' steady rhythm makes it shake and a support fails; resonance explained simply",
+   "type": "underdog",
+   "character": "A column of soldiers and the bridge's engineer",
+   "category": "inventions",
+   "setting": "medieval_town",
+   "score": 78,
+   "source": "story-types",
+   "signal": "Story type A (hidden physics: resonance)"
+  },
+  {
+   "id": "the-experiment-that-drips-once-every-decade",
+   "title": "The Experiment That Drips Once Every Decade",
+   "angle": "The pitch drop experiment started at the University of Queensland in 1927: pitch looks solid but is a very slow liquid, and only a few drops have fallen since",
+   "type": "experiment",
+   "character": "Thomas Parnell, the physics professor who started it",
+   "category": "science",
+   "setting": "interior",
+   "score": 84,
+   "source": "story-types",
+   "signal": "Story type B (weird real experiment); check the exact number of drops before publishing"
+  },
+  {
+   "id": "why-eight-people-sealed-themselves-in-glass",
+   "title": "Why Eight People Sealed Themselves in Glass",
+   "angle": "Biosphere 2, Arizona, 1991-1993: eight people live inside a sealed glass world, oxygen drops and they have to get help, and what scientists learned",
+   "type": "experiment",
+   "character": "The eight Biosphere 2 crew members",
+   "category": "science",
+   "setting": "desert",
+   "score": 85,
+   "source": "story-types",
+   "signal": "Story type B (weird real experiment)"
+  },
+  {
+   "id": "why-the-tower-of-london-must-keep-six-ravens",
+   "title": "Why the Tower of London Must Keep Six Ravens",
+   "angle": "The legend that the kingdom falls if the ravens leave, the Ravenmaster who looks after them and the six-raven rule that is still followed today",
+   "type": "experiment",
+   "character": "The Ravenmaster of the Tower of London",
+   "category": "oddities",
+   "setting": "london",
+   "score": 80,
+   "source": "story-types",
+   "signal": "Story type B (weird institution)"
+  },
+  {
+   "id": "the-frozen-vault-that-stores-seeds-for-doomsday",
+   "title": "The Frozen Vault That Stores Seeds for Doomsday",
+   "angle": "The Svalbard Global Seed Vault in the Arctic, opened in 2008: why it is buried in a mountain, who can use it and what it protects",
+   "type": "experiment",
+   "character": "A seed-bank scientist who checks the vault",
+   "category": "science",
+   "setting": "snow",
+   "score": 82,
+   "source": "story-types",
+   "signal": "Story type B (weird institution)"
   }
  ]
 }
