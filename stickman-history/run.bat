@@ -88,7 +88,7 @@ rem ---- 4. menu ----
 :menu
 echo.
 echo ===== Stickman History =====
-echo  1  Make history shorts (it asks how many, 1:30 to 3:00 each)
+echo  1  Make history shorts (it asks how many, 1:15 to 1:45 each)
 echo  2  Make history shorts, vertical 9:16
 echo  3  Show the story library (made and still to make)
 echo  4  Test run with no key: placeholder story and voice, 1 video

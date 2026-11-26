@@ -417,11 +417,101 @@ def snow(k):
     return dict(layers=[far, mid, gr, fg], chars=[], props=[], light=(-1, -1))
 
 
+def _plank_floor(gr, top, bot, seam, y0=GROUND):
+    gr.grad(X0, y0, X1, Y1, top, bot)
+    gr.line([(X0, y0), (X1, y0)], INK, 3.2)
+    for i in range(1, 9):  # boards run toward the viewer
+        x = X0 + (X1 - X0) * i / 9
+        gr.line([(x * .55 + 360 * .45, y0), (x, Y1)], seam, 2.0)
+    for j in range(1, 6):
+        y = y0 + (j ** 1.7) * 16
+        gr.line([(X0, y), (X1, y)], seam, 1.6)
+
+
+def museum(k):  # gallery hall: paintings on the walls, polished floor, velvet ropes (for heists, art, palaces indoors)
+    far, mid, gr, fg = Ctx(k), Ctx(k), Ctx(k), Ctx(k)
+    far.grad(X0, -MY, X1, GROUND + 30, (236, 222, 200), (210, 190, 164))
+    far.rect(X0, GROUND + 29, X1, Y1, fill=(210, 190, 164), ink=None, w=0)
+    far.rect(X0, 640, X1, 700, fill=(150, 98, 78), w=2.6)  # wainscot
+    far.rect(X0, 700, X1, GROUND + 30, fill=(124, 82, 66), w=2.6)
+    far.glow(360, -40, 380, (255, 244, 214), .55)  # skylight
+    far.cel([(260, -MY), (460, -MY), (500, 40), (220, 40)], (214, 232, 244), (190, 212, 228), w=3)
+    frames = ((40, 190, 190, 330, (92, 128, 96)), (250, 150, 440, 380, (170, 112, 82)), (500, 190, 650, 330, (84, 110, 150)))
+    for x0, y0, x1, y1, col in frames:
+        mid.rect(x0 - 14, y0 - 14, x1 + 14, y1 + 14, fill=(216, 176, 84), w=3)
+        mid.rect(x0, y0, x1, y1, fill=col, w=2.4)
+    mid.circle(345, 250, 46, fill=(236, 206, 170), w=2.6)  # a portrait in the centre frame
+    mid.cel([(290, 380), (300, 292), (390, 292), (400, 380)], (76, 54, 46), (58, 40, 36), w=2.6)
+    mid.cel([(300, 224), (345, 190), (390, 224), (392, 270), (298, 270)], (90, 62, 44), (70, 48, 36), w=2.4)
+    mid.circle(345, 252, 38, fill=(240, 214, 180), w=2.4)
+    for x in (X0 + 40, X1 - 40):
+        column(mid, x, GROUND + 28, 520, 70, col=(228, 214, 196), sh=(198, 182, 166))
+    _plank_floor(gr, (192, 138, 96), (150, 104, 72), (122, 84, 60))
+    for x in (60, 660):  # velvet rope posts
+        fg.cel([(x - 10, 1100), (x + 10, 1100), (x + 14, 1250), (x - 14, 1250)], (216, 176, 84), (186, 148, 62), w=3)
+        fg.cel_circle(x, 1090, 18, (216, 176, 84), (186, 148, 62), w=3)
+    fg.line([(60, 1110), (360, 1160), (660, 1110)], (160, 40, 56), 9)
+    return dict(layers=[far, mid, gr, fg], chars=[], props=[], light=(0, -1))
+
+
+def interior(k):  # warm room: panelled wall, sunny window, bookshelf, lamp (houses, workshops, courts, studies)
+    far, mid, gr, fg = Ctx(k), Ctx(k), Ctx(k), Ctx(k)
+    far.grad(X0, -MY, X1, GROUND + 30, (222, 190, 150), (196, 160, 122))
+    far.rect(X0, GROUND + 29, X1, Y1, fill=(196, 160, 122), ink=None, w=0)
+    for x in range(int(X0), int(X1), 70):
+        far.line([(x, -MY), (x, GROUND + 30)], (176, 140, 104), 2.2)
+    far.rect(X0, 690, X1, GROUND + 30, fill=(150, 108, 80), w=2.6)
+    mid.rect(70, 190, 270, 470, fill=(190, 222, 240), w=4)  # window with light
+    mid.line([(170, 190), (170, 470)], INK, 4)
+    mid.line([(70, 330), (270, 330)], INK, 4)
+    mid.glow(170, 330, 260, (255, 236, 180), .5)
+    mid.rect(430, 170, 690, 610, fill=(132, 92, 68), w=3)  # bookshelf
+    rng = np.random.default_rng(6)
+    for r in range(3):
+        y0 = 190 + r * 140
+        mid.line([(430, y0 + 128), (690, y0 + 128)], INK, 3)
+        x = 442
+        while x < 676:
+            wd = rng.uniform(14, 26)
+            col = [(176, 70, 66), (80, 118, 150), (206, 168, 80), (92, 130, 96), (140, 96, 140)][int(rng.integers(0, 5))]
+            mid.rect(x, y0 + 28, x + wd, y0 + 126, fill=col, w=1.8)
+            x += wd + 2
+    mid.line([(360, -MY), (360, 60)], INK, 3)  # hanging lamp
+    mid.glow(360, 100, 200, (255, 214, 130), .55)
+    mid.cel([(330, 100), (390, 100), (408, 70), (312, 70)], (214, 176, 90), (180, 142, 66), w=3)
+    _plank_floor(gr, (176, 128, 90), (138, 96, 66), (112, 78, 54))
+    fg.cel_circle(-20, 1240, 70, (132, 92, 68), (104, 72, 52), w=3, wob=.03, seed=2)
+    return dict(layers=[far, mid, gr, fg], chars=[], props=[], light=(-1, -1))
+
+
+def stairwell(k):  # dark staircase: moody, one lamp (hiding, escapes, secrets, night scenes indoors)
+    far, mid, gr, fg = Ctx(k), Ctx(k), Ctx(k), Ctx(k)
+    far.grad(X0, -MY, X1, GROUND + 30, (46, 52, 74), (84, 84, 104))
+    far.rect(X0, GROUND + 29, X1, Y1, fill=(84, 84, 104), ink=None, w=0)
+    for y in range(-100, 700, 90):  # stone blocks
+        for x in range(int(X0) + (45 if (y // 90) % 2 else 0), int(X1), 90):
+            far.rect(x, y, x + 88, y + 88, fill=None, ink=(58, 62, 84), w=2)
+    # stairs climbing to the right, a door at the top
+    for i in range(8):
+        x0 = 200 + i * 60
+        top = 700 - i * 60
+        mid.cel([(x0, top), (x0 + 60, top), (x0 + 60, GROUND + 30), (x0, GROUND + 30)], (122, 122, 140), (92, 92, 112), w=2.8)
+    mid.cel([(640, 220), (700, 220), (700, 280), (640, 280)], (96, 64, 52), (74, 48, 40), w=3)
+    mid.line([(200, 640), (640, 160)], (70, 52, 46), 8)  # banister
+    mid.glow(150, 330, 240, (255, 206, 120), .6)  # lamp on the wall
+    mid.cel([(138, 330), (162, 330), (170, 360), (130, 360)], (226, 186, 96), (190, 150, 70), w=2.6)
+    gr.grad(X0, GROUND, X1, Y1, (92, 92, 112), (64, 64, 84))
+    gr.line([(X0, GROUND), (X1, GROUND)], INK, 3.2)
+    speckles(gr, GROUND + 30, H + 100, (62, 62, 84), 30, 4)
+    fg.cel_circle(740, 1240, 80, (70, 70, 92), (52, 52, 72), w=3, wob=.03, seed=7)
+    return dict(layers=[far, mid, gr, fg], chars=[], props=[], light=(-1, -1))
+
+
 BACKDROPS = {
     "egypt_temple": SCENES["egypt"], "viking_coast": SCENES["viking"], "edo_street": SCENES["edo"], "roman_forum": SCENES["rome"],
     "medieval_town": medieval_town, "greek_agora": greek_agora, "china_palace": china_palace, "desert": desert, "ship_sea": ship_sea,
     "old_west": old_west, "london": london, "cave": cave, "steppe": steppe, "jungle_temple": jungle_temple, "battlefield": battlefield,
-    "harbor": harbor, "moon": moon, "snow": snow,
+    "harbor": harbor, "moon": moon, "snow": snow, "museum": museum, "interior": interior, "stairwell": stairwell,
 }
 
 

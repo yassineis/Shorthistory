@@ -5,7 +5,7 @@
 const { loadEnv } = require('./voice');
 
 const SETTINGS = ['edo_street', 'egypt_temple', 'roman_forum', 'medieval_town', 'viking_coast', 'greek_agora', 'china_palace',
-  'desert', 'ship_sea', 'old_west', 'london', 'cave', 'steppe', 'jungle_temple', 'battlefield', 'harbor', 'moon', 'snow'];
+  'desert', 'ship_sea', 'old_west', 'london', 'cave', 'steppe', 'jungle_temple', 'battlefield', 'harbor', 'moon', 'snow', 'museum', 'interior', 'stairwell'];
 const POSES = ['stand', 'walk', 'wave', 'point', 'cheer', 'think', 'hold', 'slump', 'write'];
 const HATS = ['crown', 'helmet', 'cap', 'kasa', 'nemes', 'laurel', 'viking', 'tophat', 'hood', 'tricorn', 'turban', 'kabuto', 'cowboy'];
 const OUTFITS = ['red', 'blue', 'green', 'yellow', 'purple', 'brown', 'white', 'black', 'orange', 'pink', 'teal', 'gray'];
@@ -13,6 +13,7 @@ const HOLDS = ['book', 'scroll', 'flag', 'coins', 'bulb', 'quill'];
 const PROPS = ['sun', 'cloud', 'tree', 'house', 'town', 'castle', 'ship', 'flag', 'crown', 'scroll', 'book', 'stack', 'press',
   'coins', 'mountain', 'map', 'bulb', 'clock', 'gear', 'arrow', 'pages', 'crowd', 'quill'];
 const EMOTES = ['!', '?', '!?', '...', ':('];
+const SFX = ['door', 'steps', 'ding', 'coins', 'drum', 'bell', 'crowd', 'thud']; // small sound effects made by the code
 const WPS = 2.5; // spoken words per second, used only for the pre-check; the real length is measured after the voice is made
 
 const words = (s) => String(s).replace(/\[\[|\]\]/g, '').split(/\s+/).filter(Boolean).length;
@@ -30,13 +31,14 @@ ANGLE: ${topic.angle || ''}
 
 RULES
 - Tell ONE complete story with a hook in the first sentence, a clear middle, and a satisfying last line.
-- HOOK (first scene): the first sentence drops the viewer straight into one specific person, object or odd fact in action, for example "He crawled down the road at midnight, hammering glass marbles into the tarmac." Never start with a date, "In the year...", "Today we...", "Have you ever wondered" or the topic name. The hook must be true and must be paid off later.
+- HOOK (first scene): the first sentence drops the viewer straight into one specific person, object or odd fact in action, for example "He crawled down the road at midnight, hammering glass marbles into the tarmac." Never start with a date, "In the year...", "Today we..." or "Have you ever wondered". The first sentence must name the main subject people search for (for example the Mona Lisa, the pyramids, Genghis Khan) within its first 8 words. The hook must be true and must be paid off later.
+- FIRST SCENE MATCHES THE HOOK: the first scene's setting, props and actors must show exactly what the first sentence says (a "dark stairwell" means setting "stairwell"; a gallery or museum means "museum"; a room, workshop, court or house interior means "interior"). Use the indoor settings for anything that happens indoors. Give the first scene a clear, active pose and an emote ("!" or "?"), never a plain standing pose.
 - CURIOSITY TURN (about the middle): one short line that makes the viewer need the answer, such as "But it gets weird." or "But how could that possibly work?" Keep the answer for the last third.
-- LAST LINE: a short punchy twist or payoff that echoes the first sentence, so the story feels finished and people want to watch it again.
+- LAST LINE: a short punchy twist or payoff that repeats a key word or image from the first sentence, so the ending flows straight back into the start when the video loops. Do not write a goodbye, a call to subscribe or a summary: the video adds its own short subscribe line after your last line.
 - Keep every scene moving: each scene brings one new fact, image or surprise. No filler, no repeating the topic.
 - Only use facts that are well documented. Do not invent dates, numbers, names or quotes. If something is disputed, say "according to" or "historians think". If unsure, leave it out.
 - Light humour is welcome (funny reactions, understatement), never at the expense of real victims.
-- ${o.minScenes} to ${o.maxScenes} scenes. Each narration is 18 to 26 words. Total ${o.minWords} to ${o.maxWords} words.
+- ${o.minScenes} to ${o.maxScenes} scenes. Each narration is 16 to 22 words. Total ${o.minWords} to ${o.maxWords} words. The whole video must stay under 1 minute 45 seconds, so be brief: no filler, no second explanation of the same point.
 - Narration is plain spoken English: no emojis, no stage directions, no hashtags. Wrap 1 to 3 key words per scene in [[double brackets]] so they show in red in the captions.
 - Years and big numbers are written so they are easy to speak.
 ${avoid.length ? `- Do NOT repeat these already-made stories: ${avoid.slice(0, 40).join('; ')}.\n` : ''}${o.fix ? `- FIX FROM LAST TRY: ${o.fix}\n` : ''}
@@ -51,6 +53,7 @@ Return ONLY JSON with this shape:
    "kicker": "2-4 word on-screen title",
    "stamp": "optional short red stamp such as a year, else empty string",
    "narration": "spoken text",
+   "sfx": optional, one of ${JSON.stringify(SFX)}, only when something in the scene really makes that sound (a door opens, footsteps, a coin, a drum, a bell, a crowd, a thud),
    "setting": one of ${JSON.stringify(SETTINGS)},
    "actors": [ {"x": 0.2-0.8, "pose": one of ${JSON.stringify(POSES)}, "outfit": one of ${JSON.stringify(OUTFITS)}, "outfit_kind": "tunic" or "robe", "hat": optional one of ${JSON.stringify(HATS)}, "holds": optional one of ${JSON.stringify(HOLDS)}, "face": "left" or "right", "talk": true for the speaking character, "emote": optional one of ${JSON.stringify(EMOTES)} for a funny reaction, "to": optional x to walk to } ],
    "props": [ {"type": one of ${JSON.stringify(PROPS)}, "x": 0.1-0.9, "size": 0.6-1.4} ]
@@ -226,7 +229,7 @@ function normalize(raw, topic) {
     }));
     return {
       kicker: String(s.kicker || '').slice(0, 28), stamp: String(s.stamp || '').slice(0, 14), narration,
-      setting, stage: { props, actors },
+      setting, stage: { props, actors }, ...(SFX.includes(s.sfx) ? { sfx: s.sfx } : {}),
     };
   });
   return {
@@ -280,13 +283,13 @@ function mockStory(topic) {
 async function writeStory(topic, opts = {}) {
   loadEnv(opts.envFile);
   if (opts.mock) return normalize(mockStory(topic), topic);
-  const o = { minWords: 300, maxWords: 400, minScenes: 14, maxScenes: 17, ...opts };
+  const o = { minWords: 180, maxWords: 220, minScenes: 9, maxScenes: 11, ...opts };
   let fix = opts.fix || '';
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     const story = normalize(parseJson(await geminiText(buildPrompt(topic, opts.avoid || [], { ...o, fix }))), topic);
     const est = estimate(story);
-    if (est >= 100 && est <= 165) return story;
-    fix = `The last version would run about ${Math.round(est)} seconds. It must be between 115 and 150 seconds: ${est < 100 ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
+    if (est >= 72 && est <= 100) return story;
+    fix = `The last version would run about ${Math.round(est)} seconds. It must be between 80 and 95 seconds, so the finished video stays under 1 minute 45: ${est < 72 ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
     if (attempt === 3) return story; // make.js measures the real length and the caller decides
   }
 }

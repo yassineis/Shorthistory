@@ -136,10 +136,10 @@ def line_caption(img, text, t_in, y_frac=0.77):
 
 
 # ---------------------------------------------------------------- subscribe card
-def draw_subscribe(top, t, click=None, host_info=None, sparkle=0.0):
+def draw_subscribe(top, t, click=None, host_info=None, sparkle=0.0, pos=(500, 770)):
     """Button on the transparent top layer. click = seconds since the click (None = not clicked)."""
     pop = ease_out_back(t / 0.4)
-    bx, by = 500, 770
+    bx, by = pos
     clicked = click is not None and click > 0
     sq = 1.0 - (0.07 * math.sin(min(1, click / 0.25) * math.pi) if (click is not None and 0 < click < 0.25) else 0)
     wd, ht = 300 * pop * sq, 92 * pop * sq

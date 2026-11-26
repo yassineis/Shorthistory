@@ -195,7 +195,7 @@ async function generateVoice(text, outputPath, opts = {}) {
   if (provider === 'kokoro') {
     return kokoroVoice(clean, outputPath, {
       voice: opts.kokoroVoice || process.env.KOKORO_VOICE || 'am_fenrir',
-      speed: Number(opts.kokoroSpeed || process.env.KOKORO_SPEED || 1.06),
+      speed: Number(opts.kokoroSpeed || process.env.KOKORO_SPEED || 1.15),
       dtype: opts.kokoroDtype || process.env.KOKORO_DTYPE || 'fp32',
     });
   }

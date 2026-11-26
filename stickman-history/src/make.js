@@ -11,7 +11,7 @@ const { spawnSync } = require('child_process');
 const { generateVoice, probeDuration, runFFmpeg, loadEnv } = require('./voice');
 
 const ROOT = path.join(__dirname, '..');
-const BOOL = new Set(['sample', 'dry-voice', 'no-music', 'no-presenter', 'force', 'help']);
+const BOOL = new Set(['sample', 'dry-voice', 'no-music', 'no-presenter', 'no-sfx', 'force', 'help']);
 
 function parseArgs(argv) {
   const o = { _: [] };
@@ -47,11 +47,12 @@ function help() {
   --fps 24           frames per second
   --pause 4000       pause in ms between Gemini voice requests (only with --voice gemini)
   --no-music         skip the background music
+  --no-sfx           skip the sound effects (storybook style)
   --no-presenter     hide the corner presenter
   --font <file.ttf>  caption font (default: a bold system font)
   --style sb|a5|b5   sb = storybook cartoon, vertical 9:16 (default for shorts), a5 = old colourful stick figures, b5 = paper stickman explainer
-  --next "Title"     show an 'Up next' end card with this title (storybook style)
-  --min 90 --max 180 refuse the video if narration + padding falls outside these seconds (exit code 3)
+  --next "Title"     (not used any more: the storybook ending is now a looping subscribe overlay on the last scene)
+  --min 75 --max 105 refuse the video if narration + padding (+ the subscribe line) falls outside these seconds (exit code 3)
   --force            ignore cached voice and clips
   --env <file>       file with GEMINI_API_KEY (default: .env)`);
 }
@@ -93,7 +94,7 @@ async function main() {
     const num = String(i + 1).padStart(2, '0');
     if (!sc.narration) throw new Error(`Scene ${i + 1} has no "narration".`);
     const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
-    const audioKey = hash(JSON.stringify([sc.narration, voice, provider, !!args['dry-voice']]));
+    const audioKey = hash(JSON.stringify([sc.narration, voice, provider, !!args['dry-voice'], process.env.KOKORO_VOICE || '', process.env.KOKORO_SPEED || '']));
     const audio = path.join(out, 'audio', `scene_${num}_${audioKey}.mp3`);
     if (!fs.existsSync(audio) || args.force) {
       process.stdout.write(`  scene ${num}: voice... `);
@@ -101,7 +102,30 @@ async function main() {
       console.log('ok');
       if (!args['dry-voice'] && provider === 'gemini' && i < scenes.length - 1) await sleep(pause);
     }
-    items.push({ sc, num, audio, adur: await probeDuration(audio) });
+    items.push({ sc, num, audio, adur: await probeDuration(audio), narr: sc.narration });
+  }
+
+  // Looping ending (storybook style): no separate end card. The narrator's last story line flows straight into a short
+  // "Subscribe, and ring the bell..." line, and the Subscribe button pops up over the SAME final scene, so viewers do not
+  // swipe away at a card and the video can loop back into its hook.
+  if (sb && !args.sample) {
+    const line = 'Subscribe, and ring the bell, to see our next episode.';
+    const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
+    const vkey = hash(JSON.stringify([line, voice, provider, !!args['dry-voice'], process.env.KOKORO_VOICE || '', process.env.KOKORO_SPEED || '']));
+    const ctaVoice = path.join(out, 'audio', `cta_${vkey}.mp3`);
+    if (!fs.existsSync(ctaVoice) || args.force) await generateVoice(line, ctaVoice, { dry: !!args['dry-voice'], provider, ...voice });
+    const last = items[items.length - 1];
+    const gap = 0.3;
+    const joinedAudio = path.join(out, 'audio', `scene_${last.num}_cta_${hash(last.audio + vkey)}.mp3`);
+    if (!fs.existsSync(joinedAudio) || args.force) {
+      await runFFmpeg(['-y', '-i', last.audio, '-i', ctaVoice, '-filter_complex',
+        `[0:a]aformat=sample_rates=24000:channel_layouts=mono,apad=pad_dur=${gap}[a];[1:a]aformat=sample_rates=24000:channel_layouts=mono[b];[a][b]concat=n=2:v=0:a=1[o]`,
+        '-map', '[o]', '-c:a', 'libmp3lame', '-b:a', '128k', joinedAudio]);
+    }
+    last.cta_start = lead + last.adur + gap; // seconds into the final scene clip where the subscribe line begins
+    last.audio = joinedAudio;
+    last.adur = await probeDuration(joinedAudio);
+    last.narr = `${last.narr} ${line}`;
   }
   const estimate = items.reduce((a, it) => a + it.adur + lead + tail, 0);
   if (!args.sample && (args.min || args.max)) {
@@ -114,9 +138,9 @@ async function main() {
 
   // pass 2: render each scene (cached by spec hash)
   for (let i = 0; i < items.length; i += 1) {
-    const { sc, num, audio, adur } = items[i];
+    const { sc, num, audio, adur, narr, cta_start } = items[i];
     const spec = {
-      index: i, narration: sc.narration, kicker: sc.kicker || '', stamp: sc.stamp || '', stamp_at: sc.stamp_at,
+      index: i, narration: narr, cta_start, kicker: sc.kicker || '', stamp: sc.stamp || '', stamp_at: sc.stamp_at,
       stage: sc.stage || {}, style, setting: sc.setting || script.setting,
       presenter: !args['no-presenter'] && (style === 'a5' ? script.presenter === true : script.presenter !== false),
       presenter_pose: sc.presenter_pose, audio, audio_duration: adur,
@@ -137,26 +161,6 @@ async function main() {
     }
     clips.push(clip);
     total += await probeDuration(clip);
-  }
-
-  if (sb && !args.sample) { // end card: narrator says "subscribe and ring the bell", Subscribe button + 'Up next' title
-    const nextTitle = args.next || '';
-    const line = 'Subscribe, and ring the bell, to see our next episode.';
-    const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
-    const vkey = hash(JSON.stringify([line, voice, provider, !!args['dry-voice']]));
-    const cardVoice = path.join(out, 'audio', `endcard_${vkey}.mp3`);
-    if (!fs.existsSync(cardVoice) || args.force) await generateVoice(line, cardVoice, { dry: !!args['dry-voice'], provider, ...voice });
-    const vdur = await probeDuration(cardVoice);
-    const cardSec = Math.max(4.5, 0.5 + vdur + 1.0);
-    const card = path.join(out, 'clips', `endcard_${hash(nextTitle + width + height + vkey)}.mp4`);
-    if (!fs.existsSync(card) || !fs.existsSync(card.replace(/\.mp4$/, '.wav')) || args.force) {
-      process.stdout.write('  end card... ');
-      const r = spawnSync(python, [path.join(ROOT, 'render', 'sb_endcard.py'), card, String(width), String(height), nextTitle, cardSec.toFixed(2), cardVoice], { stdio: 'inherit' });
-      if (r.status !== 0) throw new Error('Rendering the end card failed.');
-      console.log('done');
-    }
-    clips.push(card);
-    total += await probeDuration(card);
   }
 
   const wavs = clips.map((c) => c.replace(/\.mp4$/, '.wav'));
@@ -180,6 +184,23 @@ async function main() {
   await concat(clips, joined);
   await concat(wavs, narration);
 
+  // Sound effects: a soft whoosh at every scene change, plus the effect the story asks for in a scene ("sfx": door, steps...).
+  let sfxWav = null;
+  if (sb && !args['no-sfx']) {
+    const events = [];
+    let at = 0;
+    for (let i = 0; i < clips.length; i += 1) {
+      if (i > 0) events.push({ t: at - 0.05, name: 'whoosh', gain: 0.55 });
+      const tag = items[i] && items[i].sc.sfx;
+      if (tag) events.push({ t: at + 0.5, name: tag, gain: 1.0 });
+      at += await probeDuration(clips[i]);
+    }
+    const ev = path.join(out, 'sfx.json');
+    sfxWav = path.join(out, 'sfx.wav');
+    fs.writeFileSync(ev, JSON.stringify({ total: at, events }));
+    const r0 = spawnSync(python, [path.join(ROOT, 'render', 'sb_sfx.py'), ev, sfxWav], { stdio: 'inherit' });
+    if (r0.status !== 0) { console.log('  (sound effects skipped)'); sfxWav = null; }
+  }
   const final = path.join(out, args.sample ? 'sample.mp4' : 'final.mp4');
   if (args['no-music']) {
     await runFFmpeg(['-y', '-i', joined, '-i', narration, '-map', '0:v', '-map', '1:a',
@@ -191,8 +212,15 @@ async function main() {
       ? spawnSync(python, [path.join(ROOT, 'render', 'sb_music.py'), String(mstyle), music, String(total + 1), '--bg'], { stdio: 'inherit' })
       : spawnSync(python, [path.join(ROOT, 'render', 'music.py'), String(total + 1), music], { stdio: 'inherit' });
     if (r.status !== 0) throw new Error('Music generation failed.');
-    await runFFmpeg(['-y', '-i', joined, '-i', narration, '-i', music, '-filter_complex',
-      '[1:a]volume=1.0[n];[2:a]volume=0.14[m];[n][m]amix=inputs=2:duration=first:dropout_transition=0[mix];[mix]volume=2[a]',
+    const ins = ['-i', joined, '-i', narration, '-i', music];
+    let fc = '[1:a]volume=1.0[n];[2:a]volume=0.14[m];';
+    if (sfxWav) {
+      ins.push('-i', sfxWav);
+      fc += '[3:a]volume=0.35[x];[n][m][x]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[mix];[mix]volume=1.1[a]';
+    } else {
+      fc += '[n][m]amix=inputs=2:duration=first:dropout_transition=0[mix];[mix]volume=2[a]';
+    }
+    await runFFmpeg(['-y', ...ins, '-filter_complex', fc,
       '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', final]);
   }
 

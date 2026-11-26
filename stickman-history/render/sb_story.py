@@ -26,7 +26,8 @@ def ease_io(x):
 
 
 class StoryScene:
-    def __init__(self, setting, actors, props, out_w, out_h, k=None):
+    def __init__(self, setting, actors, props, out_w, out_h, k=None, variant=0):
+        self.variant = variant  # scene number: changes camera direction and zoom so neighbouring scenes do not look alike
         self.k = k or max(1.25, out_w / W * 1.5)
         self.ow, self.oh = out_w, out_h
         self.layers = backdrop(setting, self.k)["layers"]
@@ -39,6 +40,12 @@ class StoryScene:
         face = -1 if a.get("face", "right") == "left" else 1
         to, moving = a.get("to"), False
         x = x0
+        enter = 0.7  # characters walk in from the side at the start of every scene
+        if to is None and t < enter:
+            p = ease_io(t / enter)
+            x = x0 + (-0.42 if x0 < 0.5 else 0.42) * (1 - p)
+            face = 1 if x0 > x else -1
+            moving = True
         if to is not None:
             t0 = a.get("move_at", 0.5)
             t1 = max(t0 + 0.5, a.get("move_end", total - 0.6))
@@ -49,9 +56,11 @@ class StoryScene:
             moving = 0 < p < 1
         return x, pose, face, moving
 
-    def frame(self, t, total, mouth=0.0, talking_idx=None):
+    def frame(self, t, total, mouth=0.0, talking_idx=None, overlay=None):
         k = self.k
-        pan = -26 + 52 * min(1.0, t / max(total, 1))
+        prog = min(1.0, t / max(total, 1))
+        v = self.variant
+        pan = (-26 + 52 * prog) * (1 if v % 2 == 0 else -1)
         size = self.layers[0].size
         out = Image.new("RGBA", size, (0, 0, 0, 255))
         f = PARALLAX
@@ -88,7 +97,9 @@ class StoryScene:
             hat = a.get("hat")
             beard = a.get("beard") or BEARD_HATS.get(hat, False)
             gy = 948 + (i % 2) * -10 + (6 if x > 0.5 else 0)
-            lean = 0.0
+            lean = 0.03 * math.sin(t * 1.7 + i * 1.3)  # gentle sway while standing
+            if a.get("talk") and (mouth or 0) > 0.3:
+                gy -= 3.0  # little lift on the stressed syllables
             if moving:
                 gy -= abs(math.sin(t * 7 + i)) * 7
                 lean = 0.06
@@ -98,7 +109,11 @@ class StoryScene:
                       beard=beard, lean=lean, emote=emote_kw, seed=i + 2, trim=(222, 184, 96) if a.get("outfit_kind") == "robe" else None)
         out.alpha_composite(top.img, (int(pan * f[2] * k), 0))
         out.alpha_composite(self.layers[3].img, (int(pan * f[3] * k), 0))
-        zoom = 1.0 + 0.06 * min(1.0, t / max(total, 1))
+        if overlay is not None:  # fixed on screen (subscribe button), drawn in the same design space
+            ov = Ctx(k)
+            overlay(ov)
+            out.alpha_composite(ov.img, (0, 0))
+        zoom = (1.0 + 0.07 * prog, 1.07 - 0.07 * prog, 1.03 + 0.02 * math.sin(prog * 3.14))[v % 3]
         vw, vh = W / zoom, H / zoom
         l, tp = (MX + W / 2 - vw / 2) * k, (MY + H / 2 - vh / 2 + 10 * (zoom - 1) * 40) * k
         return out.convert("RGB").resize((self.ow, self.oh), Image.LANCZOS, box=(l, tp, l + vw * k, tp + vh * k))

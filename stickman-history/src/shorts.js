@@ -5,7 +5,7 @@
 //   2. picks topics from library/topics.json that are not made yet (top-scored first)
 //   3. for each: writes the story with Gemini (saved in library/stories/), voices it, renders it
 //   4. records every story in library/index.json so a story is never made twice
-// Each video must come out between 1:30 and 3:00.
+// Each video (subscribe line included) must come out between 1:15 and 1:45.
 
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +17,7 @@ const { writeStory, estimate } = require('./story');
 
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
-const MIN_SEC = 90, MAX_SEC = 180, MAX_VIDEOS = 10;
+const MIN_SEC = 75, MAX_SEC = 105, MAX_VIDEOS = 10;
 const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'help']);
 
 function parseArgs(argv) {
@@ -38,7 +38,7 @@ const normTitle = (s) => s.toLowerCase().replace(/\(mock\)/g, '').replace(/[^a-z
 function help() {
   console.log(`Usage: node src/shorts.js [options]
 
-It asks how many videos to make (1-10), then makes them. Videos are 1:30 to 3:00 long.
+It asks how many videos to make (1-10), then makes them. Videos are 1:15 to 1:45 long (subscribe line included).
 
   --count N        skip the question and make N videos (max ${MAX_VIDEOS})
   --topic "text"   make a video about your own topic (repeatable use: run again for more)
@@ -146,7 +146,8 @@ async function main() {
       const outDir = path.join('out', 'shorts', entry.id);
       let ok = false;
       for (let attempt = 1; attempt <= 3 && !ok; attempt += 1) {
-        const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--min', String(MIN_SEC), '--max', String(MAX_SEC), '--style', args.style || 'sb'];
+        const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--style', args.style || 'sb'];
+        if (!q.redo) margs.push('--min', String(MIN_SEC), '--max', String(MAX_SEC)); // a remake keeps the saved story as it is, whatever its length
         for (const k of ['aspect', 'height', 'pause', 'env', 'voice']) if (args[k]) margs.push(`--${k}`, args[k]);
         const nextT = nextTitle(i);
         if (nextT) margs.push('--next', nextT);
@@ -158,9 +159,9 @@ async function main() {
         const m = /DURATION ([\d.]+)/.exec(r.stderr || '');
         if (r.status === 3 && m && !args['mock-story'] && attempt < 3) {
           const secs = parseFloat(m[1]);
-          console.log(`  the voice runs ${secs.toFixed(0)}s, outside 1:30-3:00. Asking for a rewrite...`);
+          console.log(`  the voice runs ${secs.toFixed(0)}s, outside 1:15-1:45. Asking for a rewrite...`);
           const story = readJson(scriptPath);
-          const fix = `The narrated video came out ${Math.round(secs)} seconds. It must be between 105 and 165 seconds: ${secs < MIN_SEC ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
+          const fix = `The narrated video came out ${Math.round(secs)} seconds. It must be between 80 and 100 seconds, so the whole video stays under 1 minute 45: ${secs < MIN_SEC ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
           const topic = lib.topics.find((t) => t.id === entry.topic_id) || { id: entry.topic_id, title: entry.title, angle: '', setting: story.scenes[0].setting };
           const again = await writeStory(topic, { avoid: index.stories.filter((s) => s.id !== entry.id).map((s) => s.title), fix, envFile: args.env || path.join(ROOT, '.env') });
           Object.assign(again, { topic_id: story.topic_id, library_id: entry.id, created: story.created });
@@ -168,7 +169,7 @@ async function main() {
           entry.title = again.title;
           continue;
         }
-        throw new Error(r.status === 3 ? `Video length ${m ? m[1] : '?'}s is outside 1:30-3:00 and could not be fixed automatically.` : 'make.js failed (see above).');
+        throw new Error(r.status === 3 ? `Video length ${m ? m[1] : '?'}s is outside 1:15-1:45 and could not be fixed automatically.` : 'make.js failed (see above).');
       }
       const final = path.join(outDir, 'final.mp4');
       const { probeDuration } = require('./voice');

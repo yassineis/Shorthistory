@@ -87,7 +87,7 @@ def main(spec_path):
         import a5 as a5mod  # only for the outfit table, never drawn
         from sb_story import StoryScene
         stage0 = spec.get("stage", {})
-        story_scene = StoryScene(spec.get("setting"), stage0.get("actors", []), stage0.get("props", []), W, H)
+        story_scene = StoryScene(spec.get("setting"), stage0.get("actors", []), stage0.get("props", []), W, H, variant=spec.get("index", 0))
         paper = Image.new("RGB", (W, H), PAPER)
     elif a5:
         import a5 as a5mod
@@ -115,11 +115,28 @@ def main(spec_path):
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 
     paper_flat = Image.new("RGB", (W, H), PAPER)
+    cta_start = spec.get("cta_start") if sb else None  # seconds into this clip where the "subscribe" line starts
+    if cta_start is not None:
+        from sb_sketch import draw_subscribe, draw_cursor, sparkles, ease_io as sk_ease
+        click_at = cta_start + 0.95  # narrator says "Subscribe," first, then the cursor clicks and the bell rings
+
+        def cta_overlay(top, t):
+            tt = t - (cta_start - 0.25)
+            if tt < 0:
+                return
+            ck = t - click_at
+            draw_subscribe(top, tt, click=ck if ck > 0 else None, pos=(330, 340))
+            p = sk_ease(min(1.0, tt / 1.1))
+            if tt > 0.2 and ck < 0.5:
+                draw_cursor(top, 620 + (350 - 620) * p, 540 + (360 - 540) * p, press=(0 < ck < 0.2))
+            if ck > 0:
+                sparkles(top, 330, 340, ck, seed=4)
     ground = L["ground"]
     for i in range(nframes):
         t = i / fps
         if sb:
-            img = story_scene.frame(t, total, mouth=float(env[i]) if lead <= t <= lead + adur else 0.0)
+            img = story_scene.frame(t, total, mouth=float(env[i]) if lead <= t <= lead + adur else 0.0,
+                                    overlay=(lambda top, _t=t: cta_overlay(top, _t)) if cta_start is not None else None)
         else:
             img = paper.copy()
         pen = Pen(img, S, seed=int(t * 8) % 997, lw=L["line_w"])
@@ -180,7 +197,7 @@ def main(spec_path):
             draw_stick(pen, L["presenter_x"], ground, L["presenter_h"], spec.get("presenter_pose", "stand"),
                        t, face=-1, scarf=True, mouth=float(env[i]) if lead <= t <= lead + adur else 0.0)
 
-        if stamp_img is not None and t >= stamp_at:
+        if stamp_img is not None and t >= stamp_at and not (cta_start is not None and t > cta_start - 0.25):  # stamp makes room for the subscribe button
             p = (t - stamp_at) / 0.35
             sc = ease_out_back(p) if p < 1 else 1.0
             w, h = max(1, int(stamp_img.width * sc)), max(1, int(stamp_img.height * sc))
