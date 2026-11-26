@@ -1,0 +1,443 @@
+{
+ "title": "Why Did Tsar Peter the Great Tax Beards?",
+ "description": "Why did Tsar Peter the Great tax beards in 1698? Discover how Russia turned facial hair into cash with copper beard tokens.",
+ "tags": [
+  "peter the great",
+  "beard tax",
+  "russia",
+  "beard token",
+  "1698",
+  "tsar",
+  "history facts",
+  "weird history"
+ ],
+ "facts_to_check": [
+  "Peter the Great introduced the beard tax in 1698 after returning from the Grand Embassy",
+  "Beard tokens were made of copper or silver and carried the inscription 'Money Taken'",
+  "The beard tax was formally repealed in 1772 under Catherine the Great",
+  "Peter personally shaved several nobles upon returning to Moscow"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Unwelcome Trim",
+   "stamp": "1698",
+   "narration": "A massive six-foot-eight ruler whipped out a long pair of [[barber shears]] and personally chopped off his horrified advisor's long beard.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "castle",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Grand Tour",
+   "stamp": "1697",
+   "narration": "Young Tsar [[Peter the Great]] had just returned from a secret eighteen-month tour across Western Europe, heavily inspired by modern French fashions.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "walk",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "tricorn",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tophat"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Cultural Clash",
+   "stamp": "",
+   "narration": "He noticed European diplomats were clean-shaven, while Russian men viewed long facial hair as a deeply holy [[religious symbol]].",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "teal",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat"
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "black",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "hood",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Facial Hair Ban",
+   "stamp": "1698",
+   "narration": "Determined to modernize his empire overnight, Peter declared long beards entirely illegal for all noblemen and wealthy merchants in Moscow.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "town",
+      "x": 0.2,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "write",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Gatekeeper Guards",
+   "stamp": "",
+   "narration": "Inspectors were stationed at city gates armed with giant [[clippers]] to forcibly shave anyone who refused to cut their own hair.",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "helmet",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "green",
+      "outfit_kind": "robe",
+      "face": "left",
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Public Outrage",
+   "stamp": "",
+   "narration": "But traditional nobles desperately wanted to keep their sacred chin hair, leading to massive public outrage and silent [[civil protests]].",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true,
+      "emote": ":("
+     },
+     {
+      "x": 0.7,
+      "pose": "point",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Cash Compromise",
+   "stamp": "",
+   "narration": "Realizing he could modernize while filling his military treasury, the practical monarch offered an astonishingly expensive [[cash compromise]].",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "coins",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "holds": "coins",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Luxury Status",
+   "stamp": "",
+   "narration": "Men could legally keep their cherished beards if they paid a heavy annual fee, effectively turning chin hair into a luxury [[status symbol]].",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "teal",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "gray",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Enforcement Riddle",
+   "stamp": "",
+   "narration": "But how could tax collectors in busy bustling cities possibly prove which bearded man had paid his required imperial annual dues?",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tricorn",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Copper Token",
+   "stamp": "1698",
+   "narration": "The state minted special copper and silver coins called [[beard tokens]] that taxpayers had to carry wherever they walked.",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [
+     {
+      "type": "coins",
+      "x": 0.7,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "hold",
+      "outfit": "green",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "coins",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Money Taken",
+   "stamp": "",
+   "narration": "One side displayed a stamped image of a mustache and beard, bearing the blunt Russian slogan declaring that [[money taken]].",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "green",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Imperial Seal",
+   "stamp": "",
+   "narration": "The other side featured the Russian imperial eagle, proving the owner had satisfied the monarch's unusual annual [[facial tax]].",
+   "setting": "medieval_town",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "hold",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tricorn",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "No Token Shave",
+   "stamp": "",
+   "narration": "If a bearded man walked outside without his shiny coin attached, guards would instantly seize him and [[forcibly shave]] his chin.",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "helmet",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "robe",
+      "face": "left",
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Building Empire",
+   "stamp": "1703",
+   "narration": "The profitable tax remained active for decades, raising vital funds for Russia's new capital city and powerful Baltic [[naval fleet]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "ship",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Saved Whiskers",
+   "stamp": "",
+   "narration": "Even after paying, devout elders often saved their cut whiskers in pouches to be buried with them for [[heavenly entry]].",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "hold",
+      "outfit": "gray",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Taxing Times",
+   "stamp": "",
+   "narration": "So next time you trim, remember the tsar who turned every chin into cash with a terrifying pair of [[barber shears]].",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "wave",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "why-did-peter-the-great-tax-beards",
+ "library_id": "why-did-peter-the-great-tax-beards",
+ "created": "2026-11-25"
+}

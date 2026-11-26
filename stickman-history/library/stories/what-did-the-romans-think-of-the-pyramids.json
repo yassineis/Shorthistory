@@ -1,0 +1,263 @@
+{
+ "title": "What did Romans think of the Great Pyramids?",
+ "description": "Roman tourists flocked to Egypt to see the ancient wonders of the world. Here is what they actually thought when standing before the Great Pyramids.",
+ "tags": [
+  "Ancient Egypt",
+  "Roman Empire",
+  "Great Pyramids",
+  "Pliny the Elder",
+  "History",
+  "Tourist Graffiti",
+  "Ancient Travel",
+  "World Wonders",
+  "History Facts",
+  "Funny History"
+ ],
+ "facts_to_check": [
+  "Pliny the Elder wrote about the Pyramids in Naturalis Historia.",
+  "Roman tourists left graffiti on ancient Egyptian monuments.",
+  "The Romans viewed the Pyramids as grand but often impractical vanity projects."
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Roman Tourist Graffiti",
+   "stamp": "100 AD",
+   "narration": "A Roman visitor scribbled his name onto the [[Great Pyramids]] with a sharp rock, leaving a permanent mark behind.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "write",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   },
+   "sfx": "thud"
+  },
+  {
+   "kicker": "Elite Travelers",
+   "stamp": "",
+   "narration": "Wealthy Romans loved visiting Egypt, treating the massive stone tombs like a bucket-list destination for their grand [[tourist]] travels.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "point",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   },
+   "sfx": "crowd"
+  },
+  {
+   "kicker": "Pliny's Opinion",
+   "stamp": "",
+   "narration": "The famous Roman writer [[Pliny the Elder]] called the pyramids an idle and foolish display of royal wealth and power.",
+   "setting": "interior",
+   "stage": {
+    "props": [
+     {
+      "type": "scroll",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "laurel",
+      "holds": "scroll",
+      "talk": true,
+      "emote": "..."
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Vanity Projects",
+   "stamp": "",
+   "narration": "He argued these enormous structures were just useless piles of stone built only to satisfy the ego of dead [[kings]].",
+   "setting": "interior",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "laurel",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "A Strange Obsession",
+   "stamp": "",
+   "narration": "But it gets weird.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Roman Obsession",
+   "stamp": "",
+   "narration": "Despite their complaints, thousands of Romans still flocked to the site, desperate to see the [[wonders]] for their own eyes.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.2,
+      "pose": "walk",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "to": 0.8
+     }
+    ]
+   },
+   "sfx": "crowd"
+  },
+  {
+   "kicker": "Ancient Souvenirs",
+   "stamp": "",
+   "narration": "They treated the site like an ancient theme park, buying local trinkets and carving their own names into the [[limestone]] walls.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "write",
+      "outfit": "teal",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Roman Legacy",
+   "stamp": "",
+   "narration": "Even their leaders were obsessed, with some Roman emperors importing Egyptian obelisks back to Rome to show off their [[glory]].",
+   "setting": "roman_forum",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "laurel",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Echoes of History",
+   "stamp": "",
+   "narration": "Perhaps the most enduring legacy of those Roman tourists is the graffiti still visible on the face of the [[Great Pyramids]].",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "what-did-the-romans-think-of-the-pyramids",
+ "library_id": "what-did-the-romans-think-of-the-pyramids",
+ "created": "2026-11-26"
+}

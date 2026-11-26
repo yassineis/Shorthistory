@@ -1,0 +1,454 @@
+{
+ "title": "How Did an Escaped Slave Unite the Steppe?",
+ "description": "How did an escaped slave unite the entire Mongolian steppe? Discover how Temüjin broke centuries of tribal tradition to create the Mongol Empire.",
+ "tags": [
+  "Genghis Khan",
+  "Temujin",
+  "Mongol Empire",
+  "Steppe",
+  "Jamukha",
+  "Mongolia",
+  "history facts",
+  "animated history"
+ ],
+ "facts_to_check": [
+  "Temujin escaped captivity under the Tayichi'ud while wearing a wooden yoke (cangue)",
+  "Temujin promoted soldiers by merit instead of aristocratic lineage",
+  "Temujin redistributed plunder equally to soldiers and widows",
+  "The 1206 Kurultai council proclaimed Temujin as Genghis Khan",
+  "Genghis Khan outlawed the kidnapping of women and animal theft in his code"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Freezing Escape",
+   "stamp": "",
+   "narration": "A terrified teenager lay submerged in a freezing river, breathing through a straw while wearing a thirty-pound [[wooden block]] around his neck.",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "emote": "!",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Orphaned Outcast",
+   "stamp": "",
+   "narration": "Young Temüjin had just escaped rival captors who killed his father, stole their horses, and left his family completely [[destitute]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "tree",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Aristocratic Steppe",
+   "stamp": "",
+   "narration": "On the harsh Mongolian steppe, tribal survival depended strictly on aristocrats, [[noble bloodlines]], and endless vicious feuds.",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "crown",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Radical Choice",
+   "stamp": "",
+   "narration": "But Temüjin gathered a small loyal band and made a revolutionary choice: promoting soldiers by [[pure merit]] instead of noble birth.",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Upsetting Elders",
+   "stamp": "",
+   "narration": "He welcomed common herdsmen into high military posts, breaking centuries of nomadic tradition and furious elite [[tribal elders]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "teal",
+      "outfit_kind": "tunic",
+      "face": "right"
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "hood",
+      "talk": true,
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Mixing Tribes",
+   "stamp": "",
+   "narration": "To destroy clan rivalries, he broke conquered tribes into mixed units, forcing former enemies to [[fight side by side]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "helmet",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "helmet"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ending Kidnappings",
+   "stamp": "",
+   "narration": "He even banned the ancient practice of kidnapping wives, which had sparked endless wars, including the theft of his [[own wife]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "hold",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Blood Brother Feud",
+   "stamp": "",
+   "narration": "But his childhood blood brother Jamukha still led the traditional aristocrats, determined to crush Temüjin's radical [[new order]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "black",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "helmet",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Strategic Turn",
+   "stamp": "",
+   "narration": "But how could a penniless fugitive wearing rags defeat the entire united strength of the traditional steppe [[nobility]]?",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "think",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Fair Looting",
+   "stamp": "",
+   "narration": "Instead of letting warriors loot conquered camps immediately, Temüjin ordered all battlefield plunder gathered and [[distributed equally]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "coins",
+      "x": 0.5,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "hold",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "holds": "coins",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Loyalty First",
+   "stamp": "",
+   "narration": "Every widow and orphan of fallen soldiers received a guaranteed share, securing complete, passionate [[loyalty]] from common families.",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "wave",
+      "outfit": "orange",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "cheer",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Steppe Conquest",
+   "stamp": "",
+   "narration": "After years of fierce battles against Jamukha's forces, Temüjin finally united all the rival nomadic tribes under [[one law]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "helmet",
+      "holds": "flag",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Universal Leader",
+   "stamp": "1206",
+   "narration": "In twelve hundred six, a massive council of leaders proclaimed him Genghis Khan, meaning the supreme [[universal ruler]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "crowd",
+      "x": 0.5,
+      "size": 1.3
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Great Law",
+   "stamp": "",
+   "narration": "His new empire outlawed selling women, banned animal theft, and created a swift horse messenger network called the [[Yam system]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "write",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "scroll",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "walk",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Unstoppable Force",
+   "stamp": "",
+   "narration": "The boy who once hid under water now commanded an unstoppable nation of over one million united [[nomadic horsemen]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.2,
+      "size": 1.1
+     },
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "cheer",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Iron Will",
+   "stamp": "",
+   "narration": "The entire world soon trembled before the leader who swapped a heavy [[wooden block]] for a global empire.",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "sun",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "crown",
+      "talk": true
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "the-mongol-empire-rises",
+ "library_id": "the-mongol-empire-rises",
+ "created": "2026-11-25"
+}

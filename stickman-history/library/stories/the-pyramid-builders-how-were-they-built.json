@@ -1,0 +1,388 @@
+{
+ "title": "How Was the Great Pyramid Actually Built?",
+ "description": "Discover the real archaeology behind the construction of the Great Pyramid of Giza. Learn about the ancient workers who built it.",
+ "tags": [
+  "pyramids",
+  "egypt",
+  "history",
+  "archaeology",
+  "ancient egypt",
+  "giza",
+  "pharaoh",
+  "history animation"
+ ],
+ "facts_to_check": [
+  "Great Pyramid built for Pharaoh Khufu",
+  "Built around twenty five hundred BC",
+  "Discovered worker town at Giza",
+  "Not built by slaves",
+  "Used ramp systems and copper chisels"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "The Great Mystery",
+   "stamp": "2500 BC",
+   "narration": "For thousands of years, people looked at the [[Great Pyramid]] and wondered how human hands managed such a [[giant]] feat.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "No Aliens Here",
+   "stamp": "",
+   "narration": "Spoiler alert, it was not [[aliens]]. Archaeologists have actually found the [[physical proof]] left behind by the real builders.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "sun",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Not Slaves",
+   "stamp": "",
+   "narration": "Popular myth says slaves did all the work, but ancient [[graffiti]] and tombs show a [[paid workforce]] of citizens.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "scroll",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Organized Crews",
+   "stamp": "",
+   "narration": "Workers were divided into organized [[teams]] with fun names like the Friends of Khufu, showing [[pride]] in their massive job.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "cheer",
+      "outfit": "orange",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Worker Town",
+   "stamp": "",
+   "narration": "Archaeologists excavated an entire [[lost city]] near the pyramids where bakers, brewers, and [[builders]] lived together.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Good Rations",
+   "stamp": "",
+   "narration": "Bones found in the area prove these workers ate lots of [[beef]] and bread, which is a surprisingly [[healthy diet]].",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Quarrying Stone",
+   "stamp": "",
+   "narration": "To build the core, workers cut limestone blocks right from nearby [[quarries]] using simple [[copper chisels]] and wooden wedges.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "point",
+      "outfit": "gray",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Moving Blocks",
+   "stamp": "",
+   "narration": "Moving those heavy multi-ton blocks required [[sledge carts]] pulled across sand that was likely [[wet down]] with water.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "to": 0.7
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Physics",
+   "stamp": "",
+   "narration": "Pouring water reduces friction on sand [[magically]] well, making it much easier to [[pull heavy loads]] across the desert.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ramp Systems",
+   "stamp": "",
+   "narration": "Historians still debate the exact [[ramp design]] used to lift stones high up, with straight, zigzag, and [[spiral options]] all studied.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Internal Ramps",
+   "stamp": "",
+   "narration": "One leading theory suggests a [[hidden internal ramp]] was built inside the pyramid as it [[grew taller]], avoiding collapse issues.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "River Transport",
+   "stamp": "",
+   "narration": "Finishing stones like fine white limestone came by [[boat]] along the Nile River during the [[annual flood]].",
+   "setting": "ship_sea",
+   "stage": {
+    "props": [
+     {
+      "type": "ship",
+      "x": 0.5,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Precise Angles",
+   "stamp": "",
+   "narration": "Despite using basic tools, the [[alignment]] with true north is astonishingly [[accurate]] within a fraction of a degree.",
+   "setting": "desert",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Human Ingenuity",
+   "stamp": "",
+   "narration": "It was not magic or mystery, but pure [[human effort]], brilliant engineering, and [[teamwork]] that raised the monument.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "sun",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "cheer",
+      "outfit": "orange",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Lasting Legacy",
+   "stamp": "",
+   "narration": "The pyramids stand today as a [[tribute]] to the clever builders who [[left their mark]] on history forever.",
+   "setting": "desert",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.3
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "wave",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "the-pyramid-builders-how-were-they-built",
+ "library_id": "the-pyramid-builders-how-were-they-built",
+ "created": "2026-11-23"
+}

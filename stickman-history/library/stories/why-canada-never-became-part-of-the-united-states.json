@@ -1,0 +1,341 @@
+{
+ "title": "Why Canada Never Became Part of the United States",
+ "description": "Discover the two failed invasions that shaped the border between Canada and the United States. Learn how these historical events kept the nations separate.",
+ "tags": [
+  "Canada",
+  "United States",
+  "History",
+  "War of 1812",
+  "American Revolution",
+  "North America",
+  "Geography",
+  "Border",
+  "British Empire",
+  "Colonial History"
+ ],
+ "facts_to_check": [
+  "The 1775 Invasion of Quebec",
+  "The 1812 Invasion of Canada",
+  "The Treaty of Paris 1783",
+  "The role of the British military in defending Canada",
+  "The failure of the American capture of Quebec City"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "North America Split",
+   "stamp": "",
+   "narration": "Have you ever wondered why North America is split by such a massive, friendly border instead of being just one giant country?",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "map",
+      "x": 0.5,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tricorn",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The First Attempt",
+   "stamp": "1775",
+   "narration": "Back in seventeen seventy-five, the American revolutionaries thought their northern neighbors would happily join their [[rebellion]] against the British crown and king.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tricorn",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "March to Quebec",
+   "stamp": "1775",
+   "narration": "They marched north to capture Quebec City, hoping to spark a continent-wide movement, but the winter weather proved far more [[formidable]] than expected.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "tree",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "walk",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tricorn",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Big Defeat",
+   "stamp": "1776",
+   "narration": "The attack failed miserably, the Americans retreated south, and the dream of a united North American revolution effectively [[vanished]] into thin air.",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "slump",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tricorn",
+      "talk": true,
+      "emote": ":("
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Tensions Rise",
+   "stamp": "1812",
+   "narration": "Decades later, in eighteen twelve, tensions boiled over again as the young United States declared war on the British and invaded Canada.",
+   "setting": "battlefield",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.2,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.8,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Goal",
+   "stamp": "",
+   "narration": "Many American leaders believed that capturing Canada would be a mere [[formality]], assuming the locals would welcome them as liberators from Britain.",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "scroll",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "think",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Local Resistance",
+   "stamp": "",
+   "narration": "But the local militia, British regulars, and Indigenous allies stood their ground, making it incredibly difficult for the invaders to gain [[ground]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.8,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Stalemate",
+   "stamp": "1814",
+   "narration": "The conflict dragged on for years with many bloody skirmishes, but neither side could claim a decisive victory, leading to an uneasy [[stalemate]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "arrow",
+      "x": 0.5,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Treaty",
+   "stamp": "1815",
+   "narration": "When the treaty was finally signed, the borders remained exactly where they were before the war, essentially keeping Canada a separate [[entity]].",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "pages",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "write",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "holds": "quill",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Shared Identity",
+   "stamp": "",
+   "narration": "Facing these invasions actually helped foster a unique sense of Canadian identity, as communities united to defend their homes against outside [[aggression]].",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Friendly Neighbors",
+   "stamp": "",
+   "narration": "Instead of becoming one nation, Canada and the United States evolved into two distinct countries, often seen as the best of [[neighbors]].",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "wave",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "wave",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "History's Lesson",
+   "stamp": "",
+   "narration": "Those failed invasions left a lasting mark, ensuring that the map of North America looks the way it does for us today.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "map",
+      "x": 0.5,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "why-canada-never-became-part-of-the-united-states",
+ "library_id": "why-canada-never-became-part-of-the-united-states",
+ "created": "2026-11-23"
+}

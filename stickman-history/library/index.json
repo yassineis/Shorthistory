@@ -7,6 +7,104 @@
    "title": "Gutenberg and the Printing Press",
    "status": "sample",
    "created": "2026-11-22"
+  },
+  {
+   "id": "the-pyramid-builders-how-were-they-built",
+   "topic_id": "the-pyramid-builders-how-were-they-built",
+   "title": "How Was the Great Pyramid Actually Built?",
+   "status": "rendered",
+   "created": "2026-11-23",
+   "est_seconds": 128,
+   "duration": 147,
+   "video": "out/shorts/the-pyramid-builders-how-were-they-built/final.mp4"
+  },
+  {
+   "id": "why-canada-never-became-part-of-the-united-states",
+   "topic_id": "why-canada-never-became-part-of-the-united-states",
+   "title": "Why Canada Never Became Part of the United States",
+   "status": "rendered",
+   "created": "2026-11-23",
+   "est_seconds": 158,
+   "duration": 121,
+   "video": "out/shorts/why-canada-never-became-part-of-the-united-states/final.mp4"
+  },
+  {
+   "id": "the-shortest-war-in-history",
+   "topic_id": "the-shortest-war-in-history",
+   "title": "The Shortest War in History (38 Minutes!)",
+   "status": "rendered",
+   "created": "2026-11-24",
+   "est_seconds": 136,
+   "duration": 138,
+   "video": "out/shorts/the-shortest-war-in-history/final.mp4"
+  },
+  {
+   "id": "the-5-500-year-old-shoe-of-areni-cave",
+   "topic_id": "the-5-500-year-old-shoe-of-areni-cave",
+   "title": "Why Was a 5,500-Year-Old Shoe Still Laced Up?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 140,
+   "duration": 135,
+   "video": "out/shorts/the-5-500-year-old-shoe-of-areni-cave/final.mp4"
+  },
+  {
+   "id": "why-did-peter-the-great-tax-beards",
+   "topic_id": "why-did-peter-the-great-tax-beards",
+   "title": "Why Did Tsar Peter the Great Tax Beards?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 146,
+   "duration": 142,
+   "video": "out/shorts/why-did-peter-the-great-tax-beards/final.mp4"
+  },
+  {
+   "id": "the-day-the-mona-lisa-was-stolen",
+   "topic_id": "the-day-the-mona-lisa-was-stolen",
+   "title": "How Did Someone Walk Out With the Mona Lisa?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 139,
+   "duration": 129,
+   "video": "out/shorts/the-day-the-mona-lisa-was-stolen/final.mp4"
+  },
+  {
+   "id": "the-mongol-empire-rises",
+   "topic_id": "the-mongol-empire-rises",
+   "title": "How Did an Escaped Slave Unite the Steppe?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 137,
+   "duration": 140,
+   "video": "out/shorts/the-mongol-empire-rises/final.mp4"
+  },
+  {
+   "id": "why-did-old-kyoto-have-narrow-deep-houses",
+   "topic_id": "why-did-old-kyoto-have-narrow-deep-houses",
+   "title": "Why Did Old Kyoto Have Such Narrow Houses?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 139,
+   "duration": 137,
+   "video": "out/shorts/why-did-old-kyoto-have-narrow-deep-houses/final.mp4"
+  },
+  {
+   "id": "the-neanderthals-our-closest-cousins",
+   "topic_id": "the-neanderthals-our-closest-cousins",
+   "title": "What Do Our Genes Say About Neanderthals?",
+   "status": "rendered",
+   "created": "2026-11-25",
+   "est_seconds": 131,
+   "duration": 139,
+   "video": "out/shorts/the-neanderthals-our-closest-cousins/final.mp4"
+  },
+  {
+   "id": "what-did-the-romans-think-of-the-pyramids",
+   "topic_id": "what-did-the-romans-think-of-the-pyramids",
+   "title": "What did Romans think of the Great Pyramids?",
+   "status": "failed",
+   "created": "2026-11-26",
+   "est_seconds": 74
   }
  ]
 }

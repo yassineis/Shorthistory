@@ -1,0 +1,486 @@
+{
+ "title": "The Shortest War in History (38 Minutes!)",
+ "description": "Discover the incredible story of the Anglo-Zanzibar War of 1896, which was fought and won in under an hour. Learn how diplomatic tension led to the briefest conflict in recorded history.",
+ "tags": [
+  "anglo zanzibar war",
+  "shortest war",
+  "history story",
+  "1896 history",
+  "animated history",
+  "british empire",
+  "zanzibar",
+  "funny history",
+  "quick history",
+  "military history"
+ ],
+ "facts_to_check": [
+  "Heligoland-Zanzibar Treaty of 1890 required British consent for new sultan",
+  "Sultan Hamad bin Thuwaini died on August 25, 1896",
+  "Khalid bin Barghash seized power without British approval",
+  "British ultimatum expired at 9:00 AM on August 27, 1896",
+  "British bombardment began at 9:02 AM and ended around 9:40 AM",
+  "War duration estimated between 38 and 45 minutes",
+  "HHS Glasgow was the royal yacht sunk during the engagement"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Morning Coffee War",
+   "stamp": "",
+   "narration": "Imagine declaring a full scale international war against a powerful empire, only for everything to end before your morning coffee gets [[cold]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "turban",
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The 1890 Treaty",
+   "stamp": "1890",
+   "narration": "In eighteen ninety, the island nation of Zanzibar signed a treaty agreeing that any new ruler needed approval from Great [[Britain]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.15,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat",
+      "holds": "scroll",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "turban"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Vacant Throne",
+   "stamp": "AUG 25 1896",
+   "narration": "On August twenty-fifth, eighteen ninety-six, Zanzibar's pro-British sultan suddenly died, leaving the royal throne completely open for a sudden [[takeover]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "crown",
+      "x": 0.7,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "turban",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Palace Takeover",
+   "stamp": "1896",
+   "narration": "Sultan Khalid bin Barghash quickly seized the palace without permission, moving in with guards and declaring himself the new [[ruler]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "castle",
+      "x": 0.85,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "cheer",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "turban",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Ultimatum",
+   "stamp": "1896",
+   "narration": "British officials were furious at this surprise move and delivered a strict [[ultimatum]] demanding he step down by nine AM.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "black",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat",
+      "holds": "scroll",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Khalid Refuses",
+   "stamp": "",
+   "narration": "Believing the British were merely bluffing, Khalid assembled three thousand defenders around his wooden palace to protect his new [[throne]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "think",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "turban",
+      "talk": true
+     },
+     {
+      "x": 0.6,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Warships Arrive",
+   "stamp": "1896",
+   "narration": "However, British forces were entirely serious, stationing five heavily armed warships directly inside the harbor right opposite the royal [[palace]].",
+   "setting": "ship_sea",
+   "stage": {
+    "props": [
+     {
+      "type": "ship",
+      "x": 0.7,
+      "size": 1.3
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "point",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Deadline",
+   "stamp": "9:00 AM",
+   "narration": "At nine AM on August twenty-seventh, the deadline passed with Khalid refusing to surrender or step down from his [[position]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.2,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "slump",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "turban",
+      "emote": "...",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "9:02 AM Fire",
+   "stamp": "9:02 AM",
+   "narration": "At precisely nine two AM, the British warships opened fire, pouring devastating artillery shells onto the wooden palace [[building]].",
+   "setting": "ship_sea",
+   "stage": {
+    "props": [
+     {
+      "type": "arrow",
+      "x": 0.6,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Palace Bombardment",
+   "stamp": "",
+   "narration": "The wooden palace caught fire rapidly under heavy bombardment, while Zanzibar's artillery guns were silenced almost immediately by overwhelming naval [[firepower]].",
+   "setting": "battlefield",
+   "stage": {
+    "props": [
+     {
+      "type": "castle",
+      "x": 0.2,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "emote": "!",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "left",
+      "hat": "turban"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Naval Battle",
+   "stamp": "",
+   "narration": "The sultan's single armed royal yacht boldly tried to attack the fleet, but accurate British cannon fire sank it almost [[instantly]].",
+   "setting": "ship_sea",
+   "stage": {
+    "props": [
+     {
+      "type": "ship",
+      "x": 0.2,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Flag Surrender",
+   "stamp": "9:40 AM",
+   "narration": "By nine forty AM, the royal flag on the burning palace was shot down, bringing an end to all active [[resistance]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "flag",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "slump",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Khalid Flees",
+   "stamp": "",
+   "narration": "Sultan Khalid quietly escaped through a back exit, leaving behind a completely ruined palace and an unbelievably short [[conflict]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.15,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "turban",
+      "to": 0.8,
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "38 Minutes",
+   "stamp": "38 MINS",
+   "narration": "Lasting roughly thirty-eight to forty-five minutes, historians record this encounter as officially the [[shortest war]] in recorded human history.",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.7,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "hold",
+      "outfit": "gray",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat",
+      "holds": "book",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Done by Lunch",
+   "stamp": "1896",
+   "narration": "A friendly sultan was crowned that afternoon, showing that some global wars wrap up before lunch is even [[served]].",
+   "setting": "harbor",
+   "stage": {
+    "props": [
+     {
+      "type": "crown",
+      "x": 0.3,
+      "size": 0.7
+     },
+     {
+      "type": "sun",
+      "x": 0.5,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "turban",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "wave",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tophat"
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "the-shortest-war-in-history",
+ "library_id": "the-shortest-war-in-history",
+ "created": "2026-11-24"
+}

@@ -1,0 +1,440 @@
+{
+ "title": "How Did Someone Walk Out With the Mona Lisa?",
+ "description": "How did someone walk out with the Mona Lisa in 1911? Discover how a museum handyman pulled off the most famous art heist in history.",
+ "tags": [
+  "mona lisa",
+  "louvre",
+  "vincenzo peruggia",
+  "1911 heist",
+  "paris history",
+  "art theft",
+  "history facts",
+  "weird history"
+ ],
+ "facts_to_check": [
+  "Vincenzo Peruggia stole the Mona Lisa on August 21, 1911",
+  "Peruggia was a handyman who installed glass cases at the Louvre",
+  "He was stuck at a locked stairwell door until a plumber opened it",
+  "The painting was missing for 24 hours before anyone noticed",
+  "He hid it in a trunk in his Paris apartment for over 2 years",
+  "He was caught in Florence in December 1913 while trying to sell it to dealer Alfredo Geri"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Locked Inside",
+   "stamp": "1911",
+   "narration": "He stood trapped inside a dark [[stairwell]], clutching a stolen masterpiece under his coat while staring at a locked door.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "slump",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll",
+      "talk": true,
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Handyman",
+   "stamp": "",
+   "narration": "Just hours earlier in [[nineteen eleven]], an Italian handyman named Vincenzo Peruggia strolled casually inside the Louvre museum in Paris.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "walk",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Inside Knowledge",
+   "stamp": "",
+   "narration": "Vincenzo had actually worked there before, helping construct protective [[glass cases]] to shield precious artwork from angry vandals.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "gear",
+      "x": 0.2,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "hold",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Patriotic Plan",
+   "stamp": "",
+   "narration": "He convinced himself that Leonardo da Vinci's masterwork rightfully belonged in Italy, and resolved to take it home himself.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "bulb",
+      "x": 0.65,
+      "size": 0.7
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Hideout",
+   "stamp": "",
+   "narration": "Knowing the museum was closed to the public on Mondays, he slipped into a worker closet and waited until dawn.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.7,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Disguised Worker",
+   "stamp": "",
+   "narration": "Wearing a white [[handyman apron]] identical to the staff, he walked unnoticed straight into the empty target gallery.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "walk",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Off The Wall",
+   "stamp": "",
+   "narration": "Vincenzo lifted the heavy painting off the wall, carried it into a quiet stairwell, and unframed the wooden panel.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "hold",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Sudden Snag",
+   "stamp": "",
+   "narration": "He wrapped the canvas in his apron, but suddenly reached the exit stairwell. [[But how]] could his plan actually succeed now?",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap",
+      "holds": "scroll",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Stuck Thief",
+   "stamp": "",
+   "narration": "The outer door was completely locked from the inside, and Vincenzo tried unscrewing the doorknob, only to drop it.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll",
+      "talk": true,
+      "emote": ":("
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Unsuspecting Help",
+   "stamp": "",
+   "narration": "Just as panic set in, a friendly [[museum plumber]] walked down the stairs and assumed Vincenzo was an embarrassed worker.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "slump",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll"
+     },
+     {
+      "x": 0.7,
+      "pose": "walk",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Great Escape",
+   "stamp": "",
+   "narration": "The helpful plumber used his master key to unlock the door, cheerfully letting the thief walk out into Paris.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "wave",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap"
+     },
+     {
+      "x": 0.7,
+      "pose": "walk",
+      "outfit": "white",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Empty Frame",
+   "stamp": "",
+   "narration": "It took twenty-four hours before anyone noticed the blank space on the wall, prompting total chaos across France.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "crowd",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "point",
+      "outfit": "black",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "tophat",
+      "talk": true,
+      "emote": "!?"
+     },
+     {
+      "x": 0.6,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Baffled Police",
+   "stamp": "",
+   "narration": "Police even questioned Vincenzo twice, but ignored him because they believed a master criminal must have done it.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "think",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "stand",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "cap"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Under The Bed",
+   "stamp": "",
+   "narration": "He kept the painting hidden inside a trunk in his Paris apartment for over two years without telling anyone.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "stack",
+      "x": 0.2,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "hold",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Busted Sale",
+   "stamp": "1913",
+   "narration": "He was finally caught after trying to sell it to an art dealer in Florence, who instantly called the police.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "hold",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "holds": "scroll"
+     },
+     {
+      "x": 0.7,
+      "pose": "point",
+      "outfit": "purple",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "hat": "tophat",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Plumber's Favor",
+   "stamp": "",
+   "narration": "All because two years earlier, a kindly plumber had unlocked the door so he could walk away from that [[stairwell]].",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "wave",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "cap",
+      "talk": true
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "the-day-the-mona-lisa-was-stolen",
+ "library_id": "the-day-the-mona-lisa-was-stolen",
+ "created": "2026-11-25"
+}

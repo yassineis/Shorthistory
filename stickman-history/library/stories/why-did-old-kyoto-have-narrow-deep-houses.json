@@ -1,0 +1,480 @@
+{
+ "title": "Why Did Old Kyoto Have Such Narrow Houses?",
+ "description": "Why did old Kyoto have such narrow houses stretching deep into the block? Discover the truth behind Japan's famous machiya townhouses and the tax myth.",
+ "tags": [
+  "kyoto",
+  "machiya",
+  "japan history",
+  "edo period",
+  "architecture",
+  "townhouses",
+  "history facts",
+  "world history"
+ ],
+ "facts_to_check": [
+  "Machiya layout (shop in front, living area middle, kura storehouse back)",
+  "Nickname 'unagi no nedoko' (eel nests)",
+  "Frontage tax origin as a popular myth vs historical consensus on commercial density and land division",
+  "Neighborhood-based tax assessment methods in Edo-period Kyoto"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "The Inspector",
+   "stamp": "EDO PERIOD",
+   "narration": "A Tokugawa [[tax inspector]] stepped up to a tiny Kyoto storefront, measured just five meters across, and assumed the merchant inside was broke.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.8,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "write",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "kasa",
+      "holds": "scroll",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "robe",
+      "face": "left",
+      "emote": "..."
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Hidden World",
+   "stamp": "",
+   "narration": "Behind that humble doorway lay a hidden [[sprawling mansion]], stretching dozens of meters back into a tranquil private garden courtyard.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "tree",
+      "x": 0.85,
+      "size": 1
+     },
+     {
+      "type": "house",
+      "x": 0.2,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "walk",
+      "outfit": "brown",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Machiya",
+   "stamp": "",
+   "narration": "These legendary wooden townhouses are called [[machiya]], and for centuries they shaped the crammed grid of Japan’s old imperial capital.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "town",
+      "x": 0.75,
+      "size": 1.3
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Clever Layout",
+   "stamp": "",
+   "narration": "The front operated as a shop, the middle was living space, and the back held a fireproof earthen [[storehouse]] called a kura.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.85,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "stand",
+      "outfit": "teal",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "hold",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "left",
+      "holds": "book"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Eel Nests",
+   "stamp": "",
+   "narration": "Because they were long and thin, locals nicknamed these mysterious residences [[eel nests]], squeezed tightly together along the narrow streets.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "town",
+      "x": 0.5,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "think",
+      "outfit": "orange",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true,
+      "emote": "?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Tax Legend",
+   "stamp": "",
+   "narration": "For centuries, tour guides and popular legends claimed officials taxed buildings based strictly on the [[width]] of their street frontage.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "scroll",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "point",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "kasa",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "think",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "left",
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Tax Dodging?",
+   "stamp": "",
+   "narration": "Supposedly, clever citizens built paper-thin storefronts to dodge the taxman, while secretly expanding deep into the shadowy block behind them.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "coins",
+      "x": 0.2,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "green",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "coins",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Curiosity Turn",
+   "stamp": "",
+   "narration": "But did [[clever tax dodgers]] really invent this famous architecture, or is that entire story just a delightful urban myth?",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "bulb",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true,
+      "emote": "!?"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Myth Busted",
+   "stamp": "",
+   "narration": "Modern [[historians think]] the famous frontage tax story is mostly a misconception that spread long after the houses were built.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "book",
+      "x": 0.7,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "stand",
+      "outfit": "gray",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "book",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Booming Hub",
+   "stamp": "",
+   "narration": "In truth, Kyoto was a booming commercial hub where thousands of [[craftsmen and merchants]] desperately competed for prime street access.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "crowd",
+      "x": 0.5,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "red",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "wave",
+      "outfit": "yellow",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Fair Sharing",
+   "stamp": "",
+   "narration": "City planners divided land into long narrow plots so as many shopkeepers as possible could get a [[front door]] on busy roads.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "map",
+      "x": 0.7,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "point",
+      "outfit": "brown",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "kasa",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Real Taxes",
+   "stamp": "",
+   "narration": "Property taxes were actually based on total [[neighborhood obligations]] and overall wealth, not just a simple tape-measure check of your doorway.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "coins",
+      "x": 0.5,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "write",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "quill",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "slump",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "left",
+      "emote": ":("
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Light & Air",
+   "stamp": "",
+   "narration": "To bring light into these deep dark corridors, builders created clever internal [[courtyards]] that caught rain, wind, and fresh air.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "tree",
+      "x": 0.8,
+      "size": 1.1
+     },
+     {
+      "type": "sun",
+      "x": 0.2,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "green",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Flexible Space",
+   "stamp": "",
+   "narration": "Sliding paper doors allowed families to reconfigure rooms instantly, turning a quiet tea room into a bustling [[family workshop]].",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.5,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "walk",
+      "outfit": "teal",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.7,
+      "pose": "hold",
+      "outfit": "pink",
+      "outfit_kind": "robe",
+      "face": "left",
+      "holds": "book"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Urban Genius",
+   "stamp": "",
+   "narration": "So that unsuspecting [[tax inspector]] wasn't tricked by a fake storefront—he was looking at pure urban genius packed into five tiny meters.",
+   "setting": "edo_street",
+   "stage": {
+    "props": [
+     {
+      "type": "house",
+      "x": 0.2,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "think",
+      "outfit": "purple",
+      "outfit_kind": "robe",
+      "face": "right",
+      "hat": "kasa",
+      "talk": true,
+      "emote": "!"
+     },
+     {
+      "x": 0.8,
+      "pose": "wave",
+      "outfit": "orange",
+      "outfit_kind": "robe",
+      "face": "left"
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "why-did-old-kyoto-have-narrow-deep-houses",
+ "library_id": "why-did-old-kyoto-have-narrow-deep-houses",
+ "created": "2026-11-25"
+}

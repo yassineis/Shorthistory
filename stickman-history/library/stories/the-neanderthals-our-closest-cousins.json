@@ -1,0 +1,409 @@
+{
+ "title": "What Do Our Genes Say About Neanderthals?",
+ "description": "What do our genes say about Neanderthals? Modern DNA testing reveals how prehistoric encounters shaped human health and survival forever.",
+ "tags": [
+  "neanderthals",
+  "genetics",
+  "ancient dna",
+  "denisovans",
+  "human evolution",
+  "svante paabo",
+  "history facts",
+  "prehistoric history"
+ ],
+ "facts_to_check": [
+  "Svante Paabo sequenced Neanderthal genome in 2010",
+  "Non-African modern humans carry roughly 1 to 2 percent Neanderthal DNA",
+  "Denisovan EPAS1 gene helps high-altitude adaptation in Tibet",
+  "Neanderthal DNA affects immune system, skin traits, and circadian rhythms"
+ ],
+ "style": "a5",
+ "voice": {
+  "name": "Kore"
+ },
+ "scenes": [
+  {
+   "kicker": "Sterile Lab",
+   "stamp": "",
+   "narration": "A scientist in a spotless white lab suit drilled tiny holes into an ancient [[fossilized bone]] while trying hard not to sneeze.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "book",
+      "x": 0.7,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "write",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "quill",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Old Myths",
+   "stamp": "1856",
+   "narration": "For over a century, early researchers claimed Neanderthals were merely brute [[ape-like creatures]] who completely vanished when modern humans appeared.",
+   "setting": "cave",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "emote": "?",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ancient Frozen DNA",
+   "stamp": "",
+   "narration": "But deep inside chilled caves, those old bones preserved precious fragments of [[ancient DNA]] waiting to tell a secret story.",
+   "setting": "cave",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "gray",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Decoding Secrets",
+   "stamp": "2010",
+   "narration": "Geneticists spent years carefully rebuilding the genetic code before comparing the sequence with millions of modern [[living humans]] worldwide.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "stack",
+      "x": 0.6,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "hold",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "right",
+      "holds": "scroll",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Shocking Result",
+   "stamp": "",
+   "narration": "The initial findings flabbergasted scientists because almost everyone outside Africa actually carries up to [[two percent]] Neanderthal DNA today.",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "bulb",
+      "x": 0.5,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "point",
+      "outfit": "blue",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true,
+      "emote": "!"
+     },
+     {
+      "x": 0.7,
+      "pose": "think",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ancient Encounters",
+   "stamp": "",
+   "narration": "This discovery meant our ancestors did not simply fight Neanderthals; they occasionally fell in love and raised [[mixed families]] together.",
+   "setting": "cave",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.35,
+      "pose": "wave",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     },
+     {
+      "x": 0.65,
+      "pose": "wave",
+      "outfit": "yellow",
+      "outfit_kind": "tunic",
+      "face": "left"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Modern Impact",
+   "stamp": "",
+   "narration": "But how could prehistoric genetic encounters shape our everyday health tens of [[thousands of years]] later?",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "cloud",
+      "x": 0.3,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "think",
+      "outfit": "teal",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Ice Age Survival",
+   "stamp": "",
+   "narration": "As modern humans migrated into ice-age Europe, inherited Neanderthal genes helped them endure harsh [[freezing winters]] and strange weather.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "tree",
+      "x": 0.8,
+      "size": 1.2
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "walk",
+      "outfit": "brown",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "to": 0.6
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Immune Boost",
+   "stamp": "",
+   "narration": "Those ancient traits boosted modern immune systems, helping our ancestors fight off novel viruses and deadly [[regional pathogens]] effectively.",
+   "setting": "snow",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "cheer",
+      "outfit": "green",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Body Clocks",
+   "stamp": "",
+   "narration": "Neanderthal genes also altered internal sleeping cycles, helping early humans adapt to long, dark [[winter nights]] in northern realms.",
+   "setting": "snow",
+   "stage": {
+    "props": [
+     {
+      "type": "clock",
+      "x": 0.2,
+      "size": 0.9
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "slump",
+      "outfit": "purple",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Modern Drawbacks",
+   "stamp": "",
+   "narration": "However, those same prehistoric immune genes now trigger modern headaches like annoying seasonal [[allergies and inflammation]] for millions of people.",
+   "setting": "london",
+   "stage": {
+    "props": [],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "slump",
+      "outfit": "orange",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "The Denisovans",
+   "stamp": "",
+   "narration": "Far away in a chilly Siberian cavern, scientists discovered a pinky bone from another cousin species called the [[Denisovans]].",
+   "setting": "cave",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.8,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.4,
+      "pose": "hold",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "High Altitude",
+   "stamp": "",
+   "narration": "People living in high-altitude Tibet inherited a special Denisovan gene that lets their bodies thrive in thin [[mountain air]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "mountain",
+      "x": 0.2,
+      "size": 1.4
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "stand",
+      "outfit": "red",
+      "outfit_kind": "tunic",
+      "face": "right",
+      "hat": "hood",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Living Legacy",
+   "stamp": "",
+   "narration": "Genetic science revealed that these ancient hominins never truly vanished; they live on inside billions of modern [[human bodies]].",
+   "setting": "steppe",
+   "stage": {
+    "props": [
+     {
+      "type": "sun",
+      "x": 0.5,
+      "size": 1
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.3,
+      "pose": "cheer",
+      "outfit": "blue",
+      "outfit_kind": "tunic",
+      "face": "right"
+     },
+     {
+      "x": 0.7,
+      "pose": "wave",
+      "outfit": "teal",
+      "outfit_kind": "tunic",
+      "face": "left",
+      "talk": true
+     }
+    ]
+   }
+  },
+  {
+   "kicker": "Don't Sneeze!",
+   "stamp": "",
+   "narration": "So when you sneeze today, remember that careful scientist drilling into an ancient bone and trying hard [[not to sneeze]].",
+   "setting": "london",
+   "stage": {
+    "props": [
+     {
+      "type": "bulb",
+      "x": 0.8,
+      "size": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "x": 0.5,
+      "pose": "point",
+      "outfit": "white",
+      "outfit_kind": "robe",
+      "face": "right",
+      "talk": true,
+      "emote": "!"
+     }
+    ]
+   }
+  }
+ ],
+ "topic_id": "the-neanderthals-our-closest-cousins",
+ "library_id": "the-neanderthals-our-closest-cousins",
+ "created": "2026-11-25"
+}
