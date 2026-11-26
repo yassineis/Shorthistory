@@ -52,7 +52,7 @@ function help() {
   --font <file.ttf>  caption font (default: a bold system font)
   --style sb|a5|b5   sb = storybook cartoon, vertical 9:16 (default for shorts), a5 = old colourful stick figures, b5 = paper stickman explainer
   --next "Title"     (not used any more: the storybook ending is now a looping subscribe overlay on the last scene)
-  --min 75 --max 105 refuse the video if narration + padding (+ the subscribe line) falls outside these seconds (exit code 3)
+  --min 70 --max 90 refuse the video if narration + padding (+ the subscribe line) falls outside these seconds (exit code 3)
   --force            ignore cached voice and clips
   --env <file>       file with GEMINI_API_KEY (default: .env)`);
 }

@@ -14,13 +14,14 @@ const PROPS = ['sun', 'cloud', 'tree', 'house', 'town', 'castle', 'ship', 'flag'
   'coins', 'mountain', 'map', 'bulb', 'clock', 'gear', 'arrow', 'pages', 'crowd', 'quill'];
 const EMOTES = ['!', '?', '!?', '...', ':('];
 const SFX = ['door', 'steps', 'ding', 'coins', 'drum', 'bell', 'crowd', 'thud']; // small sound effects made by the code
-const WPS = 2.5; // spoken words per second, used only for the pre-check; the real length is measured after the voice is made
+// Spoken words per second at the narrator's speed (about 3.5 at speed 1.21, measured from real runs). Used for the length pre-check.
+const wps = () => 2.9 * (parseFloat(process.env.KOKORO_SPEED) || 1.21);
 
 const words = (s) => String(s).replace(/\[\[|\]\]/g, '').split(/\s+/).filter(Boolean).length;
 const pick = (v, list, d) => (list.includes(v) ? v : d);
 
 function estimate(story) {
-  return story.scenes.reduce((a, s) => a + words(s.narration) / WPS + 1.0, 0);
+  return story.scenes.reduce((a, s) => a + words(s.narration) / wps() + 1.0, 0) + 3.3; // + the subscribe line at the end
 }
 
 function buildPrompt(topic, avoid, o) {
@@ -38,7 +39,7 @@ RULES
 - Keep every scene moving: each scene brings one new fact, image or surprise. No filler, no repeating the topic.
 - Only use facts that are well documented. Do not invent dates, numbers, names or quotes. If something is disputed, say "according to" or "historians think". If unsure, leave it out.
 - Light humour is welcome (funny reactions, understatement), never at the expense of real victims.
-- ${o.minScenes} to ${o.maxScenes} scenes. Each narration is 16 to 22 words. Total ${o.minWords} to ${o.maxWords} words. The whole video must stay under 1 minute 45 seconds, so be brief: no filler, no second explanation of the same point.
+- ${o.minScenes} to ${o.maxScenes} scenes. Each narration is 20 to 26 words. Total ${o.minWords} to ${o.maxWords} words. The finished video must NOT be longer than 1 minute 30 seconds (and not shorter than about 1 minute 10), so be brief: no filler, no second explanation of the same point.
 - Narration is plain spoken English: no emojis, no stage directions, no hashtags. Wrap 1 to 3 key words per scene in [[double brackets]] so they show in red in the captions.
 - Years and big numbers are written so they are easy to speak.
 ${avoid.length ? `- Do NOT repeat these already-made stories: ${avoid.slice(0, 40).join('; ')}.\n` : ''}${o.fix ? `- FIX FROM LAST TRY: ${o.fix}\n` : ''}
@@ -283,13 +284,13 @@ function mockStory(topic) {
 async function writeStory(topic, opts = {}) {
   loadEnv(opts.envFile);
   if (opts.mock) return normalize(mockStory(topic), topic);
-  const o = { minWords: 180, maxWords: 220, minScenes: 9, maxScenes: 11, ...opts };
+  const o = { minWords: 215, maxWords: 255, minScenes: 9, maxScenes: 11, ...opts };
   let fix = opts.fix || '';
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     const story = normalize(parseJson(await geminiText(buildPrompt(topic, opts.avoid || [], { ...o, fix }))), topic);
     const est = estimate(story);
-    if (est >= 72 && est <= 100) return story;
-    fix = `The last version would run about ${Math.round(est)} seconds. It must be between 80 and 95 seconds, so the finished video stays under 1 minute 45: ${est < 72 ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
+    if (est >= 70 && est <= 88) return story;
+    fix = `The last version would run about ${Math.round(est)} seconds. It must be between 75 and 85 seconds, so the finished video stays under 1 minute 30: ${est < 70 ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
     if (attempt === 3) return story; // make.js measures the real length and the caller decides
   }
 }

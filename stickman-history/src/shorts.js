@@ -5,7 +5,8 @@
 //   2. picks topics from library/topics.json that are not made yet (top-scored first)
 //   3. for each: writes the story with Gemini (saved in library/stories/), voices it, renders it
 //   4. records every story in library/index.json so a story is never made twice
-// Each video (subscribe line included) must come out between 1:15 and 1:45.
+// Each video (subscribe line included) should come out around 1:10 to 1:30. The story is sized to that; nothing is refused
+// afterwards: if the real voice makes it a bit shorter or longer, the video is kept and a note is added to the summary.
 
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +18,7 @@ const { writeStory, estimate } = require('./story');
 
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
-const MIN_SEC = 75, MAX_SEC = 105, MAX_VIDEOS = 10;
+const NOTE_BELOW = 60, NOTE_ABOVE = 92, MAX_VIDEOS = 10; // seconds: outside this, the summary adds a length note
 const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'help']);
 
 function parseArgs(argv) {
@@ -38,7 +39,7 @@ const normTitle = (s) => s.toLowerCase().replace(/\(mock\)/g, '').replace(/[^a-z
 function help() {
   console.log(`Usage: node src/shorts.js [options]
 
-It asks how many videos to make (1-10), then makes them. Videos are 1:15 to 1:45 long (subscribe line included).
+It asks how many videos to make (1-10), then makes them. Videos are about 1:10 to 1:30 long (subscribe line included).
 
   --count N        skip the question and make N videos (max ${MAX_VIDEOS})
   --topic "text"   make a video about your own topic (repeatable use: run again for more)
@@ -147,7 +148,6 @@ async function main() {
       let ok = false;
       for (let attempt = 1; attempt <= 3 && !ok; attempt += 1) {
         const margs = [path.join(__dirname, 'make.js'), scriptPath, '--out', outDir, '--style', args.style || 'sb'];
-        if (!q.redo) margs.push('--min', String(MIN_SEC), '--max', String(MAX_SEC)); // a remake keeps the saved story as it is, whatever its length
         for (const k of ['aspect', 'height', 'pause', 'env', 'voice']) if (args[k]) margs.push(`--${k}`, args[k]);
         const nextT = nextTitle(i);
         if (nextT) margs.push('--next', nextT);
@@ -156,20 +156,7 @@ async function main() {
         const r = spawnSync(process.execPath, margs, { stdio: ['inherit', 'inherit', 'pipe'], encoding: 'utf8' });
         if (r.stderr) process.stderr.write(r.stderr);
         if (r.status === 0) { ok = true; break; }
-        const m = /DURATION ([\d.]+)/.exec(r.stderr || '');
-        if (r.status === 3 && m && !args['mock-story'] && attempt < 3) {
-          const secs = parseFloat(m[1]);
-          console.log(`  the voice runs ${secs.toFixed(0)}s, outside 1:15-1:45. Asking for a rewrite...`);
-          const story = readJson(scriptPath);
-          const fix = `The narrated video came out ${Math.round(secs)} seconds. It must be between 80 and 100 seconds, so the whole video stays under 1 minute 45: ${secs < MIN_SEC ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
-          const topic = lib.topics.find((t) => t.id === entry.topic_id) || { id: entry.topic_id, title: entry.title, angle: '', setting: story.scenes[0].setting };
-          const again = await writeStory(topic, { avoid: index.stories.filter((s) => s.id !== entry.id).map((s) => s.title), fix, envFile: args.env || path.join(ROOT, '.env') });
-          Object.assign(again, { topic_id: story.topic_id, library_id: entry.id, created: story.created });
-          saveJson(scriptPath, again);
-          entry.title = again.title;
-          continue;
-        }
-        throw new Error(r.status === 3 ? `Video length ${m ? m[1] : '?'}s is outside 1:15-1:45 and could not be fixed automatically.` : 'make.js failed (see above).');
+        throw new Error('make.js failed (see above).');
       }
       const final = path.join(outDir, 'final.mp4');
       const { probeDuration } = require('./voice');
@@ -180,7 +167,8 @@ async function main() {
       const story = readJson(scriptPath);
       fs.writeFileSync(path.join(outDir, 'info.txt'),
         `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\n${hashtags(story)}\n\nTAGS\n${finalTags(story).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n`);
-      results.push(`OK   ${entry.title} - ${entry.duration}s - ${final}`);
+      const lenNote = entry.duration > NOTE_ABOVE ? '  (note: longer than 1:30)' : entry.duration < NOTE_BELOW ? '  (note: shorter than 1:00)' : '';
+      results.push(`OK   ${entry.title} - ${entry.duration}s - ${final}${lenNote}`);
     } catch (e) {
       console.error(`  failed: ${e.message}`);
       if (entry) { entry.status = 'failed'; saveJson(indexFile, index); }
