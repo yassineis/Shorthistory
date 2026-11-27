@@ -28,7 +28,12 @@ function parse(argv) {
 }
 
 function reach(args) {
-  const r = spawnSync('agent-reach', args, { encoding: 'utf8', shell: process.platform === 'win32', timeout: 120000 });
+  // no shell: the topic text is passed as one safe argument (also avoids Node's DEP0190 warning on Windows)
+  let r = spawnSync('agent-reach', args, { encoding: 'utf8', timeout: 120000 });
+  if (r.error && r.error.code === 'ENOENT' && process.platform === 'win32') { // .cmd / .bat launchers need cmd.exe
+    r = spawnSync('cmd', ['/d', '/s', '/c', 'agent-reach', ...args], { encoding: 'utf8', timeout: 120000 });
+    if (r.status === 1 && /not recognized/i.test(r.stderr || '')) r = { error: { code: 'ENOENT' } };
+  }
   return { missing: !!(r.error && r.error.code === 'ENOENT'), status: r.status, out: (r.stdout || '').trim(), err: (r.stderr || '').trim(), error: r.error };
 }
 
