@@ -87,7 +87,8 @@ def main(spec_path):
         import a5 as a5mod  # only for the outfit table, never drawn
         from sb_story import StoryScene
         stage0 = spec.get("stage", {})
-        story_scene = StoryScene(spec.get("setting"), stage0.get("actors", []), stage0.get("props", []), W, H, variant=spec.get("index", 0))
+        story_scene = StoryScene(spec.get("setting"), stage0.get("actors", []), stage0.get("props", []), W, H, variant=spec.get("index", 0), enter=spec.get("enter", True),
+                                 enhanced=bool(spec.get("enhanced")), action=spec.get("action"), key_at=spec.get("key_at"))
         paper = Image.new("RGB", (W, H), PAPER)
     elif a5:
         import a5 as a5mod

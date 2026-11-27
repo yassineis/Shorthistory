@@ -83,7 +83,9 @@ async function main() {
   const scenes = args.sample ? script.scenes.slice(0, 1) : script.scenes;
 
   console.log(`"${script.title || name}": ${scenes.length} scene(s), ${width}x${height} @ ${fps}fps${args['dry-voice'] ? ' [dry voice]' : ''}`);
-  const lead = 0.45, tail = 0.55;
+  const enhanced = script.enhanced === true; // option A: option 9 plus prop actions, faces on key words, mastered audio
+  const trueMode = script.mode === 'true' || enhanced; // option 9: short one-sentence shots, tighter cuts
+  const lead = trueMode ? 0.15 : 0.45, tail = trueMode ? 0.25 : 0.55;
   const clips = [];
   let total = 0;
 
@@ -94,11 +96,14 @@ async function main() {
     const num = String(i + 1).padStart(2, '0');
     if (!sc.narration) throw new Error(`Scene ${i + 1} has no "narration".`);
     const provider = args.voice || process.env.VOICE_PROVIDER || 'kokoro';
-    const audioKey = hash(JSON.stringify([sc.narration, voice, provider, !!args['dry-voice'], process.env.KOKORO_VOICE || '', process.env.KOKORO_SPEED || '']));
+    // enhanced: the hook is a touch slower and the last line slower still (it lands better); normal modes keep one speed
+    const baseSpeed = Number(process.env.KOKORO_SPEED || 1.21);
+    const sMul = enhanced ? (i === scenes.length - 1 ? 0.92 : i === 0 ? 0.97 : 1) : 1;
+    const audioKey = hash(JSON.stringify([sc.narration, voice, provider, !!args['dry-voice'], process.env.KOKORO_VOICE || '', process.env.KOKORO_SPEED || '', ...(enhanced ? [sMul] : [])]));
     const audio = path.join(out, 'audio', `scene_${num}_${audioKey}.mp3`);
     if (!fs.existsSync(audio) || args.force) {
       process.stdout.write(`  scene ${num}: voice... `);
-      await generateVoice(sc.narration, audio, { dry: !!args['dry-voice'], provider, ...voice });
+      await generateVoice(sc.narration, audio, { dry: !!args['dry-voice'], provider, ...voice, ...(enhanced && sMul !== 1 ? { kokoroSpeed: baseSpeed * sMul } : {}) });
       console.log('ok');
       if (!args['dry-voice'] && provider === 'gemini' && i < scenes.length - 1) await sleep(pause);
     }
@@ -136,6 +141,19 @@ async function main() {
     }
   }
 
+  // enhanced: when (seconds into the clip) the key word of the sentence is spoken; faces change and props act from there
+  const keyAt = (sc, adur) => {
+    const words = sc.narration.trim().split(/\s+/);
+    let idx = Math.floor(words.length * 0.55);
+    if (sc.key) {
+      const k = String(sc.key).toLowerCase().replace(/[^a-z0-9]/g, '');
+      const f = words.findIndex((w) => w.toLowerCase().replace(/[^a-z0-9]/g, '') === k);
+      if (f >= 0) idx = f;
+    }
+    const chars = words.slice(0, idx).join(' ').length / Math.max(1, sc.narration.trim().length);
+    return Math.round((lead + Math.max(0, adur * chars - 0.05)) * 100) / 100;
+  };
+
   // pass 2: render each scene (cached by spec hash)
   for (let i = 0; i < items.length; i += 1) {
     const { sc, num, audio, adur, narr, cta_start } = items[i];
@@ -145,6 +163,8 @@ async function main() {
       presenter: !args['no-presenter'] && (style === 'a5' ? script.presenter === true : script.presenter !== false),
       presenter_pose: sc.presenter_pose, audio, audio_duration: adur,
       width, height, fps, font: args.font || script.font || undefined,
+      ...(trueMode ? { lead, tail, enter: i === 0 || (scenes[i - 1].setting || script.setting) !== (sc.setting || script.setting) } : {}),
+      ...(enhanced ? { enhanced: true, action: sc.action, key_at: keyAt(sc, adur) } : {}),
     };
     Object.keys(spec).forEach((k) => spec[k] === undefined && delete spec[k]);
     const clip = path.join(out, 'clips', `scene_${num}_${hash(JSON.stringify(spec))}.mp4`);
@@ -190,9 +210,19 @@ async function main() {
     const events = [];
     let at = 0;
     for (let i = 0; i < clips.length; i += 1) {
-      if (i > 0) events.push({ t: at - 0.05, name: 'whoosh', gain: 0.55 });
+      const newPlace = !trueMode || i === 0 || (items[i] && items[i - 1] && items[i].sc.setting !== items[i - 1].sc.setting);
+      if (i > 0 && newPlace) events.push({ t: at - 0.05, name: 'whoosh', gain: 0.55 }); // true-story mode: only when the place changes
       const tag = items[i] && items[i].sc.sfx;
       if (tag) events.push({ t: at + 0.5, name: tag, gain: 1.0 });
+      if (enhanced && items[i]) {
+        const sc = items[i].sc, ka = keyAt(sc, items[i].adur);
+        const enters = i === 0 || (items[i - 1].sc.setting || script.setting) !== (sc.setting || script.setting);
+        if (enters) { events.push({ t: at + 0.05, name: 'step2', gain: 0.5 }); events.push({ t: at + 0.4, name: 'step2', gain: 0.5 }); } // footsteps while they walk in
+        const AX = { throw: [['thud', 1.25]], swing: [['thud', 0.42], ['crash', 1.32]], fall: [['crash', 0.75]], impact: [['crash', 0]], door: [['door', 0]], sail: [['splash', 0.3]], glide: [['whoosh', 0]], train: [['whoosh', 0.2], ['bell', 0]] };
+        for (const [nm, off] of AX[sc.action] || []) events.push({ t: at + ka + off, name: nm, gain: 0.9 });
+        const acts = sc.stage && sc.stage.actors ? sc.stage.actors : [];
+        if (!tag && !sc.action && acts.some((a) => a.mood === 'shock' || a.mood === 'scared')) events.push({ t: at + ka, name: 'gasp', gain: 0.7 });
+      }
       at += await probeDuration(clips[i]);
     }
     const ev = path.join(out, 'sfx.json');
@@ -208,13 +238,22 @@ async function main() {
   } else {
     const music = path.join(out, 'music.wav');
     const mstyle = (parseInt(hash(script.title || name), 16) % 5) + 1; // one of 5 code-made music styles, chosen per story
+    const ctaAt = items[items.length - 1].cta_start;
+    const hush = enhanced && ctaAt ? ['--hush', String((total - items[items.length - 1].adur - lead - tail + ctaAt).toFixed(2))] : [];
     const r = sb
-      ? spawnSync(python, [path.join(ROOT, 'render', 'sb_music.py'), String(mstyle), music, String(total + 1), '--bg'], { stdio: 'inherit' })
+      ? spawnSync(python, [path.join(ROOT, 'render', 'sb_music.py'), String(mstyle), music, String(total + 1), '--bg', ...hush], { stdio: 'inherit' })
       : spawnSync(python, [path.join(ROOT, 'render', 'music.py'), String(total + 1), music], { stdio: 'inherit' });
     if (r.status !== 0) throw new Error('Music generation failed.');
     const ins = ['-i', joined, '-i', narration, '-i', music];
     let fc = '[1:a]volume=1.0[n];[2:a]volume=0.14[m];';
-    if (sfxWav) {
+    if (enhanced && sfxWav) {
+      // mastered: clean and compress the voice, duck the music under it, level to -14 LUFS (YouTube's loudness)
+      fc = '[1:a]highpass=f=80,acompressor=threshold=-18dB:ratio=3:attack=5:release=80:makeup=4,equalizer=f=3000:t=q:w=1:g=2,asplit=2[n][nk];'
+        + '[2:a]volume=0.22[m0];[m0][nk]sidechaincompress=threshold=0.02:ratio=9:attack=15:release=350[m];'
+        + '[3:a]volume=0.35[x];[n][m][x]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[mix];'
+        + '[mix]loudnorm=I=-14:TP=-1.5:LRA=11[a]';
+      ins.push('-i', sfxWav);
+    } else if (sfxWav) {
       ins.push('-i', sfxWav);
       fc += '[3:a]volume=0.35[x];[n][m][x]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[mix];[mix]volume=1.1[a]';
     } else {

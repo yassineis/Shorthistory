@@ -19,7 +19,7 @@ const { writeStory, estimate } = require('./story');
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
 const NOTE_BELOW = 60, NOTE_ABOVE = 92, MAX_VIDEOS = 10; // seconds: outside this, the summary adds a length note
-const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'help']);
+const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'truestory', 'enhanced', 'help']);
 
 function parseArgs(argv) {
   const o = {};
@@ -46,6 +46,8 @@ It asks how many videos to make (1-10), then makes them. Videos are about 1:10 t
   --random         pick unused library topics at random instead of top score first
   --yes            do not ask for confirmation
   --list           show the library: topics made and topics left
+  --enhanced       option A: true stories plus prop actions, faces on key words, mastered audio and more sound effects; 1:00 to 1:30
+  --truestory      option 9: true-story mode (mocked underdog, weird experiment, clever scheme) with short one-sentence shots; separate queue
   --redo           show the stories already made and remake the one you pick (same story, new render, no Gemini)
   --mock-story     placeholder story, no Gemini (to test the pipeline)
   --voice kokoro|gemini  default kokoro: free offline voice, no key, no limits
@@ -59,6 +61,8 @@ function ask(rl, q) { return new Promise((res) => rl.question(q, (a) => res(a.tr
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) return help();
+  if (args.enhanced) args.truestory = true; // option A builds on the true-story queue, with its own stories (mode 'enhanced')
+  const MODE = args.enhanced ? 'enhanced' : args.truestory ? 'true' : undefined;
   loadEnv(args.env || path.join(ROOT, '.env'));
 
   const topicsFile = path.join(LIB, 'topics.json');
@@ -66,8 +70,13 @@ async function main() {
   const lib = readJson(topicsFile, { topics: [] });
   const index = readJson(indexFile, { version: 1, stories: [] });
   const done = new Set(index.stories.filter((s) => s.status !== 'failed' && s.status !== 'scripted').map((s) => s.topic_id));
-  const unfinished = index.stories.filter((s) => s.status === 'scripted' || s.status === 'failed');
-  const left = lib.topics.filter((t) => !done.has(t.id) && !unfinished.some((u) => u.topic_id === t.id));
+  const unfinishedAll = index.stories.filter((s) => s.status === 'scripted' || s.status === 'failed');
+  // Option 9 (--truestory) works only on the true-story topics and stories; the normal options leave them alone when marked "only".
+  const TRUE_TYPES = ['underdog', 'experiment', 'scheme'];
+  const unfinished = unfinishedAll.filter((u) => (args.enhanced ? u.mode === 'enhanced' : args.truestory ? u.mode === 'true' : (u.mode !== 'true' && u.mode !== 'enhanced')));
+  const left = lib.topics.filter((t) => !done.has(t.id) && !unfinishedAll.some((u) => u.topic_id === t.id)
+    && (args.truestory ? TRUE_TYPES.includes(t.type) : t.only !== 'true'));
+  const rank = (t) => t.score + (args.truestory && t.type === 'underdog' ? 6 : 0); // mocked-underdog stories first
 
   if (args.list) {
     console.log(`Library: ${lib.topics.length} topics, ${index.stories.length} stories recorded, ${left.length} topics left.`);
@@ -98,7 +107,7 @@ async function main() {
     // queue: unfinished stories first, then a custom topic, then library topics
     queue = unfinished.slice(0, n).map((u) => ({ resume: u }));
     if (args.topic && queue.length < n) queue.push({ topic: { id: slugify(args.topic), title: args.topic, angle: '', setting: 'medieval_town', source: 'custom' } });
-    const pool = args.random ? [...left].sort(() => Math.random() - 0.5) : [...left].sort((a, b) => b.score - a.score);
+    const pool = args.random ? [...left].sort(() => Math.random() - 0.5) : [...left].sort((a, b) => rank(b) - rank(a));
     while (queue.length < n && pool.length) queue.push({ topic: pool.shift() });
     if (queue.length < n) console.log(`Only ${queue.length} topics are left in the library. Add more with vidIQ later, or use --topic.`);
   }
@@ -131,13 +140,13 @@ async function main() {
       if (!entry) {
         const avoid = index.stories.map((s) => s.title);
         console.log('  writing the story...');
-        const story = await writeStory(q.topic, { mock: args['mock-story'], avoid, envFile: args.env || path.join(ROOT, '.env') });
+        const story = await writeStory(q.topic, { mock: args['mock-story'], avoid, mode: MODE, envFile: args.env || path.join(ROOT, '.env') });
         if (index.stories.some((s) => normTitle(s.title) === normTitle(story.title))) throw new Error(`A story titled "${story.title}" already exists in the library.`);
         let slug = slugify(q.topic.id), k = 2;
         while (index.stories.some((s) => s.id === slug)) slug = `${slugify(q.topic.id)}-${k++}`;
         story.topic_id = q.topic.id; story.library_id = slug; story.created = new Date().toISOString().slice(0, 10);
         saveJson(path.join(LIB, 'stories', `${slug}.json`), story);
-        entry = { id: slug, topic_id: q.topic.id, title: story.title, status: 'scripted', created: story.created, est_seconds: Math.round(estimate(story)) };
+        entry = { id: slug, topic_id: q.topic.id, title: story.title, status: 'scripted', created: story.created, est_seconds: Math.round(estimate(story)), ...(MODE ? { mode: MODE } : {}) };
         index.stories.push(entry);
         saveJson(indexFile, index);
         console.log(`  saved: library/stories/${slug}.json  (${story.scenes.length} scenes, about ${entry.est_seconds}s)`);
@@ -166,8 +175,8 @@ async function main() {
       saveJson(indexFile, index);
       const story = readJson(scriptPath);
       fs.writeFileSync(path.join(outDir, 'info.txt'),
-        `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\n${hashtags(story)}\n\nTAGS\n${finalTags(story).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n`);
-      const lenNote = entry.duration > NOTE_ABOVE ? '  (note: longer than 1:30)' : entry.duration < NOTE_BELOW ? '  (note: shorter than 1:00)' : '';
+        `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\n${hashtags(story)}\n\nTAGS\n${finalTags(story).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n${(story.invented_details || []).length ? `\nDRAMATISED (invented for the story, not historical fact)\n${story.invented_details.map((f) => `- ${f}`).join('\n')}\n` : ''}`);
+      const lenNote = entry.duration > (args.enhanced ? 90 : NOTE_ABOVE) ? '  (note: longer than 1:30)' : entry.duration < NOTE_BELOW ? '  (note: shorter than 1:00)' : '';
       results.push(`OK   ${entry.title} - ${entry.duration}s - ${final}${lenNote}`);
     } catch (e) {
       console.error(`  failed: ${e.message}`);

@@ -242,13 +242,19 @@ def render(n, dur=24.0):
     return np.clip(m, -1, 1)
 
 
-def render_bg(n, dur):
+def render_bg(n, dur, hush=None):
     """Music bed for a whole story video: one of the 5 styles, quiet, with fade in/out, no sound effects."""
     m = STYLES[n](dur)
     m = m / (np.abs(m).max() + 1e-9) * 0.5
     fi, fo = int(1.0 * SR), int(2.0 * SR)
     m[:fi] *= np.linspace(0, 1, fi)
     m[-fo:] *= np.linspace(1, 0, fo)
+    if hush is not None:  # enhanced mode: shape the music like a story, then go quiet for the subscribe line
+        tt = np.arange(len(m)) / SR
+        arc = np.where(tt < 4, 1.2, 0.9) + 0.25 * np.clip((tt - dur * 0.6) / (dur * 0.35), 0, 1)
+        arc = np.where(tt >= hush, 0.45, arc)
+        arc = np.convolve(arc, np.ones(int(0.4 * SR)) / int(0.4 * SR), mode="same")
+        m = m * arc
     return np.clip(m, -1, 1)
 
 
@@ -263,5 +269,6 @@ def save(path, y):
 if __name__ == "__main__":
     n = int(sys.argv[1])
     d = float(sys.argv[3]) if len(sys.argv) > 3 else 24.0
-    save(sys.argv[2], render_bg(n, d) if "--bg" in sys.argv else render(n, d))
+    hush = float(sys.argv[sys.argv.index("--hush") + 1]) if "--hush" in sys.argv else None
+    save(sys.argv[2], render_bg(n, d, hush) if "--bg" in sys.argv else render(n, d))
     print("wrote", sys.argv[2])

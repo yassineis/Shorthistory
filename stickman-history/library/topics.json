@@ -1,7 +1,7 @@
 {
  "version": 1,
  "updated": "2026-11-26",
- "about": "Seed library of history story topics. 'vidiq' topics come from vidIQ signals fetched 2026-11-22 (outliers, rising keywords, trending videos); 'evergreen' topics are curated. Scores are my 0-100 priority guess, not a vidIQ number. Topics are seeds: every fact must be checked before publishing. Titles rewritten on 2026-11-25 as curiosity questions (original in orig_title); ids unchanged so made-story tracking keeps working. 2026-11-26: added 14 topics in three story types (type: underdog, experiment, scheme) with a main character each.",
+ "about": "Seed library of history story topics. 'vidiq' topics come from vidIQ signals fetched 2026-11-22 (outliers, rising keywords, trending videos); 'evergreen' topics are curated. Scores are my 0-100 priority guess, not a vidIQ number. Topics are seeds: every fact must be checked before publishing. Titles rewritten on 2026-11-25 as curiosity questions (original in orig_title); ids unchanged so made-story tracking keeps working. 2026-11-26: added 14 topics in three story types (type: underdog, experiment, scheme) with a main character each. Topics with only:'true' are used by menu option 9 (true stories) only.",
  "excluded_note": "Skipped trending items that are pseudo-history or unverifiable (Tartaria, Anunnaki-as-aliens, 'forbidden' claims), music/exam/news content and non-story keywords.",
  "vidiq_runs": [
   {
@@ -998,6 +998,32 @@
    "score": 82,
    "source": "story-types",
    "signal": "Story type B (weird institution)"
+  },
+  {
+   "id": "why-golf-balls-are-covered-in-dents",
+   "title": "Why Golf Balls Are Covered in Dents",
+   "angle": "Golfers noticed that old, nicked balls flew farther than smooth new ones; the dimple pattern was patented by William Taylor in 1905; dimples cut drag and add lift. Do not invent the golfers; any rival or jokes are dramatised.",
+   "type": "underdog",
+   "character": "a golfer who dents his new smooth ball",
+   "category": "inventions",
+   "setting": "steppe",
+   "score": 90,
+   "source": "story-types",
+   "only": "true",
+   "signal": "Idea from a viral stickman Shorts tutorial (about 16M-view 'physics proves him right' stories vs about 4M for what-ifs; the tutorial's creator's claim)"
+  },
+  {
+   "id": "the-girl-who-was-mailed-like-a-parcel",
+   "title": "The Girl Who Was Mailed Like a Parcel",
+   "angle": "May Pierstorff, about five years old, 1914, Idaho: her parents used the new parcel post rules, which did not forbid sending a child, and she rode in a railway mail car about 73 miles; the Post Office then banned it.",
+   "type": "scheme",
+   "character": "May Pierstorff, a small girl",
+   "category": "oddities",
+   "setting": "old_west",
+   "score": 90,
+   "source": "story-types",
+   "only": "true",
+   "signal": "Idea from a viral stickman Shorts tutorial's list of true-story ideas ('the stamp that mailed a girl')"
   }
  ]
 }

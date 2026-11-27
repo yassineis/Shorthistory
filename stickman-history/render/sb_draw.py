@@ -424,12 +424,20 @@ def draw_char(c, x, gy, h, outfit="linen", hat=None, emotion="smile", pose="idle
             c.arc(fx + sd * ex, ey + r * .05, r * .13, r * .13, 200, 340, INK, ow * 1.1)
     else:
         for sd in (-1, 1):
-            px = fx + sd * ex + gaze * r * 0.1
+            px = fx + sd * ex + gaze * r * 0.16
             if blink:
                 c.line([(px - ed, ey), (px + ed, ey)], INK, ow * .9)
             elif emo == "surprise":
                 c.circle(px, ey, ed * 1.35, fill=IVORY, ink=INK, w=ow * .7)
                 c.circle(px + gaze * ed * .5, ey, ed * .55, fill=INK, ink=None)
+            elif emo in ("shock", "scared"):  # wide eyes with tiny pupils
+                c.circle(px, ey, ed * 1.7, fill=IVORY, ink=INK, w=ow * .8)
+                c.circle(px + gaze * ed * .6, ey, ed * (.42 if emo == "shock" else .5), fill=INK, ink=None)
+            elif emo == "smug":  # half-closed lids
+                c.circle(px, ey + ed * .15, ed, fill=INK, ink=None)
+                c.line([(px - ed * 1.5, ey - ed * .35), (px + ed * 1.5, ey - ed * .35)], INK, ow * 1.1)
+            elif emo == "angry":
+                c.circle(px, ey, ed, fill=INK, ink=None)
             else:
                 c.circle(px, ey, ed, fill=INK, ink=None)
     # brows
@@ -438,6 +446,15 @@ def draw_char(c, x, gy, h, outfit="linen", hat=None, emotion="smile", pose="idle
             tilt = {"worry": 0.5 * sd, "sad": 0.5 * sd, "curious": -0.3 * sd if sd > 0 else 0.1, "proud": -0.2 * sd, "surprise": 0.0}[emo]
             by = ey - r * (0.3 if emo != "surprise" else 0.42)
             c.line([(fx + sd * ex - r * .13, by + tilt * r * .13), (fx + sd * ex + r * .13, by - tilt * r * .13)], INK, ow * .9)
+    for sd in (-1, 1):  # moods added for reactions: brows described by outer / inner end height
+        if emo in ("shock", "excited", "scared", "angry", "smug"):
+            bw = r * .15
+            by = ey - r * {"shock": .50, "excited": .40, "scared": .38, "angry": .26, "smug": .30}[emo]
+            dyo, dyi = {"shock": (-.05, -.05), "excited": (-.03, -.03), "scared": (.07, -.07), "angry": (-.07, .11),
+                        "smug": ((-.02, -.02) if sd < 0 else (-.10, -.06))}[emo]
+            ox = fx + sd * ex + sd * bw
+            ix = fx + sd * ex - sd * bw
+            c.line([(ox, by + dyo * r), (ix, by + dyi * r)], INK, ow * 1.0)
     # mouth
     my = hc_y + r * (0.80 if beard else 0.46)
     mxp = fx + face * r * 0.04
@@ -446,6 +463,17 @@ def draw_char(c, x, gy, h, outfit="linen", hat=None, emotion="smile", pose="idle
         c.ellipse(mxp, my + r * .02, r * (0.13 + 0.05 * m), r * (0.03 + 0.17 * m), fill=(120, 52, 60), ink=INK, w=ow * .8)
     elif emo in ("happy", "joy"):
         c.poly([(mxp - r * .2, my - r * .03), (mxp + r * .2, my - r * .03), (mxp, my + r * .24)], fill=(120, 52, 60), w=ow * .8)
+    elif emo == "shock":
+        c.ellipse(mxp, my + r * .10, r * .13, r * .20, fill=(120, 52, 60), w=ow * .8)
+    elif emo == "excited":
+        c.poly([(mxp - r * .28, my - r * .06), (mxp + r * .28, my - r * .06), (mxp, my + r * .32)], fill=(120, 52, 60), w=ow * .8)
+    elif emo == "angry":
+        c.arc(mxp, my + r * .26, r * .2, r * .13, 205, 335, INK, ow * 1.1)
+    elif emo == "smug":
+        c.line([(mxp - r * .16, my + r * .05), (mxp + r * .08, my + r * .05)], INK, ow)
+        c.arc(mxp + face * r * .12, my - r * .02, r * .09, r * .09, 10, 150, INK, ow)
+    elif emo == "scared":
+        c.line([(mxp - r * .16, my + r * .08), (mxp - r * .08, my + r * .02), (mxp, my + r * .08), (mxp + r * .08, my + r * .02), (mxp + r * .16, my + r * .08)], INK, ow * .9)
     elif emo in ("smile", "proud"):
         c.arc(mxp, my - r * .12, r * .2, r * .2, 25, 155, INK, ow)
     elif emo == "surprise":
@@ -461,7 +489,7 @@ def draw_char(c, x, gy, h, outfit="linen", hat=None, emotion="smile", pose="idle
         mustache(c, hx, hc_y, r, face, beard, beard_col, ow, seed)
     if hat:
         _hat(c, hat, hx, hc_y - r * 0.2, r, face, ow, base)
-    if emo in ("surprise",) or emote == "!":
+    if emo in ("surprise", "shock") or emote == "!":
         for i, a in enumerate((-68, -90, -112)):
             ca = math.radians(a)
             c.line([(hx + math.cos(ca) * r * 1.2, hc_y + math.sin(ca) * r * 1.2), (hx + math.cos(ca) * r * 1.5, hc_y + math.sin(ca) * r * 1.5)], INK, ow * .8)

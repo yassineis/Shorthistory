@@ -14,6 +14,9 @@ const PROPS = ['sun', 'cloud', 'tree', 'house', 'town', 'castle', 'ship', 'flag'
   'coins', 'mountain', 'map', 'bulb', 'clock', 'gear', 'arrow', 'pages', 'crowd', 'quill'];
 const EMOTES = ['!', '?', '!?', '...', ':('];
 const SFX = ['door', 'steps', 'ding', 'coins', 'drum', 'bell', 'crowd', 'thud']; // small sound effects made by the code
+const SFX_ENH = [...SFX, 'glass', 'splash', 'crash', 'laugh', 'gasp', 'boing', 'thunder', 'applause', 'creak', 'zap']; // enhanced mode (option A)
+const ACTIONS = ['throw', 'swing', 'fall', 'impact', 'door', 'sail', 'glide', 'train']; // prop actions drawn by render/sb_actions.py
+const MOODS = ['shock', 'angry', 'smug', 'excited', 'scared', 'sad', 'joy', 'curious', 'worry'];
 // Spoken words per second at the narrator's speed (about 3.5 at speed 1.21, measured from real runs). Used for the length pre-check.
 const wps = () => 2.9 * (parseFloat(process.env.KOKORO_SPEED) || 1.21);
 
@@ -21,7 +24,8 @@ const words = (s) => String(s).replace(/\[\[|\]\]/g, '').split(/\s+/).filter(Boo
 const pick = (v, list, d) => (list.includes(v) ? v : d);
 
 function estimate(story) {
-  return story.scenes.reduce((a, s) => a + words(s.narration) / wps() + 1.0, 0) + 3.3; // + the subscribe line at the end
+  const pad = story.mode === 'true' || story.enhanced ? 0.4 : 1.0; // true-story mode cuts tighter between shots
+  return story.scenes.reduce((a, s) => a + words(s.narration) / wps() + pad, 0) + 3.3; // + the subscribe line at the end
 }
 
 // Story shapes that suit short narrated cartoons: always one main character and a TRUE ending that pays off the hook.
@@ -31,6 +35,80 @@ const SHAPES = {
   scheme: 'STORY SHAPE (clever scheme or loophole): one main character plans something sneaky or clever; show the plan step by step, then a twist that reveals how it really worked.',
 };
 const shapeFor = (topic) => (SHAPES[topic.type] ? `${SHAPES[topic.type]}${topic.character ? ` MAIN CHARACTER: ${topic.character}.` : ''}\n` : '');
+
+// Option 9 'true story' mode: mocked-underdog style with short one-sentence shots (inspired by a viral stickman Shorts tutorial).
+function buildTruePrompt(topic, avoid, o) {
+  const shape = SHAPES[topic.type] || SHAPES.underdog;
+  return `You write scripts for short narrated cartoon videos that tell ONE TRUE story about a real person, in a funny, friendly cartoon style (round white heads, colourful settings). The voice is a fast, warm narrator speaking English.
+
+TOPIC: ${topic.title}
+ANGLE: ${topic.angle || ''}
+${shape}${topic.character ? ` MAIN CHARACTER: ${topic.character}.` : ''}
+
+RULES
+- The story is TRUE. Real people, real events, real outcome. The only things you may dramatise are small things around the edges: a doubter's short jokes, a rival, a trophy, a reaction. List every dramatised detail in "invented_details" so the human can see what is real and what is invented. Never invent the main facts, dates, outcome or science.
+- HOOK (first sentence): a person doing something that looks strange, with one specific number that is part of the real story (a count, a year, an age, a distance), for example "A golfer hammers 327 dents into his new ball before the village tournament." Name the main subject within the first 8 words. Never start with a date alone, "Today we...", or "Have you ever wondered".
+- SHOTS: ${o.minScenes} to ${o.maxScenes} scenes. Each scene is ONE sentence of 12 to 17 words: one place, one clear action, one new fact or beat. Stay in the same setting for consecutive scenes unless the location really changes. Total ${o.minWords} to ${o.maxWords} words. The finished video must not be longer than 1 minute 30 seconds.
+- THE DOUBTERS: show the mockery in the middle. Give the doubters 1 or 2 very short funny lines (3 to 6 words) in quotes, such as "Nice potato!" and "Pothole alert!". Light teasing only, never about real victims.
+- PAYOFF: in the last third, a side-by-side result: first what the doubter's way did, then what the underdog's way did ("First..., then..."). Then one short last line that repeats a key word or image from the first sentence. No goodbye, no call to subscribe, no summary: the video adds its own short subscribe line.
+- MAIN CHARACTER LOOK: the main character is always the FIRST actor of every scene, with the identical outfit, hat and beard in all scenes. Describe that look once in "character". Other people have other outfits.
+- FIRST SCENE MATCHES THE HOOK: its setting, props and pose show exactly what the first sentence says (indoors use "museum", "interior" or "stairwell"). Give it an active pose and an emote.
+- Narration is plain spoken English: no emojis, no stage directions, no hashtags. Wrap 1 to 3 key words per scene in [[double brackets]] so they show in red. Write numbers so they are easy to speak.
+${avoid.length ? `- Do NOT repeat these already-made stories: ${avoid.slice(0, 40).join('; ')}.\n` : ''}${o.fix ? `- FIX FROM LAST TRY: ${o.fix}\n` : ''}
+Return ONLY JSON with this shape:
+{
+ "title": "title under 60 characters, in one of these patterns: \"They laughed at [odd idea]\", \"Why [normal thing] is secretly weird\", \"The [person] who [odd action]\", or a question; never a lie",
+ "description": "2 sentence YouTube description; the first sentence repeats the odd detail from the title",
+ "tags": ["6 to 10 tags: specific ones first (person, place, object, science idea), then 2 broad ones"],
+ "facts_to_check": ["every date, number and claim a human should verify"],
+ "invented_details": ["each small thing you dramatised, such as the rival, the trophy, a joke"],
+ "character": {"name": "main character", "outfit": one of ${JSON.stringify(OUTFITS)}, "outfit_kind": "tunic" or "robe", "hat": optional one of ${JSON.stringify(HATS)}},
+ "scenes": [
+  {
+   "kicker": "2-4 word on-screen title",
+   "stamp": "optional short red stamp such as a year, else empty string",
+   "narration": "ONE spoken sentence",
+   "sfx": optional, one of ${JSON.stringify(SFX)}, only when something in the scene really makes that sound,
+   "setting": one of ${JSON.stringify(SETTINGS)},
+   "actors": [ {"x": 0.2-0.8, "pose": one of ${JSON.stringify(POSES)}, "outfit": one of ${JSON.stringify(OUTFITS)}, "outfit_kind": "tunic" or "robe", "hat": optional one of ${JSON.stringify(HATS)}, "holds": optional one of ${JSON.stringify(HOLDS)}, "face": "left" or "right", "talk": true for the speaking character, "emote": optional one of ${JSON.stringify(EMOTES)}, "to": optional x to walk to } ],
+   "props": [ {"type": one of ${JSON.stringify(PROPS)}, "x": 0.1-0.9, "size": 0.6-1.4} ]
+  }
+ ]
+}`;
+}
+
+// True-story mode: the main character (first actor) looks the same in every scene, and the invented bits are listed.
+// Option A (enhanced): the true-story prompt plus prop actions, face moods on a key word, and more sound effects.
+function buildEnhancedPrompt(topic, avoid, o) {
+  let p = buildTruePrompt(topic, avoid, o);
+  p = p.replace(`"sfx": optional, one of ${JSON.stringify(SFX)}`, `"sfx": optional, one of ${JSON.stringify(SFX_ENH)}`);
+  p = p.replace('The finished video must not be longer than 1 minute 30 seconds.', 'The finished video must be between 1 minute and 1 minute 30 seconds, never longer.');
+  p = p.replace('\nReturn ONLY JSON', `- ACTIONS: in 4 to 6 scenes, give an "action" that animates something with the main character: ${ACTIONS.join(', ')}. throw = the main character throws the held prop, swing = swings it, fall = the prop falls and crashes, impact = a hit with a screen shake, door = a door opens behind, sail = a boat sails past, glide = a plane glides past, train = a train rushes past. Use an action only when it matches what the sentence says. Skip it in other scenes.
+- REACTIONS: for each actor you may set "mood" (${MOODS.join(', ')}) which the face switches to on the scene's key word. Use it on the doubters (smug, angry, shock) and on the main character at the payoff (joy, excited). Add "key": the one word of the narration (no punctuation) where the reaction or action lands.
+- SOUND: add "sfx" in about half the scenes (glass for something breaking, splash for water, crash for a big hit, laugh when the doubters laugh, gasp for shock, boing for something bouncy, thunder, applause at the payoff, creak for an old door, zap for science).
+\nReturn ONLY JSON`);
+  p = p.replace('"narration": "ONE spoken sentence",', '"narration": "ONE spoken sentence", "key": "one word of the narration", "action": optional, one of ' + JSON.stringify(ACTIONS) + ',');
+  p = p.replace('"talk": true for the speaking character,', '"talk": true for the speaking character, "mood": optional, one of ' + JSON.stringify(MOODS) + ',');
+  return p;
+}
+
+function finishTrue(raw, story) {
+  const c = raw && raw.character ? raw.character : {};
+  const first = story.scenes[0].stage.actors[0];
+  const look = {
+    outfit: pick(c.outfit, OUTFITS, first.outfit),
+    outfit_kind: c.outfit_kind === 'robe' ? 'robe' : (c.outfit_kind === 'tunic' ? 'tunic' : first.outfit_kind),
+    hat: HATS.includes(c.hat) ? c.hat : first.hat,
+  };
+  for (const s of story.scenes) {
+    const a = s.stage.actors[0];
+    a.outfit = look.outfit; a.outfit_kind = look.outfit_kind;
+    if (look.hat) a.hat = look.hat; else delete a.hat;
+  }
+  story.mode = 'true';
+  story.invented_details = (Array.isArray(raw.invented_details) ? raw.invented_details : []).map(String);
+  return story;
+}
 
 function buildPrompt(topic, avoid, o) {
   return `You write scripts for short animated history videos in a funny, friendly cartoon style (stick figures with white round heads, colourful period settings). The voice is a warm narrator speaking English.
@@ -227,6 +305,7 @@ function normalize(raw, topic) {
       if (HATS.includes(a.hat)) o.hat = a.hat;
       if (HOLDS.includes(a.holds)) o.holds = a.holds;
       if (a.talk) o.talk = true;
+      if (MOODS.includes(a.mood)) o.mood = a.mood;
       if (EMOTES.includes(a.emote)) o.emote = a.emote;
       if (Number.isFinite(Number(a.to)) && a.to !== null && a.to !== '') o.to = Math.min(0.88, Math.max(0.1, Number(a.to)));
       return o;
@@ -238,7 +317,8 @@ function normalize(raw, topic) {
     }));
     return {
       kicker: String(s.kicker || '').slice(0, 28), stamp: String(s.stamp || '').slice(0, 14), narration,
-      setting, stage: { props, actors }, ...(SFX.includes(s.sfx) ? { sfx: s.sfx } : {}),
+      setting, stage: { props, actors }, ...(SFX_ENH.includes(s.sfx) ? { sfx: s.sfx } : {}),
+      ...(ACTIONS.includes(s.action) ? { action: s.action } : {}), ...(s.key ? { key: String(s.key).replace(/[^A-Za-z0-9']/g, '') } : {}),
     };
   });
   return {
@@ -291,16 +371,27 @@ function mockStory(topic) {
 // opts: { mock, avoid: [titles], minWords, maxWords, minScenes, maxScenes, fix }
 async function writeStory(topic, opts = {}) {
   loadEnv(opts.envFile);
-  if (opts.mock) return normalize(mockStory(topic), topic);
-  const o = { minWords: 215, maxWords: 255, minScenes: 9, maxScenes: 11, ...opts };
+  const isEnh = opts.mode === 'enhanced';
+  if (opts.mock) {
+    const m = normalize(mockStory(topic), topic);
+    if (!isEnh) return opts.mode === 'true' ? finishTrue({}, m) : m;
+    const acts = ['throw', 'swing', 'fall', 'impact', 'door', 'sail', 'glide', 'train'], moods = ['shock', 'angry', 'smug', 'excited', 'scared', 'joy', 'curious', 'worry'];
+    m.scenes.forEach((s, i) => { if (i % 2 === 1) s.action = acts[(i >> 1) % acts.length]; s.stage.actors[s.stage.actors.length - 1].mood = moods[i % moods.length]; });
+    finishTrue({}, m); m.enhanced = true; return m;
+  }
+  const isTrue = opts.mode === 'true' || isEnh;
+  const o = isEnh ? { minWords: 200, maxWords: 240, minScenes: 14, maxScenes: 18, ...opts } : isTrue ? { minWords: 215, maxWords: 255, minScenes: 14, maxScenes: 18, ...opts } : { minWords: 215, maxWords: 255, minScenes: 9, maxScenes: 11, ...opts };
   let fix = opts.fix || '';
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const story = normalize(parseJson(await geminiText(buildPrompt(topic, opts.avoid || [], { ...o, fix }))), topic);
+    const raw = parseJson(await geminiText((isEnh ? buildEnhancedPrompt : isTrue ? buildTruePrompt : buildPrompt)(topic, opts.avoid || [], { ...o, fix })));
+    const story = isTrue ? finishTrue(raw, normalize(raw, topic)) : normalize(raw, topic);
+    if (isEnh) story.enhanced = true;
     const est = estimate(story);
-    if (est >= 70 && est <= 88) return story;
-    fix = `The last version would run about ${Math.round(est)} seconds. It must be between 75 and 85 seconds, so the finished video stays under 1 minute 30: ${est < 70 ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
+    const [lo, hi] = isEnh ? [64, 86] : [70, 88];
+    if (est >= lo && est <= hi) return story;
+    fix = `The last version would run about ${Math.round(est)} seconds. It must be between ${isEnh ? '68 and 82' : '75 and 85'} seconds, so the finished video stays under 1 minute 30: ${est < lo ? 'add scenes or lengthen narration' : 'cut scenes or shorten narration'}.`;
     if (attempt === 3) return story; // make.js measures the real length and the caller decides
   }
 }
 
-module.exports = { writeStory, estimate, normalize, mockStory, SETTINGS };
+module.exports = { buildEnhancedPrompt, writeStory, estimate, normalize, mockStory, SETTINGS };

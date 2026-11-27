@@ -96,10 +96,14 @@ echo  5  Voice test only
 echo  6  Old sample: printing press explainer, first scene
 echo  7  Remake a story already made ^(it shows them and asks which one^)
 echo  8  Storybook sketches: the 5 prototype videos with voice and music
-echo  9  Exit
+echo  9  True stories: mocked underdog, weird experiment, clever scheme ^(new, short shots^)
+echo  A  ENHANCED true stories: prop actions, faces, mastered sound ^(test version, 1:00-1:30^)
+echo  0  Exit
 echo.
-choice /c 123456789 /n /m "Choose 1-9: "
-if errorlevel 9 goto end
+choice /c 1234567890A /n /m "Choose 1-9, A, or 0 to exit: "
+if errorlevel 11 goto enhanced
+if errorlevel 10 goto end
+if errorlevel 9 goto truestory
 if errorlevel 8 goto sketches
 if errorlevel 7 goto redo
 if errorlevel 6 goto sample
@@ -111,6 +115,18 @@ goto shorts
 
 :shorts
 node src\shorts.js
+if errorlevel 1 goto failed
+if exist "out\shorts" start "" "out\shorts"
+goto menu
+
+:truestory
+node src\shorts.js --truestory
+if errorlevel 1 goto failed
+if exist "out\shorts" start "" "out\shorts"
+goto menu
+
+:enhanced
+node src\shorts.js --enhanced
 if errorlevel 1 goto failed
 if exist "out\shorts" start "" "out\shorts"
 goto menu
