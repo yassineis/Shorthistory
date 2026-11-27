@@ -19,7 +19,7 @@ const { writeStory, estimate } = require('./story');
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
 const NOTE_BELOW = 60, NOTE_ABOVE = 92, MAX_VIDEOS = 10; // seconds: outside this, the summary adds a length note
-const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'truestory', 'enhanced', 'classic', 'help']);
+const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'truestory', 'enhanced', 'classic', 'idea', 'help']);
 
 function parseArgs(argv) {
   const o = {};
@@ -46,6 +46,7 @@ It asks how many videos to make (1-10), then makes them. Videos are about 1:10 t
   --random         pick unused library topics at random instead of top score first
   --yes            do not ask for confirmation
   --list           show the library: topics made and topics left
+  --idea           option W: you type your own idea, it is sent to Gemini, which writes the story; then it is voiced and rendered
   --classic        options 1 and 2 now use the enhanced look and sound (prop actions, face moods, mastered audio); this turns that off
   --enhanced       option A: true stories plus prop actions, faces on key words, mastered audio and more sound effects; 1:00 to 1:30
   --truestory      option 9: true-story mode (mocked underdog, weird experiment, clever scheme) with short one-sentence shots; separate queue
@@ -63,7 +64,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) return help();
   if (args.enhanced) args.truestory = true; // option A builds on the true-story queue, with its own stories (mode 'enhanced')
-  const MODE = args.enhanced ? 'enhanced' : args.truestory ? 'true' : undefined;
+  let MODE = args.enhanced ? 'enhanced' : args.truestory ? 'true' : undefined;
   loadEnv(args.env || path.join(ROOT, '.env'));
 
   const topicsFile = path.join(LIB, 'topics.json');
@@ -99,6 +100,16 @@ async function main() {
     if (!picks.length) { rl.close(); return console.log('Cancelled. Nothing was changed.'); }
     queue = picks.map((u) => ({ resume: u, redo: true }));
     args.yes = true;
+  } else if (args.idea) {
+    // Option W: your own idea goes to Gemini as the topic; the story is saved in the library like any other
+    console.log('\nOption W: write your own idea. Say who or what, where, and what is strange or surprising. Keep it TRUE: Gemini writes the story around your idea.');
+    let idea = args.idea === true ? '' : String(args.idea);
+    if (!idea) idea = await ask(rl, '\nYour idea (one line or a few sentences; Enter = cancel): ');
+    if (!idea) { rl.close(); return console.log('Cancelled. Nothing was made.'); }
+    const st = await ask(rl, 'Style: 1 = history story (default), 2 = true underdog / experiment story with short shots: ');
+    if (st === '2') { MODE = 'enhanced'; args.enhanced = true; }
+    const line = idea.replace(/\s+/g, ' ').trim();
+    queue = [{ topic: { id: slugify(line), title: line.slice(0, 90), angle: `The user's own idea, follow it closely and keep every fact true: ${line}`, setting: 'medieval_town', source: 'idea', ...(st === '2' ? { type: 'underdog' } : {}) } }];
   } else {
     let n = parseInt(args.count, 10);
     while (!(n >= 1 && n <= MAX_VIDEOS)) {
