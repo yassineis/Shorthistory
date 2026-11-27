@@ -67,3 +67,19 @@ Aim for about 25-30 words per scene (roughly 10-12 s) and 7-9 scenes for 1-2 min
 - Check every historical fact in your script yourself before publishing. The sample script is an example, not a source.
 - Gemini voice terms for monetized YouTube use: read Google's current terms before you rely on it commercially.
 - The tool never uploads anything.
+
+
+## Publishing (menu option P)
+
+Option **P** (or `node src/publish.js`) posts a finished video to **YouTube, Facebook (Page reel), Instagram (reel) and TikTok** with the title, description, hashtags and tags from its `info.txt`. It shows the caption and the "check these facts" list first and asks before posting. It uses only the platforms' official free APIs; the code is our own (written from the public API documentation). Tokens are saved in `publish/tokens.json` (git-ignored). A video is never posted twice to the same platform unless you add `--again`.
+
+Every platform needs a free **developer app** that you create once. The honest limits:
+
+| Platform | One-time setup | Limits you will meet |
+| --- | --- | --- |
+| **YouTube** | Google Cloud project, enable *YouTube Data API v3*, create an OAuth client "Web application" with redirect `http://127.0.0.1:8787/callback/youtube`, put `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env`, then `node src/publish.js auth youtube`. Set the app to "In production" or Google ends the sign-in after 7 days. | Uploads from an API project Google has not **audited** are locked **private** (request the audit with YouTube's API Services audit form). About 100 uploads per day. |
+| **Facebook Page** | Meta app (Business type) with *Facebook Login for Business*. In the Graph API Explorer create a user token with `pages_show_list`, `pages_manage_posts` (and `instagram_basic`, `instagram_content_publish`, `business_management` for Instagram), then `node src/publish.js facebook-token <TOKEN>`. Put `META_APP_ID` / `META_APP_SECRET` in `.env` first so the Page token never expires. | For your own Page you can stay in development mode (no app review). Reels are up to 90 s: longer videos go up as a normal Page video. |
+| **Instagram** | The Instagram account must be **Business or Creator** and linked to the Facebook Page; the same `facebook-token` step saves it. | Instagram downloads the video from a public https link: run a free tunnel `cloudflared tunnel --url http://localhost:8787` and add `--public https://<it>.trycloudflare.com` (or `PUBLIC_BASE_URL` in `.env`). |
+| **TikTok** | TikTok developer app with *Login Kit* and *Content Posting API* (Direct Post), scopes `user.info.basic` and `video.publish`, redirect `https://<tunnel>/callback/tiktok`; `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` in `.env`, then `node src/publish.js auth tiktok --public https://<tunnel>`. | Until TikTok **audits** the app, posts are **private** ("Only me"). |
+
+Commands: `node src/publish.js setup` (what is connected), `post <story-id> --to youtube,facebook,instagram,tiktok --privacy public|unlisted|private [--dry-run] [--yes]`.

@@ -100,9 +100,11 @@ echo  9  True stories: mocked underdog, weird experiment, clever scheme ^(new, s
 echo  A  ENHANCED true stories: prop actions, faces, mastered sound ^(test version, 1:00-1:30^)
 echo  R  Research a topic or title on YouTube for free ^(needs Agent-Reach, it shows how to install^)
 echo  W  Write your own idea: you type it, Gemini writes the story, then it is made
+echo  P  Publish a finished video to YouTube / Facebook / Instagram / TikTok ^(first time: see README, Publishing^)
 echo  0  Exit
 echo.
-choice /c 1234567890ARW /n /m "Choose 1-9, A, R, W, or 0 to exit: "
+choice /c 1234567890ARWP /n /m "Choose 1-9, A, R, W, P, or 0 to exit: "
+if errorlevel 14 goto publish
 if errorlevel 13 goto idea
 if errorlevel 12 goto research
 if errorlevel 11 goto enhanced
@@ -127,6 +129,11 @@ goto menu
 node src\shorts.js --truestory
 if errorlevel 1 goto failed
 if exist "out\shorts" start "" "out\shorts"
+goto menu
+
+:publish
+node src\publish.js
+pause
 goto menu
 
 :idea
