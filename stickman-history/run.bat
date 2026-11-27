@@ -98,9 +98,11 @@ echo  7  Remake a story already made ^(it shows them and asks which one^)
 echo  8  Storybook sketches: the 5 prototype videos with voice and music
 echo  9  True stories: mocked underdog, weird experiment, clever scheme ^(new, short shots^)
 echo  A  ENHANCED true stories: prop actions, faces, mastered sound ^(test version, 1:00-1:30^)
+echo  R  Research a topic or title on YouTube for free ^(needs Agent-Reach, it shows how to install^)
 echo  0  Exit
 echo.
-choice /c 1234567890A /n /m "Choose 1-9, A, or 0 to exit: "
+choice /c 1234567890AR /n /m "Choose 1-9, A, R, or 0 to exit: "
+if errorlevel 12 goto research
 if errorlevel 11 goto enhanced
 if errorlevel 10 goto end
 if errorlevel 9 goto truestory
@@ -123,6 +125,11 @@ goto menu
 node src\shorts.js --truestory
 if errorlevel 1 goto failed
 if exist "out\shorts" start "" "out\shorts"
+goto menu
+
+:research
+node src\research.js
+pause
 goto menu
 
 :enhanced
