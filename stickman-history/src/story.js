@@ -78,19 +78,23 @@ Return ONLY JSON with this shape:
 }
 
 // True-story mode: the main character (first actor) looks the same in every scene, and the invented bits are listed.
-// Option A (enhanced): the true-story prompt plus prop actions, face moods on a key word, and more sound effects.
-function buildEnhancedPrompt(topic, avoid, o) {
-  let p = buildTruePrompt(topic, avoid, o);
+// Enhanced look and sound (option A, and the default for options 1 and 2): the normal prompt plus prop actions,
+// face moods on a key word, and more sound effects. Applied on top of whichever base prompt is used.
+function enhancePrompt(p) {
   p = p.replace(`"sfx": optional, one of ${JSON.stringify(SFX)}`, `"sfx": optional, one of ${JSON.stringify(SFX_ENH)}`);
   p = p.replace('The finished video must not be longer than 1 minute 30 seconds.', 'The finished video must be between 1 minute and 1 minute 30 seconds, never longer.');
-  p = p.replace('\nReturn ONLY JSON', `- ACTIONS: in 4 to 6 scenes, give an "action" that animates something with the main character: ${ACTIONS.join(', ')}. throw = the main character throws the held prop, swing = swings it, fall = the prop falls and crashes, impact = a hit with a screen shake, door = a door opens behind, sail = a boat sails past, glide = a plane glides past, train = a train rushes past. Use an action only when it matches what the sentence says. Skip it in other scenes.
-- REACTIONS: for each actor you may set "mood" (${MOODS.join(', ')}) which the face switches to on the scene's key word. Use it on the doubters (smug, angry, shock) and on the main character at the payoff (joy, excited). Add "key": the one word of the narration (no punctuation) where the reaction or action lands.
-- SOUND: add "sfx" in about half the scenes (glass for something breaking, splash for water, crash for a big hit, laugh when the doubters laugh, gasp for shock, boing for something bouncy, thunder, applause at the payoff, creak for an old door, zap for science).
-\nReturn ONLY JSON`);
-  p = p.replace('"narration": "ONE spoken sentence",', '"narration": "ONE spoken sentence", "key": "one word of the narration", "action": optional, one of ' + JSON.stringify(ACTIONS) + ',');
+  p = p.replace(/\n ?Return ONLY JSON/, `
+- ACTIONS: in about one scene out of three, give an "action" that animates something with the main character: ${ACTIONS.join(', ')}. throw = the main character throws the held prop, swing = swings it, fall = the prop falls and crashes, impact = a hit with a screen shake, door = a door opens behind, sail = a boat sails past, glide = a plane glides past, train = a train rushes past. Use an action only when it matches what the sentence says. Skip it in other scenes.
+- REACTIONS: for each actor you may set "mood" (${MOODS.join(', ')}) which the face switches to on the scene's key word. Use it on onlookers and doubters (smug, angry, shock) and on the main character at the payoff (joy, excited). Add "key": the one word of the narration (no punctuation) where the reaction or action lands.
+- SOUND: add "sfx" in about half the scenes (glass for something breaking, splash for water, crash for a big hit, laugh when people laugh, gasp for shock, boing for something bouncy, thunder, applause at the payoff, creak for an old door, zap for science).
+
+Return ONLY JSON`);
+  p = p.replace(/"narration": "[^"]*",/, (m) => m + ' "key": "one word of the narration", "action": optional, one of ' + JSON.stringify(ACTIONS) + ',');
   p = p.replace('"talk": true for the speaking character,', '"talk": true for the speaking character, "mood": optional, one of ' + JSON.stringify(MOODS) + ',');
   return p;
 }
+const buildEnhancedPrompt = (topic, avoid, o) => enhancePrompt(buildTruePrompt(topic, avoid, o)); // option A: true stories
+const buildEnhancedHistoryPrompt = (topic, avoid, o) => enhancePrompt(buildPrompt(topic, avoid, o)); // options 1 and 2
 
 function finishTrue(raw, story) {
   const c = raw && raw.character ? raw.character : {};
@@ -371,19 +375,22 @@ function mockStory(topic) {
 // opts: { mock, avoid: [titles], minWords, maxWords, minScenes, maxScenes, fix }
 async function writeStory(topic, opts = {}) {
   loadEnv(opts.envFile);
-  const isEnh = opts.mode === 'enhanced';
+  const isEnhTrue = opts.mode === 'enhanced';
+  const isEnhHist = !opts.mode && opts.enhance === true; // options 1 and 2: library history topics, enhanced look and sound
+  const isEnh = isEnhTrue || isEnhHist;
   if (opts.mock) {
     const m = normalize(mockStory(topic), topic);
     if (!isEnh) return opts.mode === 'true' ? finishTrue({}, m) : m;
     const acts = ['throw', 'swing', 'fall', 'impact', 'door', 'sail', 'glide', 'train'], moods = ['shock', 'angry', 'smug', 'excited', 'scared', 'joy', 'curious', 'worry'];
     m.scenes.forEach((s, i) => { if (i % 2 === 1) s.action = acts[(i >> 1) % acts.length]; s.stage.actors[s.stage.actors.length - 1].mood = moods[i % moods.length]; });
-    finishTrue({}, m); m.enhanced = true; return m;
+    if (isEnhTrue) finishTrue({}, m);
+    m.enhanced = true; return m;
   }
-  const isTrue = opts.mode === 'true' || isEnh;
-  const o = isEnh ? { minWords: 200, maxWords: 240, minScenes: 14, maxScenes: 18, ...opts } : isTrue ? { minWords: 215, maxWords: 255, minScenes: 14, maxScenes: 18, ...opts } : { minWords: 215, maxWords: 255, minScenes: 9, maxScenes: 11, ...opts };
+  const isTrue = opts.mode === 'true' || isEnhTrue;
+  const o = isEnhHist ? { minWords: 205, maxWords: 245, minScenes: 9, maxScenes: 11, ...opts } : isEnh ? { minWords: 200, maxWords: 240, minScenes: 14, maxScenes: 18, ...opts } : isTrue ? { minWords: 215, maxWords: 255, minScenes: 14, maxScenes: 18, ...opts } : { minWords: 215, maxWords: 255, minScenes: 9, maxScenes: 11, ...opts };
   let fix = opts.fix || '';
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const raw = parseJson(await geminiText((isEnh ? buildEnhancedPrompt : isTrue ? buildTruePrompt : buildPrompt)(topic, opts.avoid || [], { ...o, fix })));
+    const raw = parseJson(await geminiText((isEnhHist ? buildEnhancedHistoryPrompt : isEnhTrue ? buildEnhancedPrompt : isTrue ? buildTruePrompt : buildPrompt)(topic, opts.avoid || [], { ...o, fix })));
     const story = isTrue ? finishTrue(raw, normalize(raw, topic)) : normalize(raw, topic);
     if (isEnh) story.enhanced = true;
     const est = estimate(story);

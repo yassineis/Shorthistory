@@ -19,7 +19,7 @@ const { writeStory, estimate } = require('./story');
 const ROOT = path.join(__dirname, '..');
 const LIB = path.join(ROOT, 'library');
 const NOTE_BELOW = 60, NOTE_ABOVE = 92, MAX_VIDEOS = 10; // seconds: outside this, the summary adds a length note
-const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'truestory', 'enhanced', 'help']);
+const BOOL = new Set(['dry-voice', 'mock-story', 'no-music', 'yes', 'random', 'list', 'redo', 'force', 'truestory', 'enhanced', 'classic', 'help']);
 
 function parseArgs(argv) {
   const o = {};
@@ -46,6 +46,7 @@ It asks how many videos to make (1-10), then makes them. Videos are about 1:10 t
   --random         pick unused library topics at random instead of top score first
   --yes            do not ask for confirmation
   --list           show the library: topics made and topics left
+  --classic        options 1 and 2 now use the enhanced look and sound (prop actions, face moods, mastered audio); this turns that off
   --enhanced       option A: true stories plus prop actions, faces on key words, mastered audio and more sound effects; 1:00 to 1:30
   --truestory      option 9: true-story mode (mocked underdog, weird experiment, clever scheme) with short one-sentence shots; separate queue
   --redo           show the stories already made and remake the one you pick (same story, new render, no Gemini)
@@ -140,7 +141,7 @@ async function main() {
       if (!entry) {
         const avoid = index.stories.map((s) => s.title);
         console.log('  writing the story...');
-        const story = await writeStory(q.topic, { mock: args['mock-story'], avoid, mode: MODE, envFile: args.env || path.join(ROOT, '.env') });
+        const story = await writeStory(q.topic, { mock: args['mock-story'], avoid, mode: MODE, enhance: !args.classic, envFile: args.env || path.join(ROOT, '.env') });
         if (index.stories.some((s) => normTitle(s.title) === normTitle(story.title))) throw new Error(`A story titled "${story.title}" already exists in the library.`);
         let slug = slugify(q.topic.id), k = 2;
         while (index.stories.some((s) => s.id === slug)) slug = `${slugify(q.topic.id)}-${k++}`;
@@ -176,7 +177,11 @@ async function main() {
       const story = readJson(scriptPath);
       fs.writeFileSync(path.join(outDir, 'info.txt'),
         `TITLE\n${story.title}\n\nDESCRIPTION\n${story.description}\n\n${hashtags(story)}\n\nTAGS\n${finalTags(story).join(', ')}\n\nCHECK THESE FACTS BEFORE PUBLISHING\n${(story.facts_to_check || []).map((f) => `- ${f}`).join('\n')}\n${(story.invented_details || []).length ? `\nDRAMATISED (invented for the story, not historical fact)\n${story.invented_details.map((f) => `- ${f}`).join('\n')}\n` : ''}`);
-      const lenNote = entry.duration > (args.enhanced ? 90 : NOTE_ABOVE) ? '  (note: longer than 1:30)' : entry.duration < NOTE_BELOW ? '  (note: shorter than 1:00)' : '';
+      const mm = (n) => `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`;
+      const limit = story.enhanced ? 90 : NOTE_ABOVE;
+      const lenNote = entry.duration > limit ? `  (WARNING: ${mm(entry.duration)} is over the 1:30 limit. The video was still made and kept; shorten it or cut a scene if you want it under 1:30)`
+        : entry.duration < NOTE_BELOW ? `  (WARNING: ${mm(entry.duration)} is under 1:00. The video was still made and kept)` : '';
+      if (lenNote) fs.appendFileSync(path.join(outDir, 'info.txt'), `\nLENGTH NOTE\n${lenNote.trim().replace(/^\(|\)$/g, '')}\n`);
       results.push(`OK   ${entry.title} - ${entry.duration}s - ${final}${lenNote}`);
     } catch (e) {
       console.error(`  failed: ${e.message}`);
