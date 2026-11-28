@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const { spawn } = require('child_process');
 const readline = require('readline');
 const crypto = require('crypto');
 const { loadEnv, probeDuration } = require('./voice');
@@ -121,6 +122,40 @@ function startServer({ videoFile, onCode }) {
     res.writeHead(404); res.end('not found');
   });
   return new Promise((resolve, reject) => { srv.on('error', reject); srv.listen(PORT, '127.0.0.1', () => resolve(srv)); });
+}
+
+// A free Cloudflare "quick tunnel" gives the local video server a public https address, which Instagram needs to download the video.
+// Started and stopped automatically, so nothing has to be copied by hand. Needs cloudflared (winget install Cloudflare.cloudflared).
+function startTunnel() {
+  const candidates = [process.env.CLOUDFLARED_BIN, 'cloudflared', 'C:\\Program Files (x86)\\cloudflared\\cloudflared.exe', 'C:\\Program Files\\cloudflared\\cloudflared.exe'].filter(Boolean);
+  return new Promise((resolve, reject) => {
+    const tryNext = (i) => {
+      if (i >= candidates.length) return reject(new Error('cloudflared is not installed. Install it once (free): winget install Cloudflare.cloudflared, then open a new window. Or pass --public https://... yourself.'));
+      let child;
+      try { child = spawn(candidates[i], ['tunnel', '--no-autoupdate', '--url', `http://127.0.0.1:${PORT}`], { windowsHide: true }); } catch (e) { return tryNext(i + 1); }
+      let done = false, log = '';
+      const stop = () => { try { child.kill(); } catch (e) { /* already gone */ } };
+      const timer = setTimeout(() => { if (!done) { done = true; stop(); reject(new Error(`cloudflared gave no address after 40 seconds.\n${log.slice(-400)}`)); } }, 40000);
+      child.on('error', (e) => { if (done) return; done = true; clearTimeout(timer); if (e.code === 'ENOENT') tryNext(i + 1); else reject(e); });
+      const onData = (d) => {
+        log += d.toString();
+        const m = /https:\/\/[a-z0-9-]+\.trycloudflare\.com|http:\/\/127\.0\.0\.1:\d+/.exec(log);
+        if (m && !done) { done = true; clearTimeout(timer); resolve({ url: m[0], stop }); }
+      };
+      child.stdout.on('data', onData); child.stderr.on('data', onData);
+      child.on('exit', () => { if (!done) { done = true; clearTimeout(timer); reject(new Error(`cloudflared stopped: ${log.slice(-400)}`)); } });
+    };
+    tryNext(0);
+  });
+}
+
+// quick tunnels can take a few seconds before the new address answers
+async function waitReachable(base, tries = 20) {
+  for (let i = 0; i < tries; i += 1) {
+    try { const r = await fetch(`${base}/video.mp4`, { headers: { Range: 'bytes=0-0' } }); if (r.ok) return true; } catch (e) { /* not yet */ }
+    await sleep(Number(process.env.PUBLISH_POLL_MS || 2000));
+  }
+  return false;
 }
 
 async function waitForCode(provider, state, timeoutMs = 300000) {
@@ -257,7 +292,7 @@ async function postFacebook(v, o) {
 async function postInstagram(v, o, publicBase) {
   const ig = tokens().instagram;
   if (!ig) throw new Error('Instagram is not connected (it needs a Business/Creator account linked to your Facebook Page). Run: node src/publish.js facebook-token <USER_TOKEN>');
-  if (!publicBase) throw new Error(`Instagram downloads the video from a public https link. Start a free tunnel (cloudflared tunnel --url http://localhost:${PORT}) and add --public https://<your-tunnel>.trycloudflare.com`);
+  if (!publicBase) throw new Error('Instagram downloads the video from a public https link, and no tunnel address is available (install cloudflared, or pass --public https://...).');
   const caption = v.description.slice(0, 2200);
   const post = (p, params) => http_(`${GRAPH()}/${p}`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ access_token: ig.token, ...params }) });
   const c = await post(`${ig.ig_user_id}/media`, { media_type: 'REELS', video_url: `${publicBase}/video.mp4`, caption, share_to_feed: 'true' });
@@ -362,15 +397,25 @@ async function post(args) {
   }
 
   const log = readJson(LOG, []);
-  let srv = null;
-  if (to.includes('instagram')) srv = await startServer({ videoFile: v.file });
+  let srv = null, tunnel = null, base = (args.public || '').replace(/\/$/, ''); // Instagram: only an address typed with --public is used as is; otherwise a fresh tunnel is opened
   const results = [];
   try {
+    if (to.includes('instagram')) {
+      srv = await startServer({ videoFile: v.file });
+      if (!base) { // no address given: open a free tunnel just for this post
+        process.stdout.write('  opening a free tunnel for Instagram... ');
+        try {
+          tunnel = await startTunnel();
+          base = tunnel.url;
+          console.log(await waitReachable(base) ? 'ready' : 'opened (not confirmed reachable yet, trying anyway)');
+        } catch (e) { console.log('failed'); results.push(`FAIL instagram: ${e.message}`); to.splice(to.indexOf('instagram'), 1); }
+      }
+    }
     for (const p of to) {
       if (!args.again && log.some((l) => l.id === v.id && l.platform === p)) { results.push(`SKIP ${p}: already posted (use --again to post a second time)`); continue; }
       process.stdout.write(`  ${p}... `);
       try {
-        const r = p === 'instagram' ? await postInstagram(v, { privacy }, publicBase) : await POSTERS[p](v, { privacy });
+        const r = p === 'instagram' ? await postInstagram(v, { privacy }, base) : await POSTERS[p](v, { privacy });
         console.log('done');
         log.push({ id: v.id, platform: p, url: r.url, date: new Date().toISOString() });
         saveJson(LOG, log);
@@ -380,7 +425,7 @@ async function post(args) {
         results.push(`FAIL ${p}: ${e.message}`);
       }
     }
-  } finally { if (srv) srv.close(); }
+  } finally { if (tunnel) tunnel.stop(); if (srv) srv.close(); }
   console.log('\n===== Published =====');
   results.forEach((r) => console.log(r));
   if (results.some((r) => r.startsWith('FAIL'))) process.exitCode = 1;
