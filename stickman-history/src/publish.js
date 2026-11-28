@@ -6,7 +6,7 @@
 //   node src/publish.js                                  menu: pick a video, pick the platforms
 //   node src/publish.js setup                            what is configured, and what is still missing
 //   node src/publish.js auth youtube                     sign in to Google once (opens a link)
-//   node src/publish.js auth tiktok                      sign in to TikTok once (needs PUBLIC_BASE_URL, see README)
+//   node src/publish.js auth tiktok                      sign in to TikTok once (you paste a code, see README)
 //   node src/publish.js facebook-token <USER_TOKEN>      turn a Facebook user token into a Page token (+ Instagram id)
 //   node src/publish.js post <story-id|folder> --to youtube,facebook,instagram,tiktok [--privacy public|unlisted|private]
 //                                                        [--public https://xxx.trycloudflare.com] [--dry-run] [--yes] [--again]
@@ -190,18 +190,29 @@ async function authYoutube() {
   console.log('Note: while the Google app is in "Testing", Google expires the sign-in after 7 days. Set the app to "In production" (Google Auth Platform > Audience) to keep it.');
 }
 
+// TikTok needs an https redirect address registered in advance. A free, permanent GitHub Pages page (site/callback.html, published once)
+// just shows the sign-in code, and you paste it here: no tunnel and no changing address. --public <tunnel> still works (old way).
+const TIKTOK_STATIC_REDIRECT = 'https://yassineis.github.io/shorthistory/callback.html';
+
 async function authTiktok(args) {
   const key = process.env.TIKTOK_CLIENT_KEY, secret = process.env.TIKTOK_CLIENT_SECRET;
-  const base = (args.public || process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
   if (!key || !secret) throw new Error('Put TIKTOK_CLIENT_KEY and TIKTOK_CLIENT_SECRET in .env first (see README, "Publishing").');
-  if (!base.startsWith('https://')) throw new Error(`TikTok only accepts an https redirect. Start a free tunnel (cloudflared tunnel --url http://localhost:${PORT}) and run again with --public https://<your-tunnel>.trycloudflare.com`);
-  const redirect = `${base}/callback/tiktok`;
+  const tunnelBase = (args.public || '').replace(/\/$/, '');
+  const redirect = tunnelBase ? `${tunnelBase}/callback/tiktok` : (args.redirect || process.env.TIKTOK_REDIRECT_URI || TIKTOK_STATIC_REDIRECT);
+  if (!redirect.startsWith('https://')) throw new Error('TikTok only accepts an https redirect address.');
   const state = crypto.randomBytes(12).toString('hex');
   const url = `${API.ttAuth}?${new URLSearchParams({ client_key: key, scope: 'user.info.basic,video.publish', response_type: 'code', redirect_uri: redirect, state })}`;
-  console.log(`\nThe redirect address ${redirect} must be listed in your TikTok app (Login Kit > Redirect URI).\nOpen this link in your browser and allow the app:\n\n${url}\n`);
-  const code = await waitForCode('tiktok', state);
+  console.log(`\nThe redirect address below must be listed in your TikTok app (Login Kit > Redirect URI), exactly like this:\n  ${redirect}\n\nOpen this link in your browser, log in to TikTok and allow the app:\n\n${url}\n`);
+  let code;
+  if (tunnelBase) code = await waitForCode('tiktok', state);
+  else {
+    const pasted = await ask('After you allow the app, the page shows a code. Paste it here (or the whole address of that page): ');
+    if (!pasted) throw new Error('Cancelled.');
+    try { code = new URL(pasted).searchParams.get('code'); } catch (e) { code = null; }
+    if (!code) code = pasted.replace(/^code=/, '').replace(/&.*$/, '');
+  }
   const r = await http_(`${API.tt}/oauth/token/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_key: key, client_secret: secret, code, grant_type: 'authorization_code', redirect_uri: redirect }) });
-  if (!r.ok || !r.json || !r.json.access_token) throw fail('TikTok did not give a token', r);
+  if (!r.ok || !r.json || !r.json.access_token) throw fail('TikTok did not give a token (the code can be used only once and expires fast; start again)', r);
   const t = tokens();
   t.tiktok = { access_token: r.json.access_token, expires_at: now() + r.json.expires_in, refresh_token: r.json.refresh_token, refresh_expires_at: now() + (r.json.refresh_expires_in || 31536000), open_id: r.json.open_id };
   saveTokens(t);
